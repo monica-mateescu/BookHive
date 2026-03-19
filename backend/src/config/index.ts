@@ -1,0 +1,16 @@
+import { z } from "zod";
+
+const envSchema = z.object({
+  MONGODB_URI: z.url({ protocol: /mongodb/ }),
+  DB_NAME: z.string(),
+  CLIENT_BASE_URL: z.url(),
+});
+
+const { data, error, success } = envSchema.safeParse(process.env);
+
+if (!success) {
+  console.error("Invalid environment variables:", z.prettifyError(error));
+  process.exit(1);
+}
+
+export const { MONGODB_URI, DB_NAME, CLIENT_BASE_URL } = data;
