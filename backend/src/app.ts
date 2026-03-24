@@ -18,10 +18,10 @@ app.use(
   })
 );
 
+app.use(express.json());
+
 app.all('/api/auth/*splat', toNodeHandler(auth));
 app.use('/api', authRouter);
-
-app.use(express.json());
 
 app.get('/', (req, res) => res.send('BookHive Backend is running!'));
 
