@@ -39,13 +39,16 @@
     "prebuild": "rm -rf dist",
     "build": "tsc",
     "prestart": "npm run build",
-    "start": "node --env-file=.env dist/app.js"
+    "start": "node --env-file=.env dist/app.js",
+    "test": "vitest"
   },
   "devDependencies": {
     "@types/cors": "^2.8.19",
     "@types/express": "^5.0.6",
     "@types/node": "^25.5.0",
-    "typescript": "^5.9.3"
+    "mongodb-memory-server": "^11.0.1",
+    "typescript": "^5.9.3",
+    "vitest": "^4.1.0"
   },
   "dependencies": {
     "better-auth": "^1.5.5",
