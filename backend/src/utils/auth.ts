@@ -1,16 +1,23 @@
 import { betterAuth } from 'better-auth';
+import { testUtils } from 'better-auth/plugins';
 import { mongodbAdapter } from 'better-auth/adapters/mongodb';
 import { MongoClient } from 'mongodb';
+import { MongoMemoryServer } from 'mongodb-memory-server';
+
 import { MONGO_URI, DB_NAME, CLIENT_BASE_URL, BETTER_AUTH_SECRET, DOMAIN } from '#config';
 
-const client = new MongoClient(MONGO_URI);
-const db = client.db(DB_NAME);
+const mongodb = await MongoMemoryServer.create();
+
+const uri = MONGO_URI ?? mongodb.getUri();
+
+const client = new MongoClient(uri);
+const db = client.db(DB_NAME ?? 'db-test');
 
 export const auth = betterAuth({
   database: mongodbAdapter(db, { client }),
   secret: BETTER_AUTH_SECRET,
   emailAndPassword: { enabled: true },
-  baseURL: CLIENT_BASE_URL,
+  baseURL: CLIENT_BASE_URL ?? 'http://localhost:5173',
   session: {
     cookieCache: {
       enabled: true,
@@ -32,5 +39,6 @@ export const auth = betterAuth({
       enabled: true,
       domain: DOMAIN
     }
-  }
+  },
+  plugins: [testUtils()]
 });
