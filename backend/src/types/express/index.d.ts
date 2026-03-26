@@ -1,3 +1,5 @@
+import { File } from 'formidable';
+
 declare global {
   namespace Express {
     export interface Request {
@@ -12,6 +14,8 @@ declare global {
         createdAt: Date;
         updatedAt: Date;
       };
+
+      image?: File;
     }
   }
 }
