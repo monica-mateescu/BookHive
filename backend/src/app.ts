@@ -5,7 +5,7 @@ import { toNodeHandler } from 'better-auth/node';
 import { CLIENT_BASE_URL } from '#config';
 import { notFoundHandler, errorHandler } from '#middlewares';
 import { auth } from '#utils';
-import { authRouter } from '#routes';
+import { authRouter, bookRouter } from '#routes';
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -18,12 +18,12 @@ app.use(
   })
 );
 
-app.use(express.json());
-
 app.all('/api/auth/*splat', toNodeHandler(auth));
 app.use('/api', authRouter);
 
-app.get('/', (req, res) => res.send('BookHive Backend is running!'));
+app.use(express.json());
+
+app.use('/api/books', bookRouter);
 
 app.use('/*splat', notFoundHandler);
 app.use(errorHandler);
