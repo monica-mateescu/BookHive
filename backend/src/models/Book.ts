@@ -6,8 +6,8 @@ const bookSchema = new Schema(
     author: { type: String, required: [true, 'Author is required'] },
     isbn: { type: String, required: [true, 'ISBN is required'], unique: true },
     summary: { type: String, required: [true, 'Summary is required'] },
-    image: { type: String },
-    publishedYear: { type: Number }
+    image: { type: String, default: null },
+    publishedYear: { type: Number, default: null }
   },
   {
     timestamps: true,
