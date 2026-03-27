@@ -1,0 +1,73 @@
+import type { Book } from "../types/book";
+
+const API_URL = import.meta.env.VITE_APP_SERVER_URL;
+
+if (!API_URL) {
+  throw new Error("API URL is required, are you missing a .env file?");
+}
+
+export const createBook = async (formData: FormData): Promise<Book> => {
+  const res = await fetch(`${API_URL}/api/books`, {
+    method: "POST",
+    credentials: "include",
+    body: formData,
+  });
+  if (!res.ok) {
+    const error = await res.json();
+    throw new Error(error.message || "Failed to create book");
+  }
+  const data: Book = await res.json();
+  return data;
+};
+
+export const getBooks = async (): Promise<Book[]> => {
+  const res = await fetch(`${API_URL}/api/books`);
+
+  if (!res.ok) throw new Error("Failed to fetch books");
+
+  const data: Book[] = await res.json();
+  return data;
+};
+
+export const getBookById = async (id: string): Promise<Book> => {
+  const res = await fetch(`${`${API_URL}/api/books`}/${id}`);
+
+  if (!res.ok) {
+    const err = await res.json().catch(() => null);
+    throw new Error(err?.message || "Failed to fetch book");
+  }
+
+  const data: Book = await res.json();
+  return data;
+};
+
+export const updateBookById = async (
+  id: string,
+  formData: FormData,
+): Promise<Book> => {
+  const res = await fetch(`${API_URL}/api/books/${id}`, {
+    method: "PUT",
+    credentials: "include",
+    body: formData,
+  });
+
+  if (!res.ok) {
+    const error = await res.json().catch(() => null);
+    throw new Error(error?.message || "Failed to update book");
+  }
+
+  const data: Book = await res.json();
+  return data;
+};
+
+export const deleteBookById = async (id: string): Promise<void> => {
+  const res = await fetch(`${API_URL}/api/books/${id}`, {
+    method: "DELETE",
+    credentials: "include",
+  });
+
+  if (!res.ok) {
+    const error = await res.json().catch(() => null);
+    throw new Error(error?.message || "Failed to delete book");
+  }
+};
