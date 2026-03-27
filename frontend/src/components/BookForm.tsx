@@ -124,10 +124,10 @@ const CreateBookForm = () => {
 
       if (isEdit && id) {
         await updateBookById(id, fd);
-        setSuccess("Book updated successfully!");
+        setSuccess("Book updated successfully.");
       } else {
         await createBook(fd);
-        setSuccess("Book created successfully!");
+        setSuccess("Book created successfully.");
       }
 
       scrollToTop();
