@@ -7,11 +7,17 @@ function Header() {
         <Link to="/" className="hover:underline">
           Home
         </Link>
+        |
         <Link to="/signup" className="hover:underline">
           Sign up
         </Link>
+        |
         <Link to="/signin" className="hover:underline">
           Sign in
+        </Link>
+        |
+        <Link to="/create-book" className="hover:underline">
+          Create book
         </Link>
       </nav>
     </header>

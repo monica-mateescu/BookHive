@@ -1,6 +1,7 @@
 import { BrowserRouter, Route, Routes } from "react-router";
 
 import MainLayout from "./layouts/MainLayout.tsx";
+import CreateBook from "./pages/Book.tsx";
 import Home from "./pages/Home.tsx";
 import NotFound from "./pages/NotFound.tsx";
 import SignIn from "./pages/SignIn.tsx";
@@ -15,6 +16,15 @@ function App() {
             <Route index element={<Home />} />
             <Route path="signup" element={<SignUp />} />
             <Route path="signin" element={<SignIn />} />
+            <Route
+              path="create-book"
+              element={<CreateBook />}
+              key="create-book"
+            />
+            <Route
+              path="books/:id/edit"
+              element={<CreateBook key="edit-book" />}
+            />
             <Route path="*" element={<NotFound />} />
           </Route>
         </Routes>

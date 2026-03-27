@@ -6,9 +6,14 @@ import { MongoMemoryServer } from 'mongodb-memory-server';
 
 import { MONGO_URI, DB_NAME, CLIENT_BASE_URL, BETTER_AUTH_SECRET, DOMAIN } from '#config';
 
-const mongodb = await MongoMemoryServer.create();
+let uri: string;
 
-const uri = MONGO_URI ?? mongodb.getUri();
+if (MONGO_URI) {
+  uri = MONGO_URI;
+} else {
+  const mongodb = await MongoMemoryServer.create();
+  uri = mongodb.getUri();
+}
 
 const client = new MongoClient(uri);
 const db = client.db(DB_NAME ?? 'db-test');
