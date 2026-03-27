@@ -3,3 +3,5 @@ import { z } from 'zod';
 
 export type BookInputDTO = z.infer<typeof bookInputSchema>;
 export type BookDTO = z.infer<typeof bookSchema>;
+
+export type UserRole = 'user' | 'admin';
