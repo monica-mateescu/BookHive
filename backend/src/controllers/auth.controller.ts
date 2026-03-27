@@ -8,3 +8,11 @@ export const me: RequestHandler = async (req, res) => {
   });
   return res.json(session);
 };
+
+export const logout: RequestHandler = async (req, res) => {
+  await auth.api.signOut({
+    headers: fromNodeHeaders(req.headers)
+  });
+
+  return res.json({ message: 'Logged out successfully.' });
+};
