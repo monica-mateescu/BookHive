@@ -5,6 +5,7 @@ import { MongoClient } from 'mongodb';
 import { MongoMemoryServer } from 'mongodb-memory-server';
 
 import { MONGO_URI, DB_NAME, CLIENT_BASE_URL, BETTER_AUTH_SECRET, DOMAIN } from '#config';
+import type { UserRole } from '#types';
 
 let uri: string;
 
@@ -33,7 +34,17 @@ export const auth = betterAuth({
     fields: {
       name: 'firstName'
     },
-    additionalFields: { lastName: { type: 'string' }, role: { type: 'string', default: 'user' } }
+    additionalFields: {
+      lastName: {
+        type: 'string',
+        defaultValue: ''
+      },
+      role: {
+        type: 'string',
+        input: false,
+        defaultValue: 'user' as UserRole
+      }
+    }
   },
   advanced: {
     defaultCookieAttributes: {
@@ -45,5 +56,5 @@ export const auth = betterAuth({
       domain: DOMAIN
     }
   },
-  plugins: [testUtils()]
+  plugins: process.env.NODE_ENV === 'test' ? [testUtils()] : []
 });
