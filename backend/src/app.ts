@@ -5,7 +5,7 @@ import { toNodeHandler } from 'better-auth/node';
 import { CLIENT_BASE_URL } from '#config';
 import { notFoundHandler, errorHandler } from '#middlewares';
 import { auth } from '#utils';
-import { authRouter, bookRouter } from '#routes';
+import { authRouter, bookRouter, clubRouter } from '#routes';
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -24,6 +24,7 @@ app.use('/api', authRouter);
 app.use(express.json());
 
 app.use('/api/books', bookRouter);
+app.use('/api/clubs', clubRouter);
 
 app.use('/*splat', notFoundHandler);
 app.use(errorHandler);
