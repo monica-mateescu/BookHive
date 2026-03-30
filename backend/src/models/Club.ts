@@ -11,10 +11,12 @@ const clubSchema = new Schema(
       {
         userId: { type: Types.ObjectId, ref: 'User', required: [true, 'Member user ID is required'] },
         role: { type: String, enum: ['member', 'admin'], default: 'member' },
-        joinedAt: { type: Date, default: Date.now }
+        joinedAt: { type: Date, default: Date.now },
+        _id: false
       }
     ],
     maxMembers: { type: Number, default: 10 },
+    countMembers: { type: Number, default: 0 },
     bookId: { type: Types.ObjectId, ref: 'Book', required: [true, 'Book ID is required'] },
     isActive: { type: Boolean, default: true }
   },
@@ -30,5 +32,7 @@ const clubSchema = new Schema(
     }
   }
 );
+
+clubSchema.index({ bookId: 1 });
 
 export default model('Club', clubSchema);
