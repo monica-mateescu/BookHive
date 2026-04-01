@@ -14,12 +14,10 @@ export const getClubs: RequestHandler<{}, ClubsPagination, {}, ClubsQuery> = asy
   const skip = (page - 1) * limit;
   const filter: Record<string, unknown> = {};
 
-  if (isActive != null) {
-    filter.isActive = isActive;
-  }
+  if (typeof isActive !== 'undefined') filter.isActive = isActive;
 
   const [total, data] = await Promise.all([
-    Club.countDocuments(),
+    Club.countDocuments(filter),
     Club.find(filter).sort({ createdAt: -1 }).skip(skip).limit(limit).populate(contextData)
   ]);
 
@@ -43,22 +41,24 @@ export const createClub: RequestHandler<{}, ClubDTO, ClubInputDTO> = async (req,
     user,
     body: { bookId }
   } = req;
+  const now = new Date();
 
   // Check if the user already has an active club with a future meeting date
   if (user?.role !== 'admin') {
-    const exists = await Club.exists({ createdBy: user?.id, isActive: true, meetingDate: { $gt: new Date() } });
+    const exists = await Club.exists({ createdBy: user?.id, isActive: true, meetingDate: { $gt: now } });
     if (exists) {
       throw new Error('You already have an active club with a future meeting date', { cause: { status: 400 } });
     }
   }
 
+  // Validate the book ID and check if the book is already assigned to another active club with a future meeting date
   await assertBookExists(bookId);
   await assertBookIsAssigned(bookId);
 
   // Create the club with the creator as the first member
-  const members = [{ userId: user?.id, role: 'admin', joinedAt: new Date() }];
+  const members = [{ userId: user?.id, role: 'admin', joinedAt: now }];
 
-  const club = await Club.create({ ...req.body, createdBy: user?.id, members, countMembers: members.length });
+  const club = await Club.create({ ...req.body, createdBy: user?.id, members });
   const populatedClub = await club.populate(contextData);
 
   res.status(201).json(populatedClub);
@@ -86,15 +86,14 @@ export const updateClub: RequestHandler<{ id: string }, ClubDTO, ClubInputDTO> =
 
   const filter: Record<string, unknown> = { _id: id };
 
-  if (user?.role !== 'admin') {
-    filter.createdBy = user?.id;
-  }
+  if (user?.role !== 'admin') filter.createdBy = user?.id;
 
   const club = await Club.findOne(filter);
   if (!club) {
     throw new Error('Club not found', { cause: { status: 404 } });
   }
 
+  // Validate the book ID and check if the book is already assigned to another active club with a future meeting date (excluding the current club)
   await assertBookExists(bookId);
   await assertBookIsAssigned(bookId, id);
 
@@ -115,10 +114,11 @@ export const deleteClub: RequestHandler<{ id: string }> = async (req, res) => {
     params: { id }
   } = req;
 
-  const club =
-    user?.role === 'admin'
-      ? await Club.findByIdAndDelete(id)
-      : await Club.findOneAndDelete({ _id: id, createdBy: user?.id });
+  const filter: Record<string, unknown> = { _id: id };
+
+  if (user?.role !== 'admin') filter.createdBy = user?.id;
+
+  const club = await Club.findOneAndDelete(filter);
 
   if (!club) {
     throw new Error('Club not found', { cause: { status: 404 } });

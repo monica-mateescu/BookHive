@@ -16,7 +16,6 @@ const clubSchema = new Schema(
       }
     ],
     maxMembers: { type: Number, default: 10 },
-    countMembers: { type: Number, default: 0 },
     bookId: { type: Types.ObjectId, ref: 'Book', required: [true, 'Book ID is required'] },
     isActive: { type: Boolean, default: true }
   },
@@ -33,6 +32,7 @@ const clubSchema = new Schema(
   }
 );
 
-clubSchema.index({ bookId: 1 });
+clubSchema.index({ bookId: 1, isActive: 1, meetingDate: 1 });
+clubSchema.index({ createdBy: 1, isActive: 1, meetingDate: 1 });
 
 export default model('Club', clubSchema);
