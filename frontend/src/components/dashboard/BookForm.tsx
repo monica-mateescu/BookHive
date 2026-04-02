@@ -1,9 +1,9 @@
 import { type ChangeEvent, useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router";
 
-import { createBook, getBookById, updateBookById } from "../data/books";
-import type { Book } from "../types/book";
-import type { CreateBookFormData } from "../types/bookForm";
+import { createBook, getBookById, updateBookById } from "../../data/books";
+import type { Book } from "../../types/book";
+import type { CreateBookFormData } from "../../types/bookForm";
 
 const initialForm: CreateBookFormData = {
   title: "",
