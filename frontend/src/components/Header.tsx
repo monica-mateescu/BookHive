@@ -31,6 +31,14 @@ function Header() {
                   Hello, {session.user.name}!
                 </Link>
                 <span className="opacity-50">|</span>
+                {session.user.role.includes("admin") && (
+                  <>
+                    <Link to="/dashboard" className="hover:underline">
+                      Dashboard
+                    </Link>
+                    <span className="opacity-50">|</span>
+                  </>
+                )}
                 <LogoutButton />
               </>
             )}
