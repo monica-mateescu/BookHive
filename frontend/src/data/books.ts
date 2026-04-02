@@ -12,10 +12,12 @@ export const createBook = async (formData: FormData): Promise<Book> => {
     credentials: "include",
     body: formData,
   });
+
   if (!res.ok) {
     const error = await res.json();
     throw new Error(error.message || "Failed to create book");
   }
+
   const data: Book = await res.json();
   return data;
 };
@@ -33,8 +35,8 @@ export const getBookById = async (id: string): Promise<Book> => {
   const res = await fetch(`${`${API_URL}/api/books`}/${id}`);
 
   if (!res.ok) {
-    const err = await res.json().catch(() => null);
-    throw new Error(err?.message || "Failed to fetch book");
+    const error = await res.json().catch(() => null);
+    throw new Error(error?.message || "Failed to fetch book");
   }
 
   const data: Book = await res.json();

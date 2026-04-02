@@ -61,7 +61,7 @@ const CreateBookForm = () => {
 
         setExistingImage(book.image ?? "");
       } catch (e) {
-        setError(e instanceof Error ? e.message : "Failed to fetch book");
+        setError(e instanceof Error ? e.message : "Failed to fetch a book");
         scrollToTop();
       } finally {
         setLoadingBook(false);
@@ -139,7 +139,7 @@ const CreateBookForm = () => {
         navigate("/");
       }
     } catch (e) {
-      setError(e instanceof Error ? e.message : "Failed to create books");
+      setError(e instanceof Error ? e.message : "Failed to create a book");
       scrollToTop();
     } finally {
       setSubmitting(false);
