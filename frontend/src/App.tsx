@@ -1,11 +1,20 @@
 import { BrowserRouter, Route, Routes } from "react-router";
 
-import MainLayout from "./layouts/MainLayout.tsx";
-import CreateBook from "./pages/Book.tsx";
-import Home from "./pages/Home.tsx";
-import NotFound from "./pages/NotFound.tsx";
-import SignIn from "./pages/SignIn.tsx";
-import SignUp from "./pages/SignUp.tsx";
+import {
+  AdminLayout,
+  DashboardLayout,
+  MainLayout,
+  ProtectedLayout,
+} from "./layouts";
+import {
+  Books,
+  CreateBook,
+  Dashboard,
+  Home,
+  NotFound,
+  SignIn,
+  SignUp,
+} from "./pages";
 
 function App() {
   return (
@@ -16,15 +25,24 @@ function App() {
             <Route index element={<Home />} />
             <Route path="signup" element={<SignUp />} />
             <Route path="signin" element={<SignIn />} />
-            <Route
-              path="create-book"
-              element={<CreateBook />}
-              key="create-book"
-            />
-            <Route
-              path="books/:id/edit"
-              element={<CreateBook key="edit-book" />}
-            />
+            <Route element={<ProtectedLayout />}>
+              <Route element={<AdminLayout />}>
+                <Route path="dashboard" element={<DashboardLayout />}>
+                  <Route index element={<Dashboard />} />
+                  <Route path="books" element={<Books />} />
+                  <Route
+                    path="create-book"
+                    element={<CreateBook />}
+                    key="create-book"
+                  />
+                  <Route
+                    path="books/:id/edit"
+                    element={<CreateBook />}
+                    key="edit-book"
+                  />
+                </Route>
+              </Route>
+            </Route>
             <Route path="*" element={<NotFound />} />
           </Route>
         </Routes>
