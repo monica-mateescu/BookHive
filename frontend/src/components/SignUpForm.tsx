@@ -36,14 +36,12 @@ function RegisterForm() {
             password,
             name: firstName,
             lastName: lastName,
-            role: ["user"],
             callbackURL: "/",
           })
         : await authClient.signUp.email({
             email: email.trim(),
             password,
             name: firstName,
-            role: ["user"],
             callbackURL: "/",
           });
 
