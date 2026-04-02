@@ -2,7 +2,13 @@ import { Link } from "react-router";
 
 import type { Book } from "../../types/book";
 
-const BookRow = ({ index, book }: { index: number; book: Book }) => {
+type BookRowProps = {
+  index: number;
+  book: Book;
+  onDelete: () => void;
+};
+
+const BookRow = ({ index, book, onDelete }: BookRowProps) => {
   return (
     <tr>
       <th>{index}</th>
@@ -21,14 +27,13 @@ const BookRow = ({ index, book }: { index: number; book: Book }) => {
       </td>
       <td>{book.publishedYear}</td>
       <th>
-        <div className="items-cente flex gap-3">
-          <Link
-            to={`/dashboard/books/${book.id}/edit`}
-            className="btn btn-warning btn-xs"
-          >
+        <div className="flex justify-end gap-3">
+          <Link to={`${book.id}/edit`} className="btn btn-warning btn-xs">
             edit
           </Link>
-          <button className="btn btn-error btn-xs">delete</button>
+          <button onClick={onDelete} className="btn btn-error btn-xs">
+            delete
+          </button>
         </div>
       </th>
     </tr>

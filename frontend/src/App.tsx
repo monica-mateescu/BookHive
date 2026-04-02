@@ -31,7 +31,7 @@ function App() {
                   <Route index element={<Dashboard />} />
                   <Route path="books" element={<Books />} />
                   <Route
-                    path="create-book"
+                    path="books/create-book"
                     element={<CreateBook />}
                     key="create-book"
                   />

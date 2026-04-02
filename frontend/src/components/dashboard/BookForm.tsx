@@ -319,10 +319,10 @@ const CreateBookForm = () => {
               <div className="mt-6 flex justify-center">
                 <button
                   type="button"
-                  onClick={() => navigate("/")}
+                  onClick={() => navigate("/dashboard/books")}
                   className="cursor-pointer text-gray-700 hover:text-gray-900"
                 >
-                  ← Back to home
+                  ← Back to books list
                 </button>
               </div>
             )}
