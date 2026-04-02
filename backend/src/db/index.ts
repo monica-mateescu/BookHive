@@ -1,6 +1,10 @@
 import mongoose from 'mongoose';
 import { MONGO_URI, DB_NAME } from '#config';
 
+if (!MONGO_URI) {
+  throw new Error('MONGO_URI is not defined in environment variables.');
+}
+
 try {
   const clinet = await mongoose.connect(MONGO_URI, {
     dbName: DB_NAME
