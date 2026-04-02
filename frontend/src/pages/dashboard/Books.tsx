@@ -1,15 +1,59 @@
-import { BookCard } from "../../components";
+import { useEffect, useState } from "react";
+
+import { BookRow } from "../../components";
+import { getBooks } from "../../data/books";
+import type { Book } from "../../types/book";
 
 const Books = () => {
-  return (
-    <section className="p-4">
-      <div>
-        <h2 className="mb-4 text-2xl font-bold">Books</h2>
-      </div>
+  const [loading, setLoading] = useState(true);
+  const [books, setBooks] = useState<Book[]>([]);
 
-      <BookCard />
-      <BookCard />
-      <BookCard />
+  useEffect(() => {
+    const fetchBooks = async () => {
+      try {
+        const data = await getBooks();
+        setBooks(data);
+      } catch (error) {
+        console.error("Error fetching books:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchBooks();
+  }, []);
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
+  return (
+    <section className="overflow-x-auto">
+      <table className="table">
+        {/* head */}
+        <thead>
+          <tr>
+            <th></th>
+            <th>Title</th>
+            <th>Year</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          {books.map((book, index) => (
+            <BookRow key={book.id} index={index + 1} book={book} />
+          ))}
+        </tbody>
+        {/* foot */}
+        <tfoot>
+          <tr>
+            <th></th>
+            <th>Title</th>
+            <th>Year</th>
+            <th></th>
+          </tr>
+        </tfoot>
+      </table>
     </section>
   );
 };
