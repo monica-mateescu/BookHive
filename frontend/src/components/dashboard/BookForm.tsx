@@ -102,6 +102,18 @@ const CreateBookForm = () => {
 
   const onImage = (e: ChangeEvent<HTMLInputElement>) => {
     const f = e.target.files?.[0] ?? null;
+
+    setError("");
+    setSuccess("");
+
+    if (f && !f.type.startsWith("image/")) {
+      setError("Only images are allowed.");
+      setField("imageFile", null);
+      e.target.value = "";
+      scrollToTop();
+      return;
+    }
+
     setField("imageFile", f);
   };
 
