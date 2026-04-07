@@ -5,10 +5,14 @@ import { AuthContext } from "./AuthContext.tsx";
 
 const AuthContextProvider = ({ children }: { children: ReactNode }) => {
   const { data, isPending } = authClient.useSession();
+  const user = data?.user
+    ? { ...data.user, role: data.user.role ?? [] }
+    : undefined;
+
+  const isAdmin = user?.role?.includes("admin") ?? false;
+
   return (
-    <AuthContext value={{ user: data?.user, isPending }}>
-      {children}
-    </AuthContext>
+    <AuthContext value={{ user, isAdmin, isPending }}>{children}</AuthContext>
   );
 };
 
