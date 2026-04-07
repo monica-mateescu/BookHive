@@ -5,6 +5,7 @@ import LogoutButton from "./LogoutButton.tsx";
 
 function Header() {
   const { data: session, isPending } = authClient.useSession();
+  const isAdmin = session?.user?.role?.includes("admin") ?? false;
 
   return (
     <header className="sticky top-0 z-100 mb-5 bg-gray-400 p-5 text-black">
@@ -31,7 +32,7 @@ function Header() {
                   Hello, {session.user.name}!
                 </Link>
                 <span className="opacity-50">|</span>
-                {session.user.role.includes("admin") && (
+                {isAdmin && (
                   <>
                     <Link to="/dashboard" className="hover:underline">
                       Dashboard

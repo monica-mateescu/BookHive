@@ -2,6 +2,7 @@ import { createContext } from "react";
 
 type AuthContextType = {
   user: User | undefined;
+  isAdmin: boolean;
   isPending: boolean;
 };
 
