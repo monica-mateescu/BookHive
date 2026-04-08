@@ -1,5 +1,7 @@
 export { default as BookForm } from "./dashboard/BookForm";
 export { default as ClubForm } from "./dashboard/ClubForm";
 export { default as BookRow } from "./dashboard/BookRow";
+export { default as ClubRow } from "./dashboard/ClubRow";
 export { default as SidebarNav } from "./dashboard/SidebarNav";
 export { default as ConfirmModal } from "./dashboard/ConfirmModal";
+export { default as Pagination } from "./dashboard/Pagination";
