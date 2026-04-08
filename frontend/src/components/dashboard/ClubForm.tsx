@@ -1,6 +1,7 @@
 import { type ChangeEvent, useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router";
 
+import useAuth from "../../contexts/useAuth";
 import { getBooks } from "../../data/books";
 import { createClub, getClubById, updateClubById } from "../../data/clubs";
 import type { Book } from "../../types/book";
@@ -19,6 +20,7 @@ const initialForm: CreateClubFormData = {
 const CreateClubForm = () => {
   const { id } = useParams<{ id: string }>();
   const isEdit = Boolean(id);
+  const { isAdmin } = useAuth();
 
   const navigate = useNavigate();
 
@@ -319,10 +321,12 @@ const CreateClubForm = () => {
               <div className="mt-6 flex justify-center">
                 <button
                   type="button"
-                  onClick={() => navigate("/")}
+                  onClick={() =>
+                    isAdmin ? navigate("/dashboard/clubs") : navigate("/")
+                  }
                   className="cursor-pointer text-gray-700 hover:text-gray-900"
                 >
-                  ← Back to home
+                  ← Back to {isAdmin ? "clubs list" : "home"}
                 </button>
               </div>
             )}
