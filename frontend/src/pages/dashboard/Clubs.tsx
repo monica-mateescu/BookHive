@@ -7,7 +7,7 @@ import {
 import { useState } from "react";
 import { Link } from "react-router";
 
-import { ClubRow, ConfirmModal, Pagination } from "../../components";
+import { ClubRow, ConfirmModal, Loading, Pagination } from "../../components";
 import { deleteClubById, getClubs } from "../../data/clubs";
 import type { Club, ClubsResponse } from "../../types/club";
 
@@ -35,13 +35,8 @@ const Clubs = () => {
 
   const errorMessage = deleteMutation.error ? "Failed to delete" : null;
 
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
-
-  if (isError) {
-    return <div className="alert alert-error">{error.message}</div>;
-  }
+  if (isLoading) return <Loading />;
+  if (isError) return <div className="alert alert-error">{error.message}</div>;
 
   return (
     <section className="overflow-x-auto p-5">

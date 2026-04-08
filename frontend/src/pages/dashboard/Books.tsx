@@ -2,7 +2,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import { Link } from "react-router";
 
-import { BookRow, ConfirmModal } from "../../components";
+import { BookRow, ConfirmModal, Loading } from "../../components";
 import { deleteBookById, getBooks } from "../../data/books";
 import type { Book } from "../../types/book";
 
@@ -28,13 +28,8 @@ const Books = () => {
 
   const errorMessage = deleteMutation.error ? "Failed to delete" : null;
 
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
-
-  if (isError) {
-    return <div className="alert alert-error">{error.message}</div>;
-  }
+  if (isLoading) return <Loading />;
+  if (isError) return <div className="alert alert-error">{error.message}</div>;
 
   return (
     <section className="overflow-x-auto p-5">
