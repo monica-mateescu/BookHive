@@ -5,3 +5,4 @@ export { default as ClubRow } from "./dashboard/ClubRow";
 export { default as SidebarNav } from "./dashboard/SidebarNav";
 export { default as ConfirmModal } from "./dashboard/ConfirmModal";
 export { default as Pagination } from "./dashboard/Pagination";
+export { default as Loading } from "./dashboard/Loading";
