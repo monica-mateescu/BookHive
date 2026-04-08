@@ -23,3 +23,17 @@ export type Club = {
   createdAt: string;
   updatedAt: string;
 };
+
+type Pagination = {
+  total: number;
+  page: number;
+  limit: number;
+  totalPages: number;
+  hasNextPage: boolean;
+  hasPrevPage: boolean;
+};
+
+export type ClubsResponse = {
+  data: Club[];
+  pagination: Pagination;
+};
