@@ -1,4 +1,4 @@
-import type { Club } from "../types/club";
+import type { Club, ClubsResponse } from "../types/club";
 import type { CreateClubFormData } from "../types/clubForm";
 
 const API_URL = import.meta.env.VITE_APP_SERVER_URL;
@@ -30,12 +30,15 @@ export const createClub = async (
   return data;
 };
 
-export const getClubs = async (): Promise<Club[]> => {
-  const res = await fetch(`${API_URL}/api/clubs`);
+export const getClubs = async (
+  page = 1,
+  limit = 10,
+): Promise<ClubsResponse> => {
+  const res = await fetch(`${API_URL}/api/clubs?page=${page}&limit=${limit}`);
 
   if (!res.ok) throw new Error("Failed to fetch clubs");
 
-  const data: Club[] = await res.json();
+  const data = await res.json();
   return data;
 };
 

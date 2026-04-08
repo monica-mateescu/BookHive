@@ -1,20 +1,18 @@
 type ConfirmModalProps = {
-  isOpen: boolean;
   title: string;
   message: string;
   onClose: () => void;
   onConfirm: () => void;
+  isLoading: boolean;
 };
 
 const ConfirmModal = ({
-  isOpen,
   title,
   message,
   onClose,
   onConfirm,
+  isLoading,
 }: ConfirmModalProps) => {
-  if (!isOpen) return null;
-
   return (
     <div className="modal modal-open" onClick={onClose}>
       <div className="modal-box" onClick={(e) => e.stopPropagation()}>
@@ -25,7 +23,11 @@ const ConfirmModal = ({
             Cancel
           </button>
 
-          <button onClick={onConfirm} className="btn btn-error btn-sm">
+          <button
+            disabled={isLoading}
+            onClick={onConfirm}
+            className="btn btn-error btn-sm"
+          >
             Yes
           </button>
         </div>
