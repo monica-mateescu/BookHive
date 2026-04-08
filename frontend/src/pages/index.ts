@@ -5,3 +5,5 @@ export { default as NotFound } from "./NotFound";
 export { default as Dashboard } from "./dashboard/Dashboard";
 export { default as CreateBook } from "./dashboard/Book";
 export { default as Books } from "./dashboard/Books";
+export { default as Clubs } from "./dashboard/Clubs";
+export { default as ClubDetail } from "./dashboard/ClubDetail";
