@@ -6,3 +6,6 @@ export { default as SidebarNav } from "./dashboard/SidebarNav";
 export { default as ConfirmModal } from "./dashboard/ConfirmModal";
 export { default as Pagination } from "./dashboard/Pagination";
 export { default as Loading } from "./dashboard/Loading";
+export { default as ClubSidebar } from "./dashboard/ClubSidebar";
+export { default as ClubMeetingCard } from "./dashboard/ClubMeetingCard";
+export { default as ClubMembers } from "./dashboard/ClubMembers";
