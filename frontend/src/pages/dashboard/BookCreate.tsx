@@ -1,6 +1,6 @@
 import { BookForm } from "../../components";
 
-function Book() {
+function BookCreate() {
   return (
     <>
       <BookForm />
@@ -8,4 +8,4 @@ function Book() {
   );
 }
 
-export default Book;
+export default BookCreate;

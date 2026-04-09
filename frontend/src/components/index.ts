@@ -8,3 +8,6 @@ export { default as Pagination } from "./dashboard/Pagination";
 export { default as Loading } from "./dashboard/Loading";
 export { default as ClubCard } from "./ClubCard";
 export { default as Clubs } from "./Clubs";
+export { default as ClubSidebar } from "./dashboard/ClubSidebar";
+export { default as ClubMeetingCard } from "./dashboard/ClubMeetingCard";
+export { default as ClubMembers } from "./dashboard/ClubMembers";
