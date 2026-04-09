@@ -1,8 +1,7 @@
 import type { RequestHandler } from 'express';
 import { Club } from '#models';
 import type { ClubDTO, ClubInputDTO, ClubsPagination, ClubsQuery } from '#types';
-import { assertBookExists, assertBookIsAssigned } from '#utils';
-import type { AnyARecord } from 'dns';
+import { assertBookExists, assertBookIsAssigned, isAdmin } from '#utils';
 
 const contextData = [
   { path: 'createdBy', select: 'firstName lastName email' },
@@ -45,7 +44,7 @@ export const createClub: RequestHandler<{}, ClubDTO, ClubInputDTO> = async (req,
   const now = new Date();
 
   // Check if the user already has an active club with a future meeting date
-  if (user?.role !== 'admin') {
+  if (!isAdmin(user?.role)) {
     const exists = await Club.exists({ createdBy: user?.id, isActive: true, meetingDate: { $gt: now } });
     if (exists) {
       throw new Error('You already have an active club with a future meeting date', { cause: { status: 400 } });
@@ -87,7 +86,7 @@ export const updateClub: RequestHandler<{ id: string }, ClubDTO, ClubInputDTO> =
 
   const filter: Record<string, unknown> = { _id: id };
 
-  if (user?.role !== 'admin') filter.createdBy = user?.id;
+  if (!isAdmin(user?.role)) filter.createdBy = user?.id;
 
   const club = await Club.findOne(filter);
   if (!club) {
@@ -117,7 +116,7 @@ export const deleteClub: RequestHandler<{ id: string }> = async (req, res) => {
 
   const filter: Record<string, unknown> = { _id: id };
 
-  if (user?.role !== 'admin') filter.createdBy = user?.id;
+  if (!isAdmin(user?.role)) filter.createdBy = user?.id;
 
   const club = await Club.findOneAndDelete(filter);
 
@@ -181,7 +180,7 @@ export const leaveClub: RequestHandler<{ id: string }, ClubDTO> = async (req, re
   }
 
   // Prevent the club owner from leaving the club unless they are an admin
-  if (club.createdBy.toString() === userId && user?.role !== 'admin') {
+  if (club.createdBy.toString() === userId && !isAdmin(user?.role)) {
     throw new Error('Owner cannot leave the club', { cause: { status: 400 } });
   }
 
