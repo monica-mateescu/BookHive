@@ -280,7 +280,7 @@ const CreateClubForm = () => {
                   htmlFor="bookId"
                   className="mb-1 ml-1 block text-sm font-medium text-gray-700"
                 >
-                  Selected Book
+                  Book
                 </label>
                 <select
                   id="bookId"

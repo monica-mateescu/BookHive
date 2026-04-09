@@ -131,9 +131,9 @@ describe("CreateBookForm", () => {
     });
 
     render(
-      <MemoryRouter initialEntries={["/edit/123"]}>
+      <MemoryRouter initialEntries={["/books/123/edit"]}>
         <Routes>
-          <Route path="/edit/:id" element={<CreateBookForm />} />
+          <Route path="books/:id/edit" element={<CreateBookForm />} />
         </Routes>
       </MemoryRouter>,
     );
@@ -158,7 +158,7 @@ describe("CreateBookForm", () => {
 
   /* Test 5: Ensure that an error message is displayed when the API call fails. */
   it("Test 5: Ensure that an error message is displayed when the API call fails.", async () => {
-    vi.mocked(createBook).mockRejectedValue(new Error("API call failed"));
+    vi.mocked(createBook).mockRejectedValue(new Error("Creating book failed"));
 
     render(
       <BrowserRouter>
@@ -185,7 +185,7 @@ describe("CreateBookForm", () => {
     fireEvent.click(screen.getByRole("button", { name: /Save book/i }));
 
     await waitFor(() => {
-      expect(screen.getByText(/API call failed/i)).toBeInTheDocument();
+      expect(screen.getByText(/Creating book failed/i)).toBeInTheDocument();
     });
   });
 
