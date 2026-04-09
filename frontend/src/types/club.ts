@@ -2,6 +2,7 @@ export type UserRef = {
   id: string;
   firstName: string;
   lastName: string;
+  email: string;
 };
 
 export type MemberRef = {
