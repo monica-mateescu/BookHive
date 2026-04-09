@@ -24,6 +24,7 @@ export const auth = betterAuth({
   secret: BETTER_AUTH_SECRET,
   emailAndPassword: { enabled: true },
   baseURL: CLIENT_BASE_URL ?? 'http://localhost:5173',
+  trustedProxies: [CLIENT_BASE_URL ?? 'http://localhost:5173'],
   session: {
     cookieCache: {
       enabled: true,
@@ -40,7 +41,7 @@ export const auth = betterAuth({
         defaultValue: ''
       },
       role: {
-        type: 'string',
+        type: 'string[]',
         input: false,
         defaultValue: 'user' as UserRole
       }
