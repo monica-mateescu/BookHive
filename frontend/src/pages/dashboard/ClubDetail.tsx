@@ -1,23 +1,36 @@
-import { useQuery } from "@tanstack/react-query";
-import { useParams } from "react-router";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import { useState } from "react";
+import { Link, useParams } from "react-router";
 
 import {
   ClubMeetingCard,
   ClubMembers,
   ClubSidebar,
+  ConfirmModal,
   Loading,
 } from "../../components";
-import { getClubById } from "../../data/clubs";
+import { deleteClubById, getClubById } from "../../data/clubs";
 import type { Club } from "../../types/club";
 import { formatDate } from "../../utils";
 
 const ClubDetail = () => {
   const { id } = useParams<{ id: string }>();
+  const [isDeleting, setIsDeleting] = useState(false);
   const { data, isLoading, isError, error } = useQuery<Club>({
     queryKey: ["club", id],
-    queryFn: () => getClubById(id as string),
+    queryFn: () => getClubById(id!),
     enabled: Boolean(id),
   });
+  const deleteMutation = useMutation({
+    mutationFn: (id: string) => deleteClubById(id),
+    onSuccess: () => {
+      setIsDeleting(false);
+    },
+  });
+
+  const handleDelete = (id: string) => {
+    deleteMutation.mutate(id);
+  };
 
   if (isLoading) return <Loading />;
   if (isError) return <div className="alert alert-error">{error.message}</div>;
@@ -56,6 +69,29 @@ const ClubDetail = () => {
           updatedDate={data.updatedAt}
         />
       </div>
+      <div className="flex justify-end gap-3">
+        <Link
+          to={`/dashboard/clubs/${id}/edit`}
+          className="btn btn-warning btn-sm"
+        >
+          edit
+        </Link>
+        <button
+          onClick={() => setIsDeleting(true)}
+          className="btn btn-error btn-sm"
+        >
+          delete
+        </button>
+      </div>
+      {isDeleting && (
+        <ConfirmModal
+          title={data.name}
+          message="Are you sure you want to delete this club?"
+          onConfirm={() => handleDelete(id!)}
+          onClose={() => setIsDeleting(false)}
+          isLoading={deleteMutation.isPending}
+        />
+      )}
     </div>
   );
 };
