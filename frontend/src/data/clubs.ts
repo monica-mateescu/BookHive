@@ -85,3 +85,33 @@ export const deleteClubById = async (id: string): Promise<void> => {
     throw new Error(error?.message || "Failed to delete club");
   }
 };
+
+export const joinClub = async (id: string): Promise<Club> => {
+  const res = await fetch(`${API_URL}/api/clubs/${id}/join`, {
+    method: "POST",
+    credentials: "include",
+    headers: defaultHeaders,
+  });
+
+  if (!res.ok) {
+    const error = await res.json().catch(() => null);
+    throw new Error(error?.message || "Failed to join club");
+  }
+
+  return res.json();
+};
+
+export const leaveClub = async (id: string): Promise<Club> => {
+  const res = await fetch(`${API_URL}/api/clubs/${id}/leave`, {
+    method: "POST",
+    credentials: "include",
+    headers: defaultHeaders,
+  });
+
+  if (!res.ok) {
+    const error = await res.json().catch(() => null);
+    throw new Error(error?.message || "Failed to leave club");
+  }
+
+  return res.json();
+};

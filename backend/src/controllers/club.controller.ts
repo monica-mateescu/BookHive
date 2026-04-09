@@ -2,6 +2,7 @@ import type { RequestHandler } from 'express';
 import { Club } from '#models';
 import type { ClubDTO, ClubInputDTO, ClubsPagination, ClubsQuery } from '#types';
 import { assertBookExists, assertBookIsAssigned } from '#utils';
+import type { AnyARecord } from 'dns';
 
 const contextData = [
   { path: 'createdBy', select: 'firstName lastName email' },
@@ -124,4 +125,72 @@ export const deleteClub: RequestHandler<{ id: string }> = async (req, res) => {
     throw new Error('Club not found', { cause: { status: 404 } });
   }
   res.status(204).send();
+};
+
+/**
+ * Join a club by ID.
+ */
+export const joinClub: RequestHandler<{ id: string }, ClubDTO> = async (req, res) => {
+  const {
+    user,
+    params: { id }
+  } = req;
+  const userId = user?.id;
+
+  const club = await Club.findById(id);
+  if (!club) {
+    throw new Error('Club not found', { cause: { status: 404 } });
+  }
+
+  // Check if the user is already a member of the club
+  const isAlreadyMember = club.members.some(m => m.userId.equals(userId));
+
+  if (isAlreadyMember) {
+    throw new Error('You are already a member of this club', { cause: { status: 400 } });
+  }
+
+  // Check if the club is already full (maxMembers)
+  if (club.maxMembers && club.members.length >= club.maxMembers) {
+    throw new Error('This Club is already full', { cause: { status: 400 } });
+  }
+
+  club.members.push({
+    userId: userId,
+    role: 'member',
+    joinedAt: new Date()
+  });
+
+  await club.save();
+  const populatedClub = await club.populate(contextData);
+  res.json(populatedClub as ClubDTO);
+};
+
+/**
+ * Leave a club by ID.
+ */
+export const leaveClub: RequestHandler<{ id: string }, ClubDTO> = async (req, res) => {
+  const {
+    user,
+    params: { id }
+  } = req;
+  const userId = user?.id;
+
+  const club = await Club.findById(id);
+  if (!club) {
+    throw new Error('Club not found', { cause: { status: 404 } });
+  }
+
+  // Prevent the club owner from leaving the club unless they are an admin
+  if (club.createdBy.toString() === userId && user?.role !== 'admin') {
+    throw new Error('Owner cannot leave the club', { cause: { status: 400 } });
+  }
+
+  club.members = club.members.filter(m => {
+    const memberId = m.userId._id?.toString();
+    return memberId !== userId;
+  }) as typeof club.members;
+
+  await club.save();
+  const populatedClub = await club.populate(contextData);
+  res.json(populatedClub as ClubDTO);
 };

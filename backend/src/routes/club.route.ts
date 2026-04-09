@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { getClubs, createClub, getClubById, updateClub, deleteClub } from '#controllers';
+import { getClubs, createClub, getClubById, updateClub, deleteClub, joinClub, leaveClub } from '#controllers';
 import { authMiddleware, validateZod, validateObjectId } from '#middlewares';
 import { paginationQuerySchema, clubInputSchema } from '#schemas';
 
@@ -10,5 +10,8 @@ clubRouter.post('/', authMiddleware, validateZod(clubInputSchema), createClub);
 clubRouter.get('/:id', validateObjectId('id'), getClubById);
 clubRouter.put('/:id', authMiddleware, validateObjectId('id'), validateZod(clubInputSchema), updateClub);
 clubRouter.delete('/:id', authMiddleware, validateObjectId('id'), deleteClub);
+
+clubRouter.post('/:id/join', authMiddleware, joinClub);
+clubRouter.post('/:id/leave', authMiddleware, leaveClub);
 
 export default clubRouter;
