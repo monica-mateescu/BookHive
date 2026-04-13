@@ -1,11 +1,11 @@
 import { Router } from 'express';
 import { createBook, deleteBook, getBookById, getBooks, updateBook } from '#controllers';
 import { authMiddleware, fileHandler, cloudinaryUpload, isAdmin, validateObjectId, validateZod } from '#middlewares';
-import { bookInputSchema } from '#schemas';
+import { paginationQuerySchema, bookInputSchema } from '#schemas';
 
 const bookRouter = Router();
 
-bookRouter.get('/', getBooks);
+bookRouter.get('/', validateZod(paginationQuerySchema), getBooks);
 bookRouter.post(
   '/',
   authMiddleware,
