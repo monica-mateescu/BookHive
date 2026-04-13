@@ -8,6 +8,16 @@ const SidebarNav = () => {
       <ul className="menu bg-base-100 text-base-content min-h-full w-64 p-4 font-bold">
         <li>
           <NavLink
+            to="/dashboard/users"
+            className={({ isActive }) =>
+              isActive ? "active text-primary" : ""
+            }
+          >
+            Users
+          </NavLink>
+        </li>
+        <li>
+          <NavLink
             to="/dashboard/books"
             className={({ isActive }) =>
               isActive ? "active text-primary" : ""

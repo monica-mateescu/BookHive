@@ -17,6 +17,7 @@ import {
   NotFound,
   SignIn,
   SignUp,
+  Users,
 } from "./pages";
 
 function App() {
@@ -32,6 +33,7 @@ function App() {
               <Route element={<AdminLayout />}>
                 <Route path="dashboard" element={<DashboardLayout />}>
                   <Route index element={<Dashboard />} />
+                  <Route path="users" element={<Users />} />
                   <Route path="books" element={<Books />} />
                   <Route path="books/create" element={<BookCreate />} />
                   <Route path="books/:id/edit" element={<BookCreate />} />

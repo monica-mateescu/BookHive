@@ -11,3 +11,4 @@ export { default as Clubs } from "./Clubs";
 export { default as ClubSidebar } from "./dashboard/ClubSidebar";
 export { default as ClubMeetingCard } from "./dashboard/ClubMeetingCard";
 export { default as ClubMembers } from "./dashboard/ClubMembers";
+export { default as UserRow } from "./dashboard/users/UserRow";
