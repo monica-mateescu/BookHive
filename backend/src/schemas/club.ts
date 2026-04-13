@@ -1,6 +1,5 @@
 import { z } from 'zod';
 import { isValidObjectId, Types } from 'mongoose';
-import { is } from 'zod/locales';
 
 export const clubInputSchema = z.strictObject({
   name: z.string().min(1, 'Name is required'),

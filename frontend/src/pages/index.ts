@@ -8,3 +8,4 @@ export { default as Books } from "./dashboard/Books";
 export { default as Clubs } from "./dashboard/Clubs";
 export { default as ClubDetail } from "./dashboard/ClubDetail";
 export { default as ClubCreate } from "./dashboard/ClubCreate";
+export { default as Users } from "./dashboard/users/Users";

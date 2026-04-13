@@ -7,7 +7,8 @@ declare global {
 
   interface User {
     id: string;
-    name: string;
+    name?: string;
+    firstName?: string;
     lastName?: string | null;
     image?: string | null | undefined;
     email: string;
