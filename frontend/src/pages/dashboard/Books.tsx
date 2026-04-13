@@ -1,17 +1,24 @@
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import {
+  keepPreviousData,
+  useMutation,
+  useQuery,
+  useQueryClient,
+} from "@tanstack/react-query";
 import { useState } from "react";
 import { Link } from "react-router";
 
-import { BookRow, ConfirmModal, Loading } from "../../components";
+import { BookRow, ConfirmModal, Loading, Pagination } from "../../components";
 import { deleteBookById, getBooks } from "../../data/books";
-import type { Book } from "../../types/book";
+import type { Book, BooksResponse } from "../../types/book";
 
 const Books = () => {
+  const [page, setPage] = useState(1);
   const [selectedBook, setSelectedBook] = useState<Book | null>(null);
   const queryClient = useQueryClient();
-  const { isLoading, isError, data, error } = useQuery<Book[], Error>({
-    queryKey: ["books"],
-    queryFn: getBooks,
+  const { isLoading, isError, data, error } = useQuery<BooksResponse, Error>({
+    queryKey: ["books", { page }],
+    queryFn: () => getBooks(page),
+    placeholderData: keepPreviousData,
   });
 
   const deleteMutation = useMutation({
@@ -40,12 +47,12 @@ const Books = () => {
       </div>
 
       <div className="flex justify-end text-xs font-semibold">
-        Total books: {data?.length ?? 0}
+        Total books: {data?.pagination.total}
       </div>
       {errorMessage && (
         <div className="alert alert-error mb-4">{errorMessage}</div>
       )}
-      {data?.length === 0 ? (
+      {data?.data?.length === 0 ? (
         <div className="alert alert-info">No books found.</div>
       ) : (
         <>
@@ -60,16 +67,21 @@ const Books = () => {
               </tr>
             </thead>
             <tbody>
-              {data?.map((book, index) => (
+              {data?.data.map((book, index) => (
                 <BookRow
                   key={book.id}
-                  index={index + 1}
+                  index={(page - 1) * data.pagination.limit + index + 1}
                   book={book}
                   onDelete={() => setSelectedBook(book)}
                 />
               ))}
             </tbody>
           </table>
+          <Pagination
+            page={page}
+            totalPages={data?.pagination.totalPages ?? 1}
+            onPageChange={setPage}
+          />
           {selectedBook && (
             <ConfirmModal
               title={selectedBook.title}

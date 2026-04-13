@@ -1,10 +1,29 @@
 import type { RequestHandler } from 'express';
 import { Book } from '#models';
-import type { BookDTO, BookInputDTO } from '#types';
+import type { BookDTO, BookInputDTO, BooksPagination, BooksQuery } from '#types';
 
-export const getBooks: RequestHandler<{}, BookDTO[]> = async (_req, res) => {
-  const books = await Book.find();
-  res.json(books);
+export const getBooks: RequestHandler<{}, BooksPagination, {}, BooksQuery> = async (req, res) => {
+  const { page = 1, limit = 10 } = req.query;
+  const skip = (page - 1) * limit;
+
+  const [total, data] = await Promise.all([
+    Book.countDocuments(),
+    Book.find().sort({ createdAt: -1 }).skip(skip).limit(limit)
+  ]);
+
+  const totalPages = Math.max(1, Math.ceil(total / limit));
+
+  res.json({
+    data: data as BookDTO[],
+    pagination: {
+      total,
+      page,
+      limit,
+      totalPages,
+      hasNextPage: page < totalPages,
+      hasPrevPage: page > 1
+    }
+  });
 };
 
 export const createBook: RequestHandler<{}, BookDTO, BookInputDTO> = async (req, res) => {

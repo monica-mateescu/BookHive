@@ -1,3 +1,5 @@
+import type { Pagination } from "./pagination";
+
 export type UserRef = {
   id: string;
   firstName: string;
@@ -32,15 +34,6 @@ export type Club = {
   isActive: boolean;
   createdAt: string;
   updatedAt: string;
-};
-
-type Pagination = {
-  total: number;
-  page: number;
-  limit: number;
-  totalPages: number;
-  hasNextPage: boolean;
-  hasPrevPage: boolean;
 };
 
 export type ClubsResponse = {

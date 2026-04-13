@@ -1,4 +1,4 @@
-import type { Book } from "../types/book";
+import type { Book, BooksResponse } from "../types/book";
 
 const API_URL = import.meta.env.VITE_APP_SERVER_URL;
 
@@ -22,12 +22,15 @@ export const createBook = async (formData: FormData): Promise<Book> => {
   return data;
 };
 
-export const getBooks = async (): Promise<Book[]> => {
-  const res = await fetch(`${API_URL}/api/books`);
+export const getBooks = async (
+  page = 1,
+  limit = 10,
+): Promise<BooksResponse> => {
+  const res = await fetch(`${API_URL}/api/books?page=${page}&limit=${limit}`);
 
   if (!res.ok) throw new Error("Failed to fetch books");
 
-  const data: Book[] = await res.json();
+  const data = await res.json();
   return data;
 };
 

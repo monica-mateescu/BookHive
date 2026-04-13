@@ -4,7 +4,7 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 
 import { getBooks } from "../../data/books";
 import { createClub, getClubById, updateClubById } from "../../data/clubs";
-import type { Book } from "../../types/book";
+import type { BooksResponse } from "../../types/book";
 import type { Club } from "../../types/club";
 import CreateClubForm from "./ClubForm";
 
@@ -35,26 +35,36 @@ vi.mock("../../contexts/useAuth", () => ({
 }));
 
 // Mock for books
-const mockBooks: Book[] = [
-  {
-    id: "123",
-    title: "Book title 1",
-    author: "Book author 1",
-    isbn: "123-1234567890",
-    summary: "Book summary 1",
-    publishedYear: 2026,
-    image: "book-cover-1.png",
+const mockBooks: BooksResponse = {
+  data: [
+    {
+      id: "123",
+      title: "Book title 1",
+      author: "Book author 1",
+      isbn: "123-1234567890",
+      summary: "Book summary 1",
+      publishedYear: 2026,
+      image: "book-cover-1.png",
+    },
+    {
+      id: "456",
+      title: "Book title 2",
+      author: "Book author 2",
+      isbn: "456-4567890123",
+      summary: "Book summary 2",
+      publishedYear: 2026,
+      image: "book-cover-2.png",
+    },
+  ],
+  pagination: {
+    total: 2,
+    page: 1,
+    limit: 10,
+    totalPages: 1,
+    hasNextPage: false,
+    hasPrevPage: false,
   },
-  {
-    id: "456",
-    title: "Book title 2",
-    author: "Book author 2",
-    isbn: "456-4567890123",
-    summary: "Book summary 2",
-    publishedYear: 2026,
-    image: "book-cover-2.png",
-  },
-];
+};
 
 // Mock for club
 const mockClubData: Club = {

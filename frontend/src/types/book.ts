@@ -1,3 +1,5 @@
+import type { Pagination } from "./pagination";
+
 export type Book = {
   id: string;
   title: string;
@@ -6,4 +8,9 @@ export type Book = {
   summary: string;
   image: string;
   publishedYear: number;
+};
+
+export type BooksResponse = {
+  data: Book[];
+  pagination: Pagination;
 };
