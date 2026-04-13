@@ -1,25 +1,35 @@
-import { describe, it, expect, beforeAll, afterEach } from 'vitest';
-import { auth } from '../src/utils/auth.ts';
+import { describe, it, expect, beforeAll, afterAll, afterEach } from 'vitest';
+
+import { setupTest, teardownTest } from './setup';
+
 import type { TestHelpers } from 'better-auth/plugins';
 
-describe('auth flow', () => {
+describe('auth flow (integration)', () => {
+  let auth: Awaited<ReturnType<typeof setupTest>>['auth'];
   let test: TestHelpers;
 
   const createdUserIds: string[] = [];
 
   beforeAll(async () => {
-    const ctx = await auth.$context;
-    test = ctx.test;
+    const setup = await setupTest();
+    auth = setup.auth;
+    test = setup.test;
+  });
+
+  afterAll(async () => {
+    await teardownTest();
   });
 
   afterEach(async () => {
-    await Promise.all(createdUserIds.map(id => test.deleteUser(id)));
+    for (const id of createdUserIds) {
+      await test.deleteUser(id);
+    }
     createdUserIds.length = 0;
   });
 
   const createTestUser = async (overrides = {}) => {
     const user = test.createUser({
-      email: 'alice@example.com',
+      email: `alice+${crypto.randomUUID()}@example.com`,
       name: 'Alice',
       lastName: 'Smith',
       emailVerified: false,
@@ -44,14 +54,14 @@ describe('auth flow', () => {
 
     const session = await auth.api.getSession({ headers });
 
+    expect(session).not.toBeNull();
     expect(session?.user.id).toBe(user.id);
   });
 
-  it('should prevent duplicate emails (DB constraint test)', async () => {
-    const user1 = await createTestUser({ email: 'duplicate@example.com' });
-    const user2 = await createTestUser({ email: 'duplicate@example.com' });
+  it('should prevent duplicate emails', async () => {
+    await createTestUser({ email: 'duplicate@example.com' });
 
-    expect(user2.id).not.toBe(user1.id);
+    await expect(createTestUser({ email: 'duplicate@example.com' })).rejects.toThrow();
   });
 
   it('should create and invalidate session correctly', async () => {
@@ -69,7 +79,7 @@ describe('auth flow', () => {
   });
 
   it('should not allow access without session', async () => {
-    const session = await auth.api.getSession({ headers: {} as any });
+    const session = await auth.api.getSession({ headers: new Headers() });
     expect(session).toBeNull();
   });
 
