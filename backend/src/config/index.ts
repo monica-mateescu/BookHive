@@ -12,7 +12,7 @@ const { data, error, success } = envSchema.safeParse(process.env);
 
 if (!success) {
   console.error('Invalid environment variables:', z.prettifyError(error));
-  if (process.env.NODE_ENV !== 'test') process.exit(1);
+  process.exit(1);
 }
 
-export const { MONGO_URI, DB_NAME, CLIENT_BASE_URL, BETTER_AUTH_SECRET, DOMAIN } = data || {};
+export const { MONGO_URI, DB_NAME, CLIENT_BASE_URL, BETTER_AUTH_SECRET, DOMAIN } = data;
