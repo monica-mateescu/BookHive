@@ -21,3 +21,6 @@ export type ClubsQuery = z.infer<typeof paginationQuerySchema>;
 export type ClubsPagination = z.infer<typeof paginationSchema>;
 
 export type UserRole = 'user' | 'admin';
+
+export type UsersQuery = z.infer<typeof paginationQuerySchema>;
+export type UsersPagination = z.infer<typeof paginationSchema>;
