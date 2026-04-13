@@ -44,7 +44,7 @@ const CreateClubForm = () => {
     const fetchBooks = async () => {
       try {
         setLoadingBooks(true);
-        const data: Book[] = await getBooks();
+        const { data } = await getBooks(1, 100);
         setBooks(data);
       } catch (e) {
         setError(e instanceof Error ? e.message : "Failed to fetch books");
