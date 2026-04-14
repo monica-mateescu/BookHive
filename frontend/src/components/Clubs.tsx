@@ -14,7 +14,7 @@ const Clubs = () => {
   });
 
   if (isLoading) return <Loading />;
-  if (isError) return <div className="alert alert-error">{error.message}</div>;
+  if (isError) return <div className="alert alert-error">{error?.message}</div>;
 
   return (
     <section className="px-5">

@@ -1,3 +1,6 @@
+export { default as Clubs } from "./Clubs";
+export { default as ClubCard } from "./ClubCard";
+export { default as ClubDetail } from "./ClubDetail";
 export { default as BookForm } from "./dashboard/BookForm";
 export { default as ClubForm } from "./dashboard/ClubForm";
 export { default as BookRow } from "./dashboard/BookRow";
@@ -6,8 +9,6 @@ export { default as SidebarNav } from "./dashboard/SidebarNav";
 export { default as ConfirmModal } from "./dashboard/ConfirmModal";
 export { default as Pagination } from "./dashboard/Pagination";
 export { default as Loading } from "./dashboard/Loading";
-export { default as ClubCard } from "./ClubCard";
-export { default as Clubs } from "./Clubs";
 export { default as ClubSidebar } from "./dashboard/ClubSidebar";
 export { default as ClubMeetingCard } from "./dashboard/ClubMeetingCard";
 export { default as ClubMembers } from "./dashboard/ClubMembers";

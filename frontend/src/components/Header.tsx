@@ -15,7 +15,7 @@ function Header() {
         </Link>
 
         {!isPending && (
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-2 md:gap-4">
             {!session ? (
               <>
                 <Link to="/signup" className="hover:underline">
