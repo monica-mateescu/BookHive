@@ -2,7 +2,7 @@ import { NavLink } from "react-router";
 
 const SidebarNav = () => {
   return (
-    <div className="drawer-side z-100">
+    <div className="drawer-side z-100 md:z-50">
       <label htmlFor="sidebar-drawer" className="drawer-overlay"></label>
 
       <ul className="menu bg-base-100 text-base-content min-h-full w-64 p-4 font-bold">

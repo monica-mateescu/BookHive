@@ -11,6 +11,7 @@ import {
   Books,
   ClubCreate,
   ClubDetail,
+  ClubDetailWithChat,
   Clubs,
   Dashboard,
   Home,
@@ -44,6 +45,7 @@ function App() {
                 </Route>
               </Route>
             </Route>
+            <Route path="clubs/:id/detail" element={<ClubDetailWithChat />} />
             <Route path="*" element={<NotFound />} />
           </Route>
         </Routes>
