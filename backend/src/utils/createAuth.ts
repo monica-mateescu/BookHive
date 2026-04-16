@@ -39,7 +39,7 @@ export const createAuth = ({ db, client, baseURL, secret, domain, isProduction, 
         role: {
           type: 'string[]',
           input: false,
-          defaultValue: 'user' as UserRole
+          defaultValue: ['user'] as UserRole[]
         }
       }
     },
