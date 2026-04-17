@@ -1,11 +1,5 @@
-import type { Club, ClubsResponse } from "../types/club";
-import type { CreateClubFormData } from "../types/clubForm";
-
-const API_URL = import.meta.env.VITE_APP_SERVER_URL;
-
-if (!API_URL) {
-  throw new Error("API URL is required, are you missing a .env file?");
-}
+import { API_URL } from "@config";
+import type { Club, ClubsResponse, CreateClubFormData } from "@types";
 
 const defaultHeaders = {
   "Content-Type": "application/json",

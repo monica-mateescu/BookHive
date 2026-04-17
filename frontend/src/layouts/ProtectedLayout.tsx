@@ -1,6 +1,5 @@
+import useAuth from "@/contexts/useAuth";
 import { Navigate, Outlet } from "react-router";
-
-import useAuth from "../contexts/useAuth";
 
 const ProtectedLayout = () => {
   const { user, isPending } = useAuth();

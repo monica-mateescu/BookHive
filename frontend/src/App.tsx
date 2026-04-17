@@ -1,11 +1,9 @@
-import { BrowserRouter, Route, Routes } from "react-router";
-
 import {
   AdminLayout,
   DashboardLayout,
   MainLayout,
   ProtectedLayout,
-} from "./layouts";
+} from "@/layouts";
 import {
   BookCreate,
   Books,
@@ -19,7 +17,8 @@ import {
   SignIn,
   SignUp,
   Users,
-} from "./pages";
+} from "@/pages";
+import { BrowserRouter, Route, Routes } from "react-router";
 
 function App() {
   return (
@@ -32,7 +31,7 @@ function App() {
             <Route path="signin" element={<SignIn />} />
             <Route element={<ProtectedLayout />}>
               <Route element={<AdminLayout />}>
-                <Route path="dashboard" element={<DashboardLayout />}>
+                <Route path="admin" element={<DashboardLayout />}>
                   <Route index element={<Dashboard />} />
                   <Route path="users" element={<Users />} />
                   <Route path="books" element={<Books />} />
