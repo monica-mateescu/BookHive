@@ -1,6 +1,9 @@
 export { default as Clubs } from "./clubs/Clubs";
 export { default as ClubCard } from "./clubs/ClubCard";
 export { default as ClubDetail } from "./clubs/ClubDetail";
+export { default as Books } from "./books/Books";
+export { default as BookCard } from "./books/BookCard";
+export { default as BookDetail } from "./books/BookDetail";
 export { default as BookForm } from "./books/admin/AdminBookForm";
 export { default as ClubForm } from "./clubs/admin/AdminClubForm";
 export { default as BookRow } from "./books/admin/AdminBookRow";

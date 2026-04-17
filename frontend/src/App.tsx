@@ -6,10 +6,11 @@ import {
 } from "@/layouts";
 import {
   BookCreate,
+  BookDetailPage,
   Books,
   ClubCreate,
   ClubDetail,
-  ClubDetailWithChat,
+  ClubDetailPage,
   Clubs,
   Dashboard,
   Home,
@@ -44,7 +45,9 @@ function App() {
                 </Route>
               </Route>
             </Route>
-            <Route path="clubs/:id/detail" element={<ClubDetailWithChat />} />
+            <Route path="books/:id/detail" element={<BookDetailPage />} />
+            <Route path="clubs/:id/detail" element={<ClubDetailPage />} />
+            <Route path="clubs/create/:bookId/" element={<ClubCreate />} />
             <Route path="*" element={<NotFound />} />
           </Route>
         </Routes>

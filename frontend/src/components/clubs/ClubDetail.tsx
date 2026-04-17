@@ -6,11 +6,11 @@ import { joinClub, leaveClub } from "../../data/clubs";
 import type { Club } from "../../types/club";
 import { formatDate, formatTime } from "../../utils/formatters";
 
-type ClubChatProps = {
+type ClubDetailProps = {
   club: Club;
 };
 
-function ClubDetail({ club }: ClubChatProps) {
+function ClubDetail({ club }: ClubDetailProps) {
   const { user } = useAuth();
   const queryClient = useQueryClient();
   const [errorMessage, setErrorMessage] = useState("");
