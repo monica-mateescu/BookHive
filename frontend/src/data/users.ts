@@ -1,10 +1,5 @@
-import type { UsersResponse } from "../types/users";
-
-const API_URL = import.meta.env.VITE_APP_SERVER_URL;
-
-if (!API_URL) {
-  throw new Error("API URL is required, are you missing a .env file?");
-}
+import { API_URL } from "@config";
+import type { UsersResponse } from "@types";
 
 export const getUsers = async (
   page = 1,

@@ -12,6 +12,14 @@ export default defineConfig({
   resolve: {
     alias: {
       "@": resolve(__dirname, "./src"),
+      "@contexts": resolve(__dirname, "./src/contexts"),
+      "@config": resolve(__dirname, "./src/config"),
+      "@components": resolve(__dirname, "./src/components"),
+      "@layouts": resolve(__dirname, "./src/layouts"),
+      "@pages": resolve(__dirname, "./src/pages"),
+      "@data": resolve(__dirname, "./src/data"),
+      "@utils": resolve(__dirname, "./src/utils"),
+      "@types": resolve(__dirname, "./src/types"),
     },
   },
   plugins: [react(), tailwindcss()],

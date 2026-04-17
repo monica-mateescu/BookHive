@@ -22,7 +22,19 @@
     "noUnusedParameters": true,
     "erasableSyntaxOnly": true,
     "noFallthroughCasesInSwitch": true,
-    "noUncheckedSideEffectImports": true
+    "noUncheckedSideEffectImports": true,
+
+    "paths": {
+      "@/*": ["./src/*"],
+      "@contexts/*": ["./src/contexts/*"],
+      "@config": ["./src/config/index.ts"],
+      "@components": ["/src/components/index.ts"],
+      "@layouts": ["./src/layouts/index.ts"],
+      "@pages": ["./src/pages/index.ts"],
+      "@data": ["./src/data/index.ts"],
+      "@utils": ["./src/utils/index.ts"],
+      "@types": ["./src/types/index.ts"]
+    }
   },
   "include": ["src"]
 }

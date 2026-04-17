@@ -1,10 +1,5 @@
-import type { Book, BooksResponse } from "../types/book";
-
-const API_URL = import.meta.env.VITE_APP_SERVER_URL;
-
-if (!API_URL) {
-  throw new Error("API URL is required, are you missing a .env file?");
-}
+import { API_URL } from "@config";
+import type { Book, BooksResponse } from "@types";
 
 export const createBook = async (formData: FormData): Promise<Book> => {
   const res = await fetch(`${API_URL}/api/books`, {

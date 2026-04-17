@@ -1,4 +1,4 @@
-import { Clubs } from "../components";
+import { Clubs } from "@/components";
 
 function Home() {
   return (
