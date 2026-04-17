@@ -1,32 +1,32 @@
-import { ClubDetail, Loading } from "@/components";
-import { getClubById } from "@/data";
 import { useQuery } from "@tanstack/react-query";
 import { useParams } from "react-router";
 
-function ClubDetailWithChat() {
+import { BookDetail, Loading } from "../../components";
+import { getBookById } from "../../data/books";
+
+function BookDetailPage() {
   const { id } = useParams();
 
   const {
-    data: club,
+    data: book,
     isError,
     isLoading,
     error,
   } = useQuery({
-    queryKey: ["clubs", id],
-    queryFn: () => getClubById(id!),
+    queryKey: ["books", id],
+    queryFn: () => getBookById(id!),
     enabled: !!id,
   });
 
   if (isLoading) return <Loading />;
-  if (isError || !club)
+  if (isError || !book)
     return <div className="alert alert-error">{error?.message}</div>;
 
   return (
     <div className="p-5">
-      <ClubDetail club={club} />
-      <div className="mt-5 text-center">The chat is coming soon.</div>
+      <BookDetail book={book} />
     </div>
   );
 }
 
-export default ClubDetailWithChat;
+export default BookDetailPage;

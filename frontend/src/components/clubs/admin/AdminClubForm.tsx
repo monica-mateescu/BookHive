@@ -1,5 +1,11 @@
 import useAuth from "@contexts/useAuth";
-import { createClub, getBooks, getClubById, updateClubById } from "@data";
+import {
+  createClub,
+  getBooks,
+  getClubById,
+  getClubs,
+  updateClubById,
+} from "@data";
 import type { Book, Club, CreateClubFormData } from "@types";
 import { type ChangeEvent, useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router";
@@ -14,9 +20,12 @@ const initialForm: CreateClubFormData = {
 };
 
 const CreateClubForm = () => {
-  const { id } = useParams<{ id: string }>();
+  const { id, bookId: preselectedBookId } = useParams<{
+    id: string;
+    bookId: string;
+  }>();
   const isEdit = Boolean(id);
-  const { isAdmin } = useAuth();
+  const { user, isAdmin } = useAuth();
 
   const navigate = useNavigate();
 
@@ -35,6 +44,12 @@ const CreateClubForm = () => {
   const scrollToTop = () => {
     topRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
   };
+
+  useEffect(() => {
+    if (preselectedBookId) {
+      setForm((prev) => ({ ...prev, bookId: preselectedBookId }));
+    }
+  }, [preselectedBookId]);
 
   useEffect(() => {
     const fetchBooks = async () => {
@@ -134,6 +149,41 @@ const CreateClubForm = () => {
     try {
       setSubmitting(true);
 
+      if (!isAdmin) {
+        const { data: existingClubs } = await getClubs();
+
+        const isBookInAnyClub = existingClubs.some((club) => {
+          const clubBookId =
+            typeof club.bookId === "object" && club.bookId !== null
+              ? club.bookId.id
+              : club.bookId;
+
+          return clubBookId === form.bookId;
+        });
+
+        const isCreator = existingClubs.some((club) => {
+          const clubBookId =
+            typeof club.bookId === "object" && club.bookId !== null
+              ? club.bookId.id
+              : club.bookId;
+
+          const creatorId =
+            typeof club.createdBy === "object" && club.createdBy !== null
+              ? club.createdBy.id
+              : club.createdBy;
+
+          return clubBookId === form.bookId && creatorId === user?.id;
+        });
+
+        if (isBookInAnyClub) {
+          throw new Error("A club for this book already exists.");
+        }
+
+        if (isCreator) {
+          throw new Error("You have already created a club for this book.");
+        }
+      }
+
       const payload = {
         name: form.name,
         description: form.description,
@@ -168,167 +218,187 @@ const CreateClubForm = () => {
 
   return (
     <>
-      <h1 className="text-center">
-        {isEdit ? "Edit club" : "Create new club"}
-      </h1>
-      <div className="my-10 w-full">
-        <div className="mx-auto w-full max-w-xl">
-          {error && (
-            <div className="mb-5 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-600">
-              {error}
+      {!user ? (
+        <>
+          <h1 className="text-center">Create new club</h1>
+          <div className="my-10 w-full">
+            <div className="mx-auto w-full max-w-xl text-center">
+              You must be signed in to create a new club.
             </div>
-          )}
+          </div>
+        </>
+      ) : (
+        <>
+          <h1 className="text-center">
+            {isEdit ? "Edit club" : "Create new club"}
+          </h1>
+          <div className="my-10 w-full">
+            <div className="mx-auto w-full max-w-xl">
+              {error && (
+                <div className="mb-5 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-600">
+                  {error}
+                </div>
+              )}
 
-          {success && (
-            <div className="mb-5 rounded-xl border border-green-200 bg-green-50 px-4 py-3 text-sm text-green-600">
-              {success}
+              {success && (
+                <div className="mb-5 rounded-xl border border-green-200 bg-green-50 px-4 py-3 text-sm text-green-600">
+                  {success}
+                </div>
+              )}
+
+              <form onSubmit={handleSubmit}>
+                <div className="space-y-5">
+                  <div>
+                    <label htmlFor="name" className="sr-only">
+                      Club name
+                    </label>
+                    <input
+                      id="name"
+                      name="name"
+                      type="text"
+                      className="w-full rounded-xl border border-gray-200 bg-white px-4 py-3 text-base transition-all outline-none focus:border-gray-900 focus:ring-4 focus:ring-gray-100 disabled:cursor-not-allowed disabled:bg-gray-50 disabled:opacity-60"
+                      placeholder="Club name"
+                      value={form.name}
+                      onChange={onText("name")}
+                      required
+                      disabled={submitting || loadingClub}
+                    />
+                  </div>
+
+                  <div>
+                    <label htmlFor="description" className="sr-only">
+                      Club description
+                    </label>
+                    <textarea
+                      id="description"
+                      name="description"
+                      className="w-full rounded-xl border border-gray-200 bg-white px-4 py-3 text-base transition-all outline-none focus:border-gray-900 focus:ring-4 focus:ring-gray-100 disabled:cursor-not-allowed disabled:bg-gray-50 disabled:opacity-60"
+                      placeholder="Club description"
+                      value={form.description}
+                      onChange={onText("description")}
+                      required
+                      disabled={submitting || loadingClub}
+                    />
+                  </div>
+
+                  <div>
+                    <label htmlFor="meetingLink" className="sr-only">
+                      Meeting link
+                    </label>
+                    <input
+                      id="meetingLink"
+                      name="meetingLink"
+                      type="text"
+                      className="w-full rounded-xl border border-gray-200 bg-white px-4 py-3 text-base transition-all outline-none focus:border-gray-900 focus:ring-4 focus:ring-gray-100 disabled:cursor-not-allowed disabled:bg-gray-50 disabled:opacity-60"
+                      placeholder="Meeting link"
+                      value={form.meetingLink}
+                      onChange={onText("meetingLink")}
+                      required
+                      disabled={submitting || loadingClub}
+                    />
+                  </div>
+
+                  <div>
+                    <label htmlFor="meetingDate" className="sr-only">
+                      Meeting date
+                    </label>
+                    <input
+                      id="meetingDate"
+                      name="meetingDate"
+                      type="datetime-local"
+                      className="w-full rounded-xl border border-gray-200 bg-white px-4 py-3 text-base transition-all outline-none focus:border-gray-900 focus:ring-4 focus:ring-gray-100 disabled:cursor-not-allowed disabled:bg-gray-50 disabled:opacity-60"
+                      placeholder="Meeting date"
+                      value={form.meetingDate}
+                      onChange={onText("meetingDate")}
+                      required
+                      disabled={submitting || loadingClub}
+                    />
+                  </div>
+
+                  <div>
+                    <label htmlFor="maxMembers" className="sr-only">
+                      Max members
+                    </label>
+                    <input
+                      id="maxMembers"
+                      name="maxMembers"
+                      type="number"
+                      className="w-full rounded-xl border border-gray-200 bg-white px-4 py-3 text-base transition-all outline-none focus:border-gray-900 focus:ring-4 focus:ring-gray-100 disabled:cursor-not-allowed disabled:bg-gray-50 disabled:opacity-60"
+                      placeholder="Max members"
+                      value={form.maxMembers}
+                      onChange={onText("maxMembers")}
+                      required
+                      disabled={submitting || loadingClub}
+                    />
+                  </div>
+
+                  <div>
+                    <label
+                      htmlFor="bookId"
+                      className="mb-1 ml-1 block text-sm font-medium text-gray-700"
+                    >
+                      Book
+                    </label>
+                    <select
+                      id="bookId"
+                      name="bookId"
+                      className="w-full appearance-none rounded-xl border border-gray-200 bg-white px-4 py-3 text-base transition-all outline-none focus:border-gray-900 focus:ring-4 focus:ring-gray-100 disabled:bg-gray-50 disabled:opacity-60"
+                      value={form.bookId}
+                      onChange={onText("bookId")}
+                      required
+                      disabled={
+                        submitting ||
+                        loadingClub ||
+                        loadingBooks ||
+                        !!preselectedBookId
+                      }
+                    >
+                      <option value="" disabled>
+                        {loadingBooks
+                          ? "Loading books..."
+                          : "Please select a book"}
+                      </option>
+                      {books.map((book) => (
+                        <option key={book.id} value={book.id}>
+                          {book.title}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                </div>
+
+                <div className="mt-10 flex justify-center">
+                  <button
+                    type="submit"
+                    disabled={!canSubmit || submitting || loadingClub}
+                    className="w-full max-w-xs cursor-pointer rounded-xl bg-indigo-600 px-10 py-4 text-white shadow-lg shadow-indigo-200 transition-all hover:bg-indigo-700 active:scale-[0.98] disabled:cursor-not-allowed disabled:bg-gray-300 disabled:shadow-none"
+                  >
+                    {submitting
+                      ? "Saving..."
+                      : isEdit
+                        ? "Save changes"
+                        : "Save club"}
+                  </button>
+                </div>
+
+                {isEdit && (
+                  <div className="mt-6 flex justify-center">
+                    <button
+                      type="button"
+                      onClick={() =>
+                        isAdmin ? navigate("/dashboard/clubs") : navigate("/")
+                      }
+                      className="cursor-pointer text-gray-700 hover:text-gray-900"
+                    >
+                      ← Back to {isAdmin ? "clubs list" : "home"}
+                    </button>
+                  </div>
+                )}
+              </form>
             </div>
-          )}
-
-          <form onSubmit={handleSubmit}>
-            <div className="space-y-5">
-              <div>
-                <label htmlFor="name" className="sr-only">
-                  Club name
-                </label>
-                <input
-                  id="name"
-                  name="name"
-                  type="text"
-                  className="w-full rounded-xl border border-gray-200 bg-white px-4 py-3 text-base transition-all outline-none focus:border-gray-900 focus:ring-4 focus:ring-gray-100 disabled:cursor-not-allowed disabled:bg-gray-50 disabled:opacity-60"
-                  placeholder="Club name"
-                  value={form.name}
-                  onChange={onText("name")}
-                  required
-                  disabled={submitting || loadingClub}
-                />
-              </div>
-
-              <div>
-                <label htmlFor="description" className="sr-only">
-                  Club description
-                </label>
-                <textarea
-                  id="description"
-                  name="description"
-                  className="w-full rounded-xl border border-gray-200 bg-white px-4 py-3 text-base transition-all outline-none focus:border-gray-900 focus:ring-4 focus:ring-gray-100 disabled:cursor-not-allowed disabled:bg-gray-50 disabled:opacity-60"
-                  placeholder="Club description"
-                  value={form.description}
-                  onChange={onText("description")}
-                  required
-                  disabled={submitting || loadingClub}
-                />
-              </div>
-
-              <div>
-                <label htmlFor="meetingLink" className="sr-only">
-                  Meeting link
-                </label>
-                <input
-                  id="meetingLink"
-                  name="meetingLink"
-                  type="text"
-                  className="w-full rounded-xl border border-gray-200 bg-white px-4 py-3 text-base transition-all outline-none focus:border-gray-900 focus:ring-4 focus:ring-gray-100 disabled:cursor-not-allowed disabled:bg-gray-50 disabled:opacity-60"
-                  placeholder="Meeting link"
-                  value={form.meetingLink}
-                  onChange={onText("meetingLink")}
-                  required
-                  disabled={submitting || loadingClub}
-                />
-              </div>
-
-              <div>
-                <label htmlFor="meetingDate" className="sr-only">
-                  Meeting date
-                </label>
-                <input
-                  id="meetingDate"
-                  name="meetingDate"
-                  type="datetime-local"
-                  className="w-full rounded-xl border border-gray-200 bg-white px-4 py-3 text-base transition-all outline-none focus:border-gray-900 focus:ring-4 focus:ring-gray-100 disabled:cursor-not-allowed disabled:bg-gray-50 disabled:opacity-60"
-                  placeholder="Meeting date"
-                  value={form.meetingDate}
-                  onChange={onText("meetingDate")}
-                  required
-                  disabled={submitting || loadingClub}
-                />
-              </div>
-
-              <div>
-                <label htmlFor="maxMembers" className="sr-only">
-                  Max members
-                </label>
-                <input
-                  id="maxMembers"
-                  name="maxMembers"
-                  type="number"
-                  className="w-full rounded-xl border border-gray-200 bg-white px-4 py-3 text-base transition-all outline-none focus:border-gray-900 focus:ring-4 focus:ring-gray-100 disabled:cursor-not-allowed disabled:bg-gray-50 disabled:opacity-60"
-                  placeholder="Max members"
-                  value={form.maxMembers}
-                  onChange={onText("maxMembers")}
-                  required
-                  disabled={submitting || loadingClub}
-                />
-              </div>
-
-              <div>
-                <label
-                  htmlFor="bookId"
-                  className="mb-1 ml-1 block text-sm font-medium text-gray-700"
-                >
-                  Book
-                </label>
-                <select
-                  id="bookId"
-                  name="bookId"
-                  className="w-full appearance-none rounded-xl border border-gray-200 bg-white px-4 py-3 text-base transition-all outline-none focus:border-gray-900 focus:ring-4 focus:ring-gray-100 disabled:bg-gray-50 disabled:opacity-60"
-                  value={form.bookId}
-                  onChange={onText("bookId")}
-                  required
-                  disabled={submitting || loadingClub || loadingBooks}
-                >
-                  <option value="" disabled>
-                    {loadingBooks ? "Loading books..." : "Please select a book"}
-                  </option>
-                  {books.map((book) => (
-                    <option key={book.id} value={book.id}>
-                      {book.title}
-                    </option>
-                  ))}
-                </select>
-              </div>
-            </div>
-
-            <div className="mt-10 flex justify-center">
-              <button
-                type="submit"
-                disabled={!canSubmit || submitting || loadingClub}
-                className="w-full max-w-xs cursor-pointer rounded-xl bg-indigo-600 px-10 py-4 text-white shadow-lg shadow-indigo-200 transition-all hover:bg-indigo-700 active:scale-[0.98] disabled:cursor-not-allowed disabled:bg-gray-300 disabled:shadow-none"
-              >
-                {submitting
-                  ? "Saving..."
-                  : isEdit
-                    ? "Save changes"
-                    : "Save club"}
-              </button>
-            </div>
-
-            {isEdit && (
-              <div className="mt-6 flex justify-center">
-                <button
-                  type="button"
-                  onClick={() =>
-                    isAdmin ? navigate("/dashboard/clubs") : navigate("/")
-                  }
-                  className="cursor-pointer text-gray-700 hover:text-gray-900"
-                >
-                  ← Back to {isAdmin ? "clubs list" : "home"}
-                </button>
-              </div>
-            )}
-          </form>
-        </div>
-      </div>
+          </div>
+        </>
+      )}
     </>
   );
 };
