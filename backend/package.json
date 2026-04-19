@@ -2,7 +2,7 @@
   "name": "bookhive-backend",
   "version": "1.0.0",
   "description": "",
-  "main": "app.ts",
+  "main": "app.js",
   "type": "module",
   "imports": {
     "#config": {
