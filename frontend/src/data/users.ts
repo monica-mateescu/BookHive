@@ -14,3 +14,25 @@ export const getUsers = async (
   const data = await res.json();
   return data;
 };
+
+export const deleteUser = async (id: string) => {
+  const res = await fetch(`${API_URL}/api/users/${id}`, {
+    method: "DELETE",
+    credentials: "include",
+  });
+
+  if (!res.ok) throw new Error("Failed to delete user");
+
+  return res.json();
+};
+
+export const restoreUser = async (id: string) => {
+  const res = await fetch(`${API_URL}/api/users/${id}/restore`, {
+    method: "POST",
+    credentials: "include",
+  });
+
+  if (!res.ok) throw new Error("Failed to restore user");
+
+  return res.json();
+};
