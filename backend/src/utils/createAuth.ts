@@ -1,25 +1,36 @@
 import { betterAuth } from 'better-auth';
 import { mongodbAdapter } from 'better-auth/adapters/mongodb';
 import type { Db, MongoClient } from 'mongodb';
-import type { UserRole } from '#types';
+import type { BetterAuthPlugin } from 'better-auth';
+import { createAuthMiddleware } from 'better-auth/api';
+import { APIError } from 'better-auth/api';
 
 type CreateAuthOptions = {
   db: Db;
   client: MongoClient;
   baseURL: string;
+  trustedOrigins?: string[];
   secret: string;
   domain?: string;
   isProduction?: boolean;
-  plugins?: any[];
 };
 
-export const createAuth = ({ db, client, baseURL, secret, domain, isProduction, plugins = [] }: CreateAuthOptions) =>
+export const createAuth = <P extends BetterAuthPlugin[] = []>({
+  db,
+  client,
+  baseURL,
+  trustedOrigins,
+  secret,
+  domain,
+  isProduction,
+  plugins = [] as unknown as P
+}: CreateAuthOptions & { plugins?: P }) =>
   betterAuth({
     database: mongodbAdapter(db, { client }),
     secret,
-    baseURL: baseURL,
-    trustedProxies: [baseURL],
-    emailAndPassword: { enabled: true },
+    baseURL,
+    trustedOrigins,
+    emailAndPassword: { enabled: true, minPasswordLength: 8, maxPasswordLength: 128 },
 
     session: {
       cookieCache: {
@@ -39,7 +50,12 @@ export const createAuth = ({ db, client, baseURL, secret, domain, isProduction, 
         role: {
           type: 'string[]',
           input: false,
-          defaultValue: ['user'] as UserRole[]
+          defaultValue: ['user']
+        },
+        deletedAt: {
+          type: 'date',
+          input: false,
+          defaultValue: null
         }
       }
     },
@@ -52,6 +68,30 @@ export const createAuth = ({ db, client, baseURL, secret, domain, isProduction, 
         enabled: true,
         domain
       }
+    },
+    hooks: {
+      before: createAuthMiddleware(async context => {
+        if (context.path !== '/sign-in/email') {
+          return;
+        }
+
+        const email = context.body?.email;
+
+        if (typeof email !== 'string' || !email.trim()) {
+          return;
+        }
+
+        const user = await db
+          .collection('user')
+          .findOne({ email: email.toLowerCase() }, { projection: { deletedAt: 1 } });
+
+        if (user?.deletedAt) {
+          throw APIError.from('FORBIDDEN', {
+            message: 'Your account is deactivated. Please contact an administrator.',
+            code: 'ACCOUNT_DELETED'
+          });
+        }
+      })
     },
     plugins
   });
