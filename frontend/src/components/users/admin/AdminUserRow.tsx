@@ -1,9 +1,11 @@
 type UserRowProps = {
   index: number;
   user: User;
+  onDelete: () => void;
+  onRestore: () => void;
 };
 
-const UserRow = ({ index, user }: UserRowProps) => {
+const UserRow = ({ index, user, onDelete, onRestore }: UserRowProps) => {
   return (
     <tr>
       <th>{index}</th>
@@ -14,7 +16,15 @@ const UserRow = ({ index, user }: UserRowProps) => {
       <td>{user.role}</td>
       <th>
         <div className="flex justify-end gap-3">
-          <button className="btn btn-error btn-xs">Delete</button>
+          {!user.deletedAt ? (
+            <button onClick={onDelete} className="btn btn-error btn-xs">
+              delete
+            </button>
+          ) : (
+            <button onClick={onRestore} className="btn btn-success btn-xs">
+              restore
+            </button>
+          )}
         </div>
       </th>
     </tr>

@@ -8,7 +8,7 @@ const Pagination = ({
   onPageChange: (newPage: number) => void;
 }) => {
   return (
-    <div className="join flex justify-center">
+    <div className="join my-5 flex justify-center">
       <button
         className="join-item btn"
         disabled={page === 1}

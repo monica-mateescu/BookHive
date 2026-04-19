@@ -20,7 +20,7 @@ export async function setupTest() {
   const auth = createAuth({
     db,
     client,
-    baseURL: 'http://localhost:5173',
+    baseURL: 'http://localhost:3000',
     secret: 'test-secret',
     isProduction: false,
     plugins: [testUtils()]
