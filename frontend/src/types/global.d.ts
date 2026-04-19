@@ -14,6 +14,7 @@ declare global {
     email: string;
     emailVerified: boolean;
     role: string[];
+    deletedAt: Date | null;
     createdAt: Date;
     updatedAt: Date;
   }
