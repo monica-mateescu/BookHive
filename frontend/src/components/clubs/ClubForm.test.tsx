@@ -5,17 +5,15 @@ import type { BooksResponse, Club } from "@types";
 import { BrowserRouter, MemoryRouter, Route, Routes } from "react-router";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
-import CreateClubForm from "./AdminClubForm";
+import CreateClubForm from "./ClubForm";
 
 // Mock for API functions
-vi.mock("@data/books", () => ({
+vi.mock("@data", () => ({
   getBooks: vi.fn(),
-}));
-
-vi.mock("@data/clubs", () => ({
   createClub: vi.fn(),
   getClubById: vi.fn(),
   updateClubById: vi.fn(),
+  getClubs: vi.fn(),
 }));
 
 // Mock for navigation
@@ -30,7 +28,10 @@ vi.mock("react-router", async () => {
 
 /* Mock the module that provides useAuth. */
 vi.mock("@contexts/useAuth", () => ({
-  default: () => ({ isAdmin: true }),
+  default: () => ({
+    user: { id: "123" },
+    isAdmin: true,
+  }),
 }));
 
 // Mock for books

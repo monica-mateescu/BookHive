@@ -5,7 +5,7 @@ export { default as Books } from "./books/Books";
 export { default as BookCard } from "./books/BookCard";
 export { default as BookDetail } from "./books/BookDetail";
 export { default as BookForm } from "./books/admin/AdminBookForm";
-export { default as ClubForm } from "./clubs/admin/AdminClubForm";
+export { default as ClubForm } from "./clubs/ClubForm";
 export { default as BookRow } from "./books/admin/AdminBookRow";
 export { default as ClubRow } from "./clubs/admin/AdminClubRow";
 export { default as SidebarNav } from "./ui/admin/SidebarNav";
