@@ -5,7 +5,6 @@ const baseURL = import.meta.env.VITE_APP_SERVER_URL;
 
 export const authClient = createAuthClient({
   baseURL: baseURL,
-  trustedOrigins: [baseURL],
   plugins: [
     inferAdditionalFields({
       user: {
