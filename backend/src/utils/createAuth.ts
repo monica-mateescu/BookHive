@@ -12,7 +12,7 @@ type CreateAuthOptions = {
   trustedOrigins?: string[];
   secret: string;
   domain?: string;
-  isProduction?: boolean;
+  isProduction: boolean;
 };
 
 export const createAuth = <P extends BetterAuthPlugin[] = []>({
@@ -63,10 +63,6 @@ export const createAuth = <P extends BetterAuthPlugin[] = []>({
       defaultCookieAttributes: {
         sameSite: isProduction ? 'none' : 'lax',
         secure: isProduction
-      },
-      crossSubDomainCookies: {
-        enabled: true,
-        domain
       }
     },
     hooks: {
@@ -87,7 +83,7 @@ export const createAuth = <P extends BetterAuthPlugin[] = []>({
 
         if (user?.deletedAt) {
           throw APIError.from('FORBIDDEN', {
-            message: 'Your account is deactivated. Please contact an administrator.',
+            message: 'This account has been deleted.',
             code: 'ACCOUNT_DELETED'
           });
         }
