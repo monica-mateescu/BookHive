@@ -9,5 +9,5 @@ export { default as BookCreate } from "./books/admin/AdminBookCreate";
 export { default as Books } from "./books/admin/AdminBooks";
 export { default as Clubs } from "./clubs/admin/AdminClubs";
 export { default as ClubDetail } from "./clubs/admin/AdminClubDetail";
-export { default as ClubCreate } from "./clubs/admin/AdminClubCreate";
+export { default as ClubCreate } from "./clubs/ClubCreate";
 export { default as Users } from "./users/admin/AdminUsers";
