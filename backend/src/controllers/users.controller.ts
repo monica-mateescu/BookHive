@@ -59,7 +59,7 @@ export const deleteUser: RequestHandler<{ id: string }> = async (req, res, next)
     await auth.api.revokeUserSessions({ body: { userId: id }, headers });
     res.json({ message: 'User deleted successfully' });
   } catch (err) {
-    next(err);
+    next(new Error('Failed to delete user', { cause: { status: 500 } }));
   }
 };
 
@@ -76,7 +76,7 @@ export const restoreUser: RequestHandler<{ id: string }> = async (req, res, next
       return next(new Error('User is not deleted', { cause: { status: 400 } }));
     }
 
-    // Restore the user by clearing deletedAt and deletedBy fields
+    // Restore the user by setting deletedAt field to null
     await auth.api.adminUpdateUser({
       body: {
         userId: id,
@@ -87,6 +87,6 @@ export const restoreUser: RequestHandler<{ id: string }> = async (req, res, next
 
     res.json({ message: 'User restored successfully' });
   } catch (err) {
-    next(err);
+    next(new Error('Failed to restore user', { cause: { status: 500 } }));
   }
 };
