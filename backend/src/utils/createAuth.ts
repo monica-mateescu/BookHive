@@ -11,7 +11,6 @@ type CreateAuthOptions = {
   baseURL: string;
   trustedOrigins?: string[];
   secret: string;
-  domain?: string;
   isProduction: boolean;
 };
 
@@ -21,7 +20,6 @@ export const createAuth = <P extends BetterAuthPlugin[] = []>({
   baseURL,
   trustedOrigins,
   secret,
-  domain,
   isProduction,
   plugins = [] as unknown as P
 }: CreateAuthOptions & { plugins?: P }) =>
