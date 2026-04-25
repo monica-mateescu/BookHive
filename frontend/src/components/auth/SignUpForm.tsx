@@ -1,6 +1,7 @@
 import { authClient } from "@utils";
 import { useMemo, useState } from "react";
 import { useNavigate } from "react-router";
+import { Link } from "react-router";
 
 function RegisterForm() {
   const navigate = useNavigate();
@@ -149,6 +150,12 @@ function RegisterForm() {
             </button>
           </div>
         </form>
+        <div className="mt-5 text-center">
+          Already have an account?{" "}
+          <Link to="/signin" className="underline">
+            Sign in!
+          </Link>
+        </div>
       </div>
     </div>
   );
