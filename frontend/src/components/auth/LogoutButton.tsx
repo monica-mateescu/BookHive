@@ -15,7 +15,10 @@ function LogoutButton() {
   };
 
   return (
-    <button className="cursor-pointer hover:underline" onClick={handleLogout}>
+    <button
+      className="btn btn-primary btn-brand-primary cursor-pointer"
+      onClick={handleLogout}
+    >
       Logout
     </button>
   );
