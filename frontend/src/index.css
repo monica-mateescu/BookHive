@@ -1,2 +1,16 @@
 @import "tailwindcss";
 @plugin "daisyui";
+/* ======================
+   Light theme (default)
+====================== */
+:root {
+  --bg-main: #ffffff;
+  --brand-primary: #006b36;
+  --brand-secondary: #292929;
+  --gray-primary: #808080;
+  --gray-secondary: #eeeeee;
+  --error: #d10000;
+}
+/* ======================
+   Dark theme
+====================== */
