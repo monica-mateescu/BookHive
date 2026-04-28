@@ -1,50 +1,52 @@
+import { getBooks } from "@data";
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
+import type { BooksResponse } from "@types";
 import { useState } from "react";
 
-import { BookCard, Loading, Pagination } from "..";
-import { getBooks } from "../../data/books";
-import type { BooksResponse } from "../../types/book";
+import {
+  BookCard,
+  BookListSkeleton,
+  EmptyState,
+  ErrorState,
+  Pagination,
+} from "..";
 
 const Books = () => {
   const [page, setPage] = useState(1);
-  const { isLoading, isError, data, error } = useQuery<BooksResponse, Error>({
+  const { isLoading, isError, data } = useQuery<BooksResponse, Error>({
     queryKey: ["books", { page }],
     queryFn: () => getBooks(page),
     placeholderData: keepPreviousData,
   });
 
-  if (isLoading) return <Loading />;
-  if (isError) return <div className="alert alert-error">{error?.message}</div>;
+  const totalPages = data?.pagination?.totalPages ?? 1;
+  if (isLoading) return <BookListSkeleton />;
+  if (isError)
+    return (
+      <ErrorState message="Something went wrong, we couldn’t load the data. Please try again later." />
+    );
 
   return (
-    <section className="px-5">
-      <h2 className="text-center">Book list</h2>
-
-      <div className="flex justify-center text-xs font-semibold">
-        Discover the book clubs: {data?.pagination.total}
-      </div>
-
+    <>
       {data?.data?.length === 0 ? (
-        <div className="alert alert-info">No clubs found.</div>
+        <EmptyState message="There are no books available at the moment. Please check back later." />
       ) : (
         <>
-          <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
-            {data?.data.map((book, index) => (
-              <BookCard
-                key={book.id}
-                index={(page - 1) * data.pagination.limit + index + 1}
-                book={book}
-              />
+          <div className="items-strech grid grid-cols-1 gap-5 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+            {data?.data.map((book) => (
+              <BookCard key={book.id} book={book} />
             ))}
           </div>
-          <Pagination
-            page={page}
-            totalPages={data?.pagination.totalPages ?? 1}
-            onPageChange={setPage}
-          />
+          {totalPages > 1 && (
+            <Pagination
+              page={page}
+              totalPages={totalPages}
+              onPageChange={setPage}
+            />
+          )}
         </>
       )}
-    </section>
+    </>
   );
 };
 
