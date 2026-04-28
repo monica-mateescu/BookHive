@@ -1,37 +1,53 @@
+import { isBookRef } from "@/utils";
 import type { Club } from "@types";
 import { Link } from "react-router";
 
+import Button from "../ui/Button";
+
 type ClubCardProps = {
-  index: number;
   club: Club;
 };
 
-function ClubCard({ index, club }: ClubCardProps) {
+function ClubCard({ club }: ClubCardProps) {
   const bookImage =
-    typeof club.bookId === "object" && club.bookId !== null
+    isBookRef(club.bookId) && club.bookId.image
       ? club.bookId.image
-      : "default-cover.png";
+      : "src/assets/images/books/default-cover.png";
+
+  const bookTitle = isBookRef(club.bookId) ? club.bookId.title : "Unknown Book";
 
   return (
     <Link to={`/clubs/${club.id}/detail`}>
-      <div className="flex h-full flex-col overflow-hidden rounded-2xl border bg-white shadow-sm transition-all hover:shadow-md">
-        <div className="relative aspect-3/4 overflow-hidden">
+      <div className="flex flex-col rounded-lg bg-(--bg-main) p-4 shadow-md">
+        <div className="mb-2 h-44">
           <img
-            src={bookImage}
+            src="src/assets/images/clubs/bc-3.png"
             alt={club.name}
-            className="h-full w-full object-cover transition-transform hover:scale-110"
+            className="h-full w-full object-cover"
           />
-          <div className="absolute top-2 left-2 rounded-full bg-black/60 px-2 py-0.5 text-[10px] text-white backdrop-blur-sm">
-            Book club {index}
-          </div>
         </div>
 
-        <div className="flex grow flex-col gap-3 p-5">
-          <h3>{club.name}</h3>
-          <div className="flex items-center justify-between text-xs text-gray-500">
-            {club.members.length} / {club.maxMembers} members
+        <h3 className="mb-1 text-sm font-semibold">{club.name}</h3>
+
+        <div className="flex items-stretch gap-3 text-(--brand-secondary)">
+          <div className="h-24 shrink-0">
+            <img
+              src={bookImage}
+              alt={bookTitle}
+              className="h-full w-auto object-cover"
+            />
           </div>
-          <span className="hover:underline">More details</span>
+
+          <div className="flex h-24 flex-1 flex-col">
+            <div className="flex flex-1 flex-col justify-center text-xs">
+              <h3 className="font-medium">{bookTitle}</h3>
+              <span>Members: {club.members.length}</span>
+            </div>
+
+            <div className="flex justify-end">
+              <Button> More details</Button>
+            </div>
+          </div>
         </div>
       </div>
     </Link>
