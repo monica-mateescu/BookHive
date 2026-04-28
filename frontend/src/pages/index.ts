@@ -4,6 +4,7 @@ export { default as SignUp } from "./auth/SignUp";
 export { default as NotFound } from "./NotFound";
 export { default as ClubDetailPage } from "./clubs/ClubDetail";
 export { default as BookDetailPage } from "./books/BookDetail";
+export { default as BooksPage } from "./books/BooksPage";
 export { default as Dashboard } from "./AdminDashboard";
 export { default as BookCreate } from "./books/admin/AdminBookCreate";
 export { default as Books } from "./books/admin/AdminBooks";
