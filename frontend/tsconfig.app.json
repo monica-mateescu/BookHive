@@ -33,7 +33,8 @@
       "@pages": ["./src/pages/index.ts"],
       "@data": ["./src/data/index.ts"],
       "@utils": ["./src/utils/index.ts"],
-      "@types": ["./src/types/index.ts"]
+      "@types": ["./src/types/index.ts"],
+      "@assets/*": ["./src/assets/*"]
     }
   },
   "include": ["src"]
