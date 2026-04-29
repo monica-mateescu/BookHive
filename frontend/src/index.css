@@ -1,5 +1,7 @@
+@import "./assets/styles/font.css";
 @import "tailwindcss";
 @plugin "daisyui";
+
 /* ======================
    Light theme (default)
 ====================== */
@@ -12,13 +14,20 @@
   --gray-secondary: #eeeeee;
   --error: #d10000;
 }
+
+@theme {
+  --font-roboto: "Roboto", sans-serif;
+}
+
 /* ======================
    Dark theme
 ====================== */
 body {
+  @apply font-roboto text-sm;
   color: var(--text-main);
   background-color: var(--bg-main);
 }
+
 .btn-brand-primary {
   border-color: var(--brand-primary);
   background-color: var(--brand-primary);

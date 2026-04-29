@@ -1,5 +1,5 @@
 import type { UserRef } from "@types";
-import { formatDate, isPopulatedUser } from "@utils";
+import { formatDate, isUserRef } from "@utils";
 
 type ClubSidebarProps = {
   createdBy: string | UserRef;
@@ -17,7 +17,7 @@ const ClubSidebar = ({
         <div className="card-body">
           <h3 className="card-title text-lg">Created By</h3>
           <p>
-            {isPopulatedUser(createdBy)
+            {isUserRef(createdBy)
               ? `${createdBy.firstName} ${createdBy.lastName}`
               : createdBy}
           </p>

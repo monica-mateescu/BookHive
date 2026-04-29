@@ -20,6 +20,7 @@ export default defineConfig({
       "@data": resolve(__dirname, "./src/data"),
       "@utils": resolve(__dirname, "./src/utils"),
       "@types": resolve(__dirname, "./src/types"),
+      "@assets": resolve(__dirname, "./src/assets"),
     },
   },
   plugins: [react(), tailwindcss()],

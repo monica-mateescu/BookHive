@@ -1,5 +1,5 @@
 import type { MemberRef } from "@types";
-import { formatDate, isPopulatedUser } from "@utils";
+import { formatDate, isUserRef } from "@utils";
 
 type ClubMembersProps = {
   members: MemberRef[];
@@ -24,13 +24,11 @@ const ClubMembers = ({ members }: ClubMembersProps) => {
               {members.map((member) => (
                 <tr
                   key={
-                    isPopulatedUser(member.userId)
-                      ? member.userId.id
-                      : member.userId
+                    isUserRef(member.userId) ? member.userId.id : member.userId
                   }
                 >
                   <td>
-                    {isPopulatedUser(member.userId)
+                    {isUserRef(member.userId)
                       ? `${member.userId.firstName} ${member.userId.lastName}`
                       : member.userId}
                   </td>

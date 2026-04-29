@@ -1,12 +1,13 @@
 import type { Book } from "@/types";
 import { Link } from "react-router";
 
+import Button from "../ui/Button";
+
 type BookCardProps = {
-  index: number;
   book: Book;
 };
 
-function BookCard({ index, book }: BookCardProps) {
+function BookCard({ book }: BookCardProps) {
   const bookImage =
     typeof book === "object" && book !== null
       ? book.image
@@ -14,21 +15,18 @@ function BookCard({ index, book }: BookCardProps) {
 
   return (
     <Link to={`/books/${book.id}/detail`}>
-      <div className="flex h-full flex-col overflow-hidden rounded-2xl border bg-white shadow-sm transition-all hover:shadow-md">
-        <div className="relative aspect-3/4 overflow-hidden">
+      <div className="flex h-full flex-col rounded-lg bg-(--bg-main) shadow-md">
+        <div className="relative h-56 overflow-hidden">
           <img
             src={bookImage}
             alt={book.title}
-            className="h-full w-full object-cover transition-transform hover:scale-110"
+            className="h-full w-full object-contain"
           />
-          <div className="absolute top-2 left-2 rounded-full bg-black/60 px-2 py-0.5 text-[10px] text-white backdrop-blur-sm">
-            Book {index}
-          </div>
         </div>
 
         <div className="flex grow flex-col gap-3 p-5">
-          <h3>{book.title}</h3>
-          <span className="hover:underline">More details</span>
+          <h3 className="mb-1 text-sm font-semibold">{book.title}</h3>
+          <Button> Create a club</Button>
         </div>
       </div>
     </Link>

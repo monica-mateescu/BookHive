@@ -8,6 +8,7 @@ import {
   BookCreate,
   BookDetailPage,
   Books,
+  BooksPage,
   ClubCreate,
   ClubDetail,
   ClubDetailPage,
@@ -30,6 +31,7 @@ function App() {
             <Route index element={<Home />} />
             <Route path="signup" element={<SignUp />} />
             <Route path="signin" element={<SignIn />} />
+            <Route path="books" element={<BooksPage />} />
             <Route element={<ProtectedLayout />}>
               <Route element={<AdminLayout />}>
                 <Route path="admin" element={<DashboardLayout />}>
