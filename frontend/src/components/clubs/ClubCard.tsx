@@ -2,6 +2,7 @@ import { isBookRef } from "@/utils";
 import type { Club } from "@types";
 import { Link } from "react-router";
 
+import clubImage from "../../assets/images/clubs/bc-3.png";
 import Button from "../ui/Button";
 
 type ClubCardProps = {
@@ -12,7 +13,7 @@ function ClubCard({ club }: ClubCardProps) {
   const bookImage =
     isBookRef(club.bookId) && club.bookId.image
       ? club.bookId.image
-      : "src/assets/images/books/default-cover.png";
+      : "../assets/images/books/default-cover.png";
 
   const bookTitle = isBookRef(club.bookId) ? club.bookId.title : "Unknown Book";
 
@@ -21,7 +22,7 @@ function ClubCard({ club }: ClubCardProps) {
       <div className="flex flex-col rounded-lg bg-(--bg-main) p-4 shadow-md">
         <div className="mb-2 h-44">
           <img
-            src="src/assets/images/clubs/bc-3.png"
+            src={clubImage}
             alt={club.name}
             className="h-full w-full object-cover"
           />
