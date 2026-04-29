@@ -12,6 +12,7 @@ type CreateAuthOptions = {
   trustedOrigins?: string[];
   secret: string;
   isProduction: boolean;
+  domain?: string;
 };
 
 export const createAuth = <P extends BetterAuthPlugin[] = []>({
@@ -21,6 +22,7 @@ export const createAuth = <P extends BetterAuthPlugin[] = []>({
   trustedOrigins,
   secret,
   isProduction,
+  domain,
   plugins = [] as unknown as P
 }: CreateAuthOptions & { plugins?: P }) =>
   betterAuth({
@@ -60,7 +62,12 @@ export const createAuth = <P extends BetterAuthPlugin[] = []>({
     advanced: {
       defaultCookieAttributes: {
         sameSite: isProduction ? 'none' : 'lax',
-        secure: isProduction
+        secure: isProduction,
+        domain: domain || undefined
+      },
+      crossSubDomainCookies: {
+        enabled: true,
+        domain: domain || undefined
       }
     },
     hooks: {
