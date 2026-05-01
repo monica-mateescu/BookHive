@@ -19,16 +19,16 @@ function ClubCard({ club }: ClubCardProps) {
 
   return (
     <Link to={`/clubs/${club.id}/detail`}>
-      <div className="flex flex-col rounded-lg bg-(--bg-main) p-4 shadow-md">
+      <div className="flex flex-col rounded-lg bg-(--bg-main)/80 p-5 shadow-lg ring-1 ring-black/5 backdrop-blur-sm transition hover:shadow-xl">
         <div className="mb-2 h-44">
           <img
-            src={clubImage}
+            src={club.image ?? clubImage}
             alt={club.name}
             className="h-full w-full object-cover"
           />
         </div>
 
-        <h3 className="mb-1 text-sm font-semibold">{club.name}</h3>
+        <h2 className="mb-1 text-sm font-semibold">{club.name}</h2>
 
         <div className="flex items-stretch gap-3 text-(--brand-secondary)">
           <div className="h-24 shrink-0">
