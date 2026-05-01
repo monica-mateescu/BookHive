@@ -11,7 +11,13 @@ export const clubInputSchema = z.strictObject({
     .string()
     .refine(id => isValidObjectId(id), 'Invalid book ID')
     .transform(id => new Types.ObjectId(id)),
-  isActive: z.boolean().optional()
+  isActive: z.boolean().optional(),
+  image: z
+    .url({
+      protocol: /^https?$/,
+      hostname: z.regexes.domain
+    })
+    .nullish()
 });
 
 export const clubSchema = z.strictObject({

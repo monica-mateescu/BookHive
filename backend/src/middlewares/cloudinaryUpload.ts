@@ -1,5 +1,6 @@
 import { v2 as cloudinary } from 'cloudinary';
 import type { RequestHandler } from 'express';
+import { buildPublicId } from '#utils';
 
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
@@ -8,33 +9,26 @@ cloudinary.config({
   secure: true
 });
 
-const slugify = (str: string) =>
-  str
-    .toLowerCase()
-    .trim()
-    .replace(/\s+/g, '-')
-    .replace(/[^\w-]/g, '');
-
 export const cloudinaryUpload =
   (folder: string): RequestHandler =>
   async (req, res, next) => {
-    if (!req.image) {
-      return next();
-    }
+    if (!req.image) return next();
 
     try {
-      const publicId = `${slugify(req.body.author)}-${slugify(req.body.title)}`;
+      const endpoint = req.baseUrl.split('/').filter(Boolean).pop();
+      const publicId = buildPublicId(endpoint!, req.body);
 
-      const imagePath = req.image.filepath;
-      const result = await cloudinary.uploader.upload(imagePath, {
+      const result = await cloudinary.uploader.upload(req.image.filepath, {
         resource_type: 'auto',
         folder,
         public_id: publicId
       });
 
       req.body.image = result.secure_url;
+
       next();
     } catch (error: unknown) {
-      return next(new Error(`Cloud upload failed: ${error}`, { cause: { status: 500 } }));
+      next(new Error(`Cloud upload failed: ${error}`, { cause: { status: 500 } }));
+      return;
     }
   };
