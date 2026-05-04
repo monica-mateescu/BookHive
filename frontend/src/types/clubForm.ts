@@ -4,5 +4,6 @@ export type CreateClubFormData = {
   meetingLink: string;
   meetingDate: string;
   maxMembers?: number;
+  imageFile?: File | null;
   bookId: string;
 };

@@ -1,18 +1,15 @@
 import { API_URL } from "@config";
-import type { Club, ClubsResponse, CreateClubFormData } from "@types";
+import type { Club, ClubsResponse } from "@types";
 
 const defaultHeaders = {
   "Content-Type": "application/json",
 };
 
-export const createClub = async (
-  clubData: CreateClubFormData,
-): Promise<Club> => {
+export const createClub = async (formData: FormData): Promise<Club> => {
   const res = await fetch(`${API_URL}/api/clubs`, {
     method: "POST",
     credentials: "include",
-    headers: defaultHeaders,
-    body: JSON.stringify(clubData),
+    body: formData,
   });
 
   if (!res.ok) {
@@ -50,13 +47,12 @@ export const getClubById = async (id: string): Promise<Club> => {
 
 export const updateClubById = async (
   id: string,
-  clubData: Partial<CreateClubFormData>,
+  formData: FormData,
 ): Promise<Club> => {
   const res = await fetch(`${API_URL}/api/clubs/${id}`, {
     method: "PUT",
     credentials: "include",
-    headers: defaultHeaders,
-    body: JSON.stringify(clubData),
+    body: formData,
   });
 
   if (!res.ok) {

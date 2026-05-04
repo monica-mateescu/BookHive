@@ -16,6 +16,7 @@ const initialForm: CreateClubFormData = {
   meetingLink: "",
   meetingDate: "",
   maxMembers: 10,
+  imageFile: null,
   bookId: "",
 };
 
@@ -39,6 +40,7 @@ const CreateClubForm = () => {
   const [success, setSuccess] = useState<string>("");
 
   const [form, setForm] = useState<CreateClubFormData>(initialForm);
+  const [existingImage, setExistingImage] = useState<string>("");
   const [books, setBooks] = useState<Book[]>([]);
 
   const scrollToTop = () => {
@@ -96,8 +98,11 @@ const CreateClubForm = () => {
                 .substring(0, 16)
             : "",
           maxMembers: club.maxMembers || 10,
+          imageFile: null,
           bookId: bookId || "",
         });
+
+        setExistingImage(club.image ?? "");
       } catch (e) {
         setError(e instanceof Error ? e.message : "Failed to fetch a club");
         scrollToTop();
@@ -142,6 +147,31 @@ const CreateClubForm = () => {
       }
     };
 
+  const onImage = (e: ChangeEvent<HTMLInputElement>) => {
+    const f = e.target.files?.[0] ?? null;
+
+    setError("");
+    setSuccess("");
+
+    if (f && !f.type.startsWith("image/")) {
+      setError("Only images are allowed.");
+      setField("imageFile", null);
+      e.target.value = "";
+      scrollToTop();
+      return;
+    }
+
+    setField("imageFile", f);
+  };
+
+  const buttonClass =
+    !canSubmit || submitting
+      ? "btn btn-disabled w-full"
+      : "btn btn-primary btn-brand-primary w-full cursor-pointer";
+
+  const uploadClass =
+    submitting || loadingClub ? "btn btn-disabled" : "btn cursor-pointer";
+
   const handleSubmit = async (e: React.SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
     setError("");
@@ -184,20 +214,22 @@ const CreateClubForm = () => {
         }
       }
 
-      const payload = {
-        name: form.name,
-        description: form.description,
-        meetingLink: form.meetingLink,
-        meetingDate: form.meetingDate,
-        maxMembers: form.maxMembers ? Number(form.maxMembers) : 10,
-        bookId: form.bookId,
-      };
+      const fd = new FormData();
+
+      fd.append("name", form.name);
+      fd.append("description", form.description);
+      fd.append("meetingLink", form.meetingLink);
+      fd.append("meetingDate", form.meetingDate);
+      fd.append("maxMembers", (form.maxMembers ?? 10).toString());
+      fd.append("bookId", form.bookId);
+
+      if (form.imageFile) fd.append("image", form.imageFile);
 
       if (isEdit && id) {
-        await updateClubById(id, payload);
+        await updateClubById(id, fd);
         setSuccess("Club updated successfully.");
       } else {
-        await createClub(payload);
+        await createClub(fd);
         setSuccess("Club created successfully.");
       }
 
@@ -220,7 +252,9 @@ const CreateClubForm = () => {
     <>
       {!user ? (
         <>
-          <h1 className="text-center">Create new club</h1>
+          <h1 className="text-center text-3xl font-semibold">
+            Create new club
+          </h1>
           <div className="my-10 w-full">
             <div className="mx-auto w-full max-w-xl text-center">
               You must be signed in to create a new club.
@@ -229,20 +263,46 @@ const CreateClubForm = () => {
         </>
       ) : (
         <>
-          <h1 className="text-center">
+          <h1 className="text-center text-3xl font-semibold">
             {isEdit ? "Edit club" : "Create new club"}
           </h1>
-          <div className="my-10 w-full">
+          <div className="my-5 w-full">
             <div className="mx-auto w-full max-w-xl">
               {error && (
-                <div className="mb-5 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-600">
-                  {error}
+                <div role="alert" className="alert alert-error mb-5">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-6 w-6 shrink-0 stroke-current"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"
+                    />
+                  </svg>
+                  <span>{error}</span>
                 </div>
               )}
 
               {success && (
-                <div className="mb-5 rounded-xl border border-green-200 bg-green-50 px-4 py-3 text-sm text-green-600">
-                  {success}
+                <div role="alert" className="alert alert-success mb-5">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-6 w-6 shrink-0 stroke-current"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+                    />
+                  </svg>
+                  <span>{success}</span>
                 </div>
               )}
 
@@ -256,7 +316,7 @@ const CreateClubForm = () => {
                       id="name"
                       name="name"
                       type="text"
-                      className="w-full rounded-xl border border-gray-200 bg-white px-4 py-3 text-base transition-all outline-none focus:border-gray-900 focus:ring-4 focus:ring-gray-100 disabled:cursor-not-allowed disabled:bg-gray-50 disabled:opacity-60"
+                      className="input input-bordered w-full"
                       placeholder="Club name"
                       value={form.name}
                       onChange={onText("name")}
@@ -272,7 +332,7 @@ const CreateClubForm = () => {
                     <textarea
                       id="description"
                       name="description"
-                      className="w-full rounded-xl border border-gray-200 bg-white px-4 py-3 text-base transition-all outline-none focus:border-gray-900 focus:ring-4 focus:ring-gray-100 disabled:cursor-not-allowed disabled:bg-gray-50 disabled:opacity-60"
+                      className="textarea textarea-bordered w-full"
                       placeholder="Club description"
                       value={form.description}
                       onChange={onText("description")}
@@ -289,7 +349,7 @@ const CreateClubForm = () => {
                       id="meetingLink"
                       name="meetingLink"
                       type="text"
-                      className="w-full rounded-xl border border-gray-200 bg-white px-4 py-3 text-base transition-all outline-none focus:border-gray-900 focus:ring-4 focus:ring-gray-100 disabled:cursor-not-allowed disabled:bg-gray-50 disabled:opacity-60"
+                      className="input input-bordered w-full"
                       placeholder="Meeting link"
                       value={form.meetingLink}
                       onChange={onText("meetingLink")}
@@ -306,7 +366,7 @@ const CreateClubForm = () => {
                       id="meetingDate"
                       name="meetingDate"
                       type="datetime-local"
-                      className="w-full rounded-xl border border-gray-200 bg-white px-4 py-3 text-base transition-all outline-none focus:border-gray-900 focus:ring-4 focus:ring-gray-100 disabled:cursor-not-allowed disabled:bg-gray-50 disabled:opacity-60"
+                      className="input input-bordered w-full"
                       placeholder="Meeting date"
                       value={form.meetingDate}
                       onChange={onText("meetingDate")}
@@ -323,7 +383,7 @@ const CreateClubForm = () => {
                       id="maxMembers"
                       name="maxMembers"
                       type="number"
-                      className="w-full rounded-xl border border-gray-200 bg-white px-4 py-3 text-base transition-all outline-none focus:border-gray-900 focus:ring-4 focus:ring-gray-100 disabled:cursor-not-allowed disabled:bg-gray-50 disabled:opacity-60"
+                      className="input input-bordered w-full"
                       placeholder="Max members"
                       value={form.maxMembers}
                       onChange={onText("maxMembers")}
@@ -333,16 +393,13 @@ const CreateClubForm = () => {
                   </div>
 
                   <div>
-                    <label
-                      htmlFor="bookId"
-                      className="mb-1 ml-1 block text-sm font-medium text-gray-700"
-                    >
+                    <label htmlFor="bookId" className="sr-only">
                       Book
                     </label>
                     <select
                       id="bookId"
                       name="bookId"
-                      className="w-full appearance-none rounded-xl border border-gray-200 bg-white px-4 py-3 text-base transition-all outline-none focus:border-gray-900 focus:ring-4 focus:ring-gray-100 disabled:bg-gray-50 disabled:opacity-60"
+                      className="select select-bordered w-full"
                       value={form.bookId}
                       onChange={onText("bookId")}
                       required
@@ -365,13 +422,59 @@ const CreateClubForm = () => {
                       ))}
                     </select>
                   </div>
+
+                  <div className="flex items-center gap-3">
+                    <label htmlFor="preview" className="sr-only">
+                      Preview
+                    </label>
+                    <input
+                      id="preview"
+                      name="preview"
+                      className="input input-bordered w-full"
+                      placeholder="Club image"
+                      value={form.imageFile?.name ?? ""}
+                      readOnly
+                      disabled={submitting || loadingClub}
+                    />
+                    <label htmlFor="image" className={uploadClass}>
+                      Upload
+                      <input
+                        id="image"
+                        name="image"
+                        type="file"
+                        accept="image/*"
+                        className="hidden"
+                        onChange={onImage}
+                        disabled={submitting || loadingClub}
+                      />
+                    </label>
+                  </div>
+
+                  {(form.imageFile || existingImage) && (
+                    <div className="overflow-hidden border border-(--gray-primary)">
+                      <img
+                        src={
+                          form.imageFile
+                            ? URL.createObjectURL(form.imageFile)
+                            : existingImage
+                        }
+                        alt="Club preview"
+                        className="h-150 w-full object-cover"
+                      />
+                    </div>
+                  )}
+                  {isEdit && !form.imageFile && existingImage && (
+                    <p className="mt-2 text-xs text-(--gray-primary)">
+                      Current image will stay unless you upload a new one.
+                    </p>
+                  )}
                 </div>
 
                 <div className="mt-10 flex justify-center">
                   <button
                     type="submit"
                     disabled={!canSubmit || submitting || loadingClub}
-                    className="w-full max-w-xs cursor-pointer rounded-xl bg-indigo-600 px-10 py-4 text-white shadow-lg shadow-indigo-200 transition-all hover:bg-indigo-700 active:scale-[0.98] disabled:cursor-not-allowed disabled:bg-gray-300 disabled:shadow-none"
+                    className={buttonClass}
                   >
                     {submitting
                       ? "Saving..."
@@ -388,7 +491,7 @@ const CreateClubForm = () => {
                       onClick={() =>
                         isAdmin ? navigate("/dashboard/clubs") : navigate("/")
                       }
-                      className="cursor-pointer text-gray-700 hover:text-gray-900"
+                      className="cursor-pointer text-(--brand-primary) no-underline hover:underline"
                     >
                       ← Back to {isAdmin ? "clubs list" : "home"}
                     </button>
