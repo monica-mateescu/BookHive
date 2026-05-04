@@ -50,7 +50,7 @@ function SignInForm() {
   };
 
   return (
-    <div className="my-10 w-full">
+    <div className="my-5 w-full">
       <div className="mx-auto w-full max-w-xl">
         {error && (
           <div role="alert" className="alert alert-error mb-5">

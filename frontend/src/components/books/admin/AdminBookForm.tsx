@@ -116,6 +116,14 @@ const CreateBookForm = () => {
     setField("imageFile", f);
   };
 
+  const buttonClass =
+    !canSubmit || submitting
+      ? "btn btn-disabled w-full"
+      : "btn btn-primary btn-brand-primary w-full cursor-pointer";
+
+  const uploadClass =
+    submitting || loadingBook ? "btn btn-disabled" : "btn cursor-pointer";
+
   const handleSubmit = async (e: React.SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
     setError("");
@@ -159,20 +167,46 @@ const CreateBookForm = () => {
 
   return (
     <>
-      <h1 className="text-center">
+      <h1 className="text-center text-3xl font-semibold">
         {isEdit ? "Edit book" : "Create new book"}
       </h1>
-      <div className="my-10 w-full">
+      <div className="my-5 w-full">
         <div className="mx-auto w-full max-w-xl">
           {error && (
-            <div className="mb-5 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-600">
-              {error}
+            <div role="alert" className="alert alert-error mb-5">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-6 w-6 shrink-0 stroke-current"
+                fill="none"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"
+                />
+              </svg>
+              <span>{error}</span>
             </div>
           )}
 
           {success && (
-            <div className="mb-5 rounded-xl border border-green-200 bg-green-50 px-4 py-3 text-sm text-green-600">
-              {success}
+            <div role="alert" className="alert alert-success mb-5">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-6 w-6 shrink-0 stroke-current"
+                fill="none"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+                />
+              </svg>
+              <span>{success}</span>
             </div>
           )}
 
@@ -186,7 +220,7 @@ const CreateBookForm = () => {
                   id="title"
                   name="title"
                   type="text"
-                  className="w-full rounded-xl border border-gray-200 bg-white px-4 py-3 text-base transition-all outline-none focus:border-gray-900 focus:ring-4 focus:ring-gray-100 disabled:cursor-not-allowed disabled:bg-gray-50 disabled:opacity-60"
+                  className="input input-bordered w-full"
                   placeholder="Book title"
                   value={form.title}
                   onChange={onText("title")}
@@ -203,7 +237,7 @@ const CreateBookForm = () => {
                   id="author"
                   name="author"
                   type="text"
-                  className="w-full rounded-xl border border-gray-200 bg-white px-4 py-3 text-base transition-all outline-none focus:border-gray-900 focus:ring-4 focus:ring-gray-100 disabled:cursor-not-allowed disabled:bg-gray-50 disabled:opacity-60"
+                  className="input input-bordered w-full"
                   placeholder="Author"
                   value={form.author}
                   onChange={onText("author")}
@@ -220,7 +254,7 @@ const CreateBookForm = () => {
                   id="isbn"
                   name="isbn"
                   type="text"
-                  className="w-full rounded-xl border border-gray-200 bg-white px-4 py-3 text-base transition-all outline-none focus:border-gray-900 focus:ring-4 focus:ring-gray-100 disabled:cursor-not-allowed disabled:bg-gray-50 disabled:opacity-60"
+                  className="input input-bordered w-full"
                   placeholder="ISBN"
                   value={form.isbn}
                   onChange={onText("isbn")}
@@ -236,7 +270,7 @@ const CreateBookForm = () => {
                 <textarea
                   id="summary"
                   name="summary"
-                  className="w-full rounded-xl border border-gray-200 bg-white px-4 py-3 text-base transition-all outline-none focus:border-gray-900 focus:ring-4 focus:ring-gray-100 disabled:cursor-not-allowed disabled:bg-gray-50 disabled:opacity-60"
+                  className="textarea textarea-bordered w-full"
                   placeholder="Summary"
                   value={form.summary}
                   onChange={onText("summary")}
@@ -253,7 +287,7 @@ const CreateBookForm = () => {
                   id="publishedYear"
                   name="publishedYear"
                   type="number"
-                  className="w-full rounded-xl border border-gray-200 bg-white px-4 py-3 text-base transition-all outline-none focus:border-gray-900 focus:ring-4 focus:ring-gray-100 disabled:cursor-not-allowed disabled:bg-gray-50 disabled:opacity-60"
+                  className="input input-bordered w-full"
                   placeholder="Published year"
                   value={form.publishedYear}
                   onChange={onText("publishedYear")}
@@ -269,16 +303,13 @@ const CreateBookForm = () => {
                 <input
                   id="preview"
                   name="preview"
-                  className="w-full rounded-xl border border-gray-200 bg-white px-4 py-3 text-base transition-all outline-none focus:border-gray-900 focus:ring-4 focus:ring-gray-100 disabled:cursor-not-allowed disabled:bg-gray-50 disabled:opacity-60"
+                  className="input input-bordered w-full"
                   placeholder="Book image"
                   value={form.imageFile?.name ?? ""}
                   readOnly
                   disabled={submitting || loadingBook}
                 />
-                <label
-                  htmlFor="image"
-                  className="shrink-0 cursor-pointer rounded-xl border border-gray-200 px-4 py-3 text-gray-700 transition-colors hover:border-gray-900 hover:text-gray-900"
-                >
+                <label htmlFor="image" className={uploadClass}>
                   Upload
                   <input
                     id="image"
@@ -293,7 +324,7 @@ const CreateBookForm = () => {
               </div>
 
               {(form.imageFile || existingImage) && (
-                <div className="overflow-hidden rounded-2xl border border-gray-200">
+                <div className="overflow-hidden border border-(--gray-primary)">
                   <img
                     src={
                       form.imageFile
@@ -306,7 +337,7 @@ const CreateBookForm = () => {
                 </div>
               )}
               {isEdit && !form.imageFile && existingImage && (
-                <p className="-mt-1 ml-2 text-xs text-(--text-muted)">
+                <p className="mt-2 text-xs text-(--gray-primary)">
                   Current image will stay unless you upload a new one.
                 </p>
               )}
@@ -316,7 +347,7 @@ const CreateBookForm = () => {
               <button
                 type="submit"
                 disabled={!canSubmit || submitting || loadingBook}
-                className="w-full max-w-xs cursor-pointer rounded-xl bg-indigo-600 px-10 py-4 text-white shadow-lg shadow-indigo-200 transition-all hover:bg-indigo-700 active:scale-[0.98] disabled:cursor-not-allowed disabled:bg-gray-300 disabled:shadow-none"
+                className={buttonClass}
               >
                 {submitting
                   ? "Saving..."
@@ -327,11 +358,11 @@ const CreateBookForm = () => {
             </div>
 
             {isEdit && (
-              <div className="mt-6 flex justify-center">
+              <div className="mt-5 flex justify-center">
                 <button
                   type="button"
                   onClick={() => navigate("/admin/books")}
-                  className="cursor-pointer text-gray-700 hover:text-gray-900"
+                  className="cursor-pointer text-(--brand-primary) no-underline hover:underline"
                 >
                   ← Back to books list
                 </button>
