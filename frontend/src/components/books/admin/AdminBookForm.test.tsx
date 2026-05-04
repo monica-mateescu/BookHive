@@ -116,6 +116,18 @@ describe("CreateBookForm", () => {
 
     await waitFor(() => {
       expect(createBook).toHaveBeenCalled();
+
+      const fd = vi.mocked(createBook).mock.calls[0][0] as FormData;
+
+      expect(fd.get("title")).toBe("Book title");
+      expect(fd.get("author")).toBe("Book author");
+      expect(fd.get("isbn")).toBe("123-1234567890");
+      expect(fd.get("summary")).toBe("Book summary");
+      expect(fd.get("publishedYear")).toBe("2026");
+
+      const imageFile = fd.get("image") as File;
+      expect(imageFile.name).toBe("book-cover-2.png");
+
       expect(
         screen.getByText(/Book created successfully/i),
       ).toBeInTheDocument();
