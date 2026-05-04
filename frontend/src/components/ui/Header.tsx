@@ -40,7 +40,7 @@ function Header() {
                 Wellcome!
                 <Link
                   to="/signin"
-                  className="btn btn-primary btn-brand-primary cursor-pointer"
+                  className="btn btn-primary btn-brand-primary btn-sm cursor-pointer"
                 >
                   Sign in
                 </Link>
