@@ -22,6 +22,11 @@ function RegisterForm() {
     return true;
   }, [email, password, firstName]);
 
+  const buttonClass =
+    !canSubmit || submitting
+      ? "btn btn-disabled w-full"
+      : "btn btn-primary btn-brand-primary w-full cursor-pointer";
+
   const handleSubmit = async (e: React.SubmitEvent) => {
     e.preventDefault();
 
@@ -63,14 +68,40 @@ function RegisterForm() {
     <div className="my-10 w-full">
       <div className="mx-auto w-full max-w-xl">
         {error && (
-          <div className="mb-5 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-600">
-            {error}
+          <div role="alert" className="alert alert-error mb-5">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-6 w-6 shrink-0 stroke-current"
+              fill="none"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"
+              />
+            </svg>
+            <span>{error}</span>
           </div>
         )}
 
         {success && (
-          <div className="mb-5 rounded-xl border border-green-200 bg-green-50 px-4 py-3 text-sm text-green-600">
-            {success}
+          <div role="alert" className="alert alert-success mb-5">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-6 w-6 shrink-0 stroke-current"
+              fill="none"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+              />
+            </svg>
+            <span>{success}</span>
           </div>
         )}
 
@@ -86,7 +117,7 @@ function RegisterForm() {
                 placeholder="First name*"
                 value={firstName}
                 onChange={(e) => setFirstName(e.target.value.trim())}
-                className="w-full rounded-xl border border-gray-200 bg-white px-4 py-3 text-base transition-all outline-none focus:border-gray-900 focus:ring-4 focus:ring-gray-100 disabled:cursor-not-allowed disabled:bg-gray-50 disabled:opacity-6"
+                className="input input-bordered w-full"
                 required
                 disabled={submitting}
               />
@@ -102,7 +133,7 @@ function RegisterForm() {
                 placeholder="Last name*"
                 value={lastName}
                 onChange={(e) => setLastName(e.target.value.trim())}
-                className="w-full rounded-xl border border-gray-200 bg-white px-4 py-3 text-base transition-all outline-none focus:border-gray-900 focus:ring-4 focus:ring-gray-100 disabled:cursor-not-allowed disabled:bg-gray-50 disabled:opacity-6"
+                className="input input-bordered w-full"
                 disabled={submitting}
               />
             </div>
@@ -117,7 +148,7 @@ function RegisterForm() {
                 placeholder="Email*"
                 value={email}
                 onChange={(e) => setEmail(e.target.value.trim())}
-                className="w-full rounded-xl border border-gray-200 bg-white px-4 py-3 text-base transition-all outline-none focus:border-gray-900 focus:ring-4 focus:ring-gray-100 disabled:cursor-not-allowed disabled:bg-gray-50 disabled:opacity-6"
+                className="input input-bordered w-full"
                 required
                 disabled={submitting}
               />
@@ -133,18 +164,18 @@ function RegisterForm() {
                 placeholder="Password*"
                 value={password}
                 onChange={(e) => setPassword(e.target.value.trim())}
-                className="w-full rounded-xl border border-gray-200 bg-white px-4 py-3 text-base transition-all outline-none focus:border-gray-900 focus:ring-4 focus:ring-gray-100 disabled:cursor-not-allowed disabled:bg-gray-50 disabled:opacity-6"
+                className="input input-bordered w-full"
                 required
                 disabled={submitting}
               />
             </div>
           </div>
 
-          <div className="mt-10 flex justify-center">
+          <div className="mt-5 flex justify-center">
             <button
               type="submit"
               disabled={!canSubmit || submitting}
-              className="w-full max-w-xs cursor-pointer rounded-xl bg-indigo-600 px-10 py-4 text-white shadow-lg shadow-indigo-200 transition-all hover:bg-indigo-700 active:scale-[0.98] disabled:cursor-not-allowed disabled:bg-gray-300 disabled:shadow-none"
+              className={buttonClass}
             >
               {submitting ? "Signing up..." : "Sign up"}
             </button>
@@ -152,7 +183,10 @@ function RegisterForm() {
         </form>
         <div className="mt-5 text-center">
           Already have an account?{" "}
-          <Link to="/signin" className="underline">
+          <Link
+            to="/signin"
+            className="text-(--brand-primary) no-underline hover:underline"
+          >
             Sign in!
           </Link>
         </div>
