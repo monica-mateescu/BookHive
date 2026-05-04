@@ -3,7 +3,10 @@ import { SignUpForm } from "@/components";
 function SignUp() {
   return (
     <>
-      <h1 className="text-center">Sign up</h1>
+      <h1 className="text-center text-3xl font-semibold">Sign up</h1>
+      <div className="mt-2 text-center text-(--gray-primary)">
+        Sign up to get started
+      </div>
       <SignUpForm />
     </>
   );
