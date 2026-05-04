@@ -34,6 +34,10 @@ vi.mock("@contexts/useAuth", () => ({
   }),
 }));
 
+const mockFile = new File(["fake-binary-image-data"], "club-preview.png", {
+  type: "image/png",
+});
+
 // Mock for books
 const mockBooks: BooksResponse = {
   data: [
@@ -84,8 +88,18 @@ const mockClubData: Club = {
 
 describe("CreateClubForm", () => {
   beforeEach(() => {
+    // Delete all stored information about previous function calls of the mocks,
+    // so that each test starts from scratch and tests do not influence each other.
     vi.clearAllMocks();
+
+    // Simulate the browser function URL.createObjectURL, which is missing in the test environment (JSDOM),
+    // it returns the string "mock-url" to enable image preview.
+    globalThis.URL.createObjectURL = vi.fn(() => "mock-url");
+
+    // Replace the `scrollIntoView` function with an empty mock function, since JSDOM does not calculate
+    // a true layout and the test would otherwise crash if the component attempts to scroll.
     window.HTMLElement.prototype.scrollIntoView = vi.fn();
+
     // Return an empty book list by default,
     // individual tests can override this if needed
     vi.mocked(getBooks).mockResolvedValue(mockBooks);
@@ -133,8 +147,7 @@ describe("CreateClubForm", () => {
       </BrowserRouter>,
     );
 
-    // Books must be loaded before we can select one,
-    // also ensures that the component is fully rendered
+    // Books must be loaded before we can select one
     await waitFor(() =>
       expect(screen.queryByText(/Loading books.../i)).not.toBeInTheDocument(),
     );
@@ -155,14 +168,27 @@ describe("CreateClubForm", () => {
       target: { value: "456" },
     });
 
+    const fileInput = screen.getByLabelText(/Upload/i);
+    fireEvent.change(fileInput, { target: { files: [mockFile] } });
+
     const submitBtn = screen.getByRole("button", { name: /Save club/i });
     expect(submitBtn).toBeEnabled();
     fireEvent.click(submitBtn);
 
     await waitFor(() => {
-      expect(createClub).toHaveBeenCalledWith(
-        expect.objectContaining({ name: "Club name", bookId: "456" }),
-      );
+      expect(createClub).toHaveBeenCalled();
+
+      const fd = vi.mocked(createClub).mock.calls[0][0] as FormData;
+
+      expect(fd.get("name")).toBe("Club name");
+      expect(fd.get("description")).toBe("Club description");
+      expect(fd.get("meetingLink")).toBe("https://link.com/m/123");
+      expect(fd.get("meetingDate")).toBe("2026-01-01T10:00");
+      expect(fd.get("bookId")).toBe("456");
+
+      const imageFile = fd.get("image") as File;
+      expect(imageFile.name).toBe("club-preview.png");
+
       expect(
         screen.getByText(/Club created successfully/i),
       ).toBeInTheDocument();
@@ -195,7 +221,7 @@ describe("CreateClubForm", () => {
     fireEvent.click(submitBtn);
 
     await waitFor(() => {
-      expect(updateClubById).toHaveBeenCalledWith("123", expect.any(Object));
+      expect(updateClubById).toHaveBeenCalledWith("123", expect.any(FormData));
       expect(
         screen.getByText(/Club updated successfully/i),
       ).toBeInTheDocument();
