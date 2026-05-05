@@ -22,10 +22,9 @@ function ClubDetailPage() {
     return <div className="alert alert-error">{error?.message}</div>;
 
   return (
-    <div className="p-5">
+    <section className="mx-auto w-full md:w-[80%]">
       <ClubDetail club={club} />
-      <div className="mt-5 text-center">The chat is coming soon.</div>
-    </div>
+    </section>
   );
 }
 

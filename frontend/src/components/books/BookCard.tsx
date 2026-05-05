@@ -14,7 +14,7 @@ function BookCard({ book }: BookCardProps) {
       : "default-cover.png";
 
   return (
-    <Link to={`/books/${book.id}/detail`}>
+    <Link to={`/books/${book.id}`}>
       <div className="flex h-full flex-col rounded-lg bg-(--bg-main)/80 p-5 shadow-lg ring-1 ring-black/5 backdrop-blur-sm transition hover:shadow-xl">
         <div className="relative mb-2 h-56 overflow-hidden">
           <img

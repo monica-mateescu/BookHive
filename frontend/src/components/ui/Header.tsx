@@ -27,7 +27,7 @@ function Header() {
   );
 
   return (
-    <header className="sticky top-0 z-100 mb-5 border-b-2 border-b-(--brand-primary) bg-(--bg-main) p-5 text-(--brand-secondary)">
+    <header className="sticky top-0 z-100 border-b-2 border-b-(--brand-primary) bg-(--bg-main) p-5 text-(--brand-secondary)">
       <nav className="max-w-8xl mx-auto flex w-full flex-row items-center justify-between">
         <Link to="/" className="text-lg hover:underline">
           Home

@@ -18,7 +18,7 @@ function ClubCard({ club }: ClubCardProps) {
   const bookTitle = isBookRef(club.bookId) ? club.bookId.title : "Unknown Book";
 
   return (
-    <Link to={`/clubs/${club.id}/detail`}>
+    <Link to={`/clubs/${club.id}`}>
       <div className="flex flex-col rounded-lg bg-(--bg-main)/80 p-5 shadow-lg ring-1 ring-black/5 backdrop-blur-sm transition hover:shadow-xl">
         <div className="mb-2 h-44">
           <img
