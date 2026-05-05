@@ -1,19 +1,21 @@
-type ButtonProps = {
-  onClick?: () => void;
-  className?: string;
+type ButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> & {
   children?: React.ReactNode;
+  variant?: "primary" | "neutral";
 };
 
 const Button = ({
-  onClick,
-  className,
+  className = "",
+  variant = "primary",
   children = "More details",
+  ...props
 }: ButtonProps) => {
+  const variantClass = {
+    primary: "btn-primary btn-brand-primary",
+    neutral: "btn-neutral btn-brand-neutral",
+  }[variant];
+
   return (
-    <button
-      onClick={onClick}
-      className={`btn btn-primary btn-brand-primary btn-sm ${className}`}
-    >
+    <button className={`btn btn-sm ${variantClass} ${className}`} {...props}>
       {children}
     </button>
   );
