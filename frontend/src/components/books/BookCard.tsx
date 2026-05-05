@@ -16,7 +16,7 @@ function BookCard({ book }: BookCardProps) {
   return (
     <Link to={`/books/${book.id}`}>
       <div className="flex h-full flex-col rounded-lg bg-(--bg-main)/80 p-5 shadow-lg ring-1 ring-black/5 backdrop-blur-sm transition hover:shadow-xl">
-        <div className="relative mb-2 h-56 overflow-hidden">
+        <div className="relative mb-5 h-56 overflow-hidden">
           <img
             src={bookImage}
             alt={book.title}
@@ -24,8 +24,11 @@ function BookCard({ book }: BookCardProps) {
           />
         </div>
 
-        <div className="flex grow flex-col gap-3 rounded-lg text-center">
-          <h2 className="mb-1 text-sm font-semibold">{book.title}</h2>
+        <div className="flex grow flex-col gap-3 rounded-lg">
+          <h2 className="mb-1 text-sm">
+            {book.author}
+            <p className="font-semibold">{book.title}</p>
+          </h2>
           <Button className="mt-auto"> Create a club</Button>
         </div>
       </div>
