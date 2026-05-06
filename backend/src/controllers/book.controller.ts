@@ -1,6 +1,7 @@
 import type { RequestHandler } from 'express';
 import { Book } from '#models';
 import type { BookDTO, BookInputDTO, BooksPagination, BooksQuery } from '#types';
+import { deleteFromCloudinary } from '#utils';
 
 export const getBooks: RequestHandler<{}, BooksPagination, {}, BooksQuery> = async (req, res) => {
   const { page = 1, limit = 10 } = req.query;
@@ -49,19 +50,42 @@ export const getBookById: RequestHandler<{ id: string }, BookDTO> = async (req, 
 export const updateBook: RequestHandler<{ id: string }, BookDTO, BookInputDTO> = async (req, res) => {
   const { id } = req.params;
 
-  const book = await Book.findByIdAndUpdate(id, req.body, { returnDocument: 'after', runValidators: true });
+  const book = await Book.findById(id);
   if (!book) {
     throw new Error('Book not found', { cause: { status: 404 } });
   }
-  res.json(book);
+
+  const imageUrl = book.image;
+
+  const updatedBook = await Book.findByIdAndUpdate(id, req.body, { returnDocument: 'after', runValidators: true });
+  if (!updatedBook) {
+    throw new Error('Book not found', { cause: { status: 404 } });
+  }
+
+  const newImageUrl = req.body.image && req.body.image !== imageUrl;
+
+  if (updatedBook && newImageUrl && imageUrl) {
+    await deleteFromCloudinary(imageUrl);
+  }
+
+  res.json(updatedBook);
 };
 
 export const deleteBook: RequestHandler<{ id: string }> = async (req, res) => {
   const { id } = req.params;
 
-  const book = await Book.findByIdAndDelete(id);
+  const book = await Book.findById(id);
   if (!book) {
     throw new Error('Book not found', { cause: { status: 404 } });
   }
+
+  const imageUrl = book.image;
+
+  await book.deleteOne();
+
+  if (imageUrl) {
+    await deleteFromCloudinary(imageUrl);
+  }
+
   res.status(204).send();
 };
