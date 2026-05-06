@@ -1,7 +1,7 @@
 import type { RequestHandler } from 'express';
 import { Club } from '#models';
 import type { ClubDTO, ClubInputDTO, ClubsPagination, ClubsQuery } from '#types';
-import { assertBookExists, assertBookIsAssigned, isAdmin } from '#utils';
+import { assertBookExists, assertBookIsAssigned, isAdmin, deleteFromCloudinary } from '#utils';
 
 const contextData = [
   { path: 'createdBy', select: 'firstName lastName email' },
@@ -93,6 +93,8 @@ export const updateClub: RequestHandler<{ id: string }, ClubDTO, ClubInputDTO> =
     throw new Error('Club not found', { cause: { status: 404 } });
   }
 
+  const imageUrl = club.image;
+
   // Validate the book ID and check if the book is already assigned to another active club with a future meeting date (excluding the current club)
   await assertBookExists(bookId);
   await assertBookIsAssigned(bookId, id);
@@ -100,7 +102,14 @@ export const updateClub: RequestHandler<{ id: string }, ClubDTO, ClubInputDTO> =
   club.set(req.body);
 
   await club.save();
+
   const populatedClub = await club.populate(contextData);
+
+  const newImageUrl = req.body.image && req.body.image !== imageUrl;
+
+  if (populatedClub && newImageUrl && imageUrl) {
+    await deleteFromCloudinary(imageUrl);
+  }
 
   res.json(populatedClub);
 };
@@ -118,11 +127,19 @@ export const deleteClub: RequestHandler<{ id: string }> = async (req, res) => {
 
   if (!isAdmin(user?.role)) filter.createdBy = user?.id;
 
-  const club = await Club.findOneAndDelete(filter);
-
+  const club = await Club.findById(filter);
   if (!club) {
     throw new Error('Club not found', { cause: { status: 404 } });
   }
+
+  const imageUrl = club.image;
+
+  await club.deleteOne();
+
+  if (imageUrl) {
+    await deleteFromCloudinary(imageUrl);
+  }
+
   res.status(204).send();
 };
 
