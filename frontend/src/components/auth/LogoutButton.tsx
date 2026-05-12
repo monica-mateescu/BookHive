@@ -16,7 +16,7 @@ function LogoutButton() {
 
   return (
     <button
-      className="btn btn-primary btn-brand-primary btn-sm cursor-pointer"
+      className="btn btn-neutral btn-sm cursor-pointer"
       onClick={handleLogout}
     >
       Logout

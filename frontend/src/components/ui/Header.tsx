@@ -29,15 +29,17 @@ function Header() {
   return (
     <header className="sticky top-0 z-100 border-b-2 border-b-(--brand-primary) bg-(--bg-main) p-5 text-(--brand-secondary)">
       <nav className="max-w-8xl mx-auto flex w-full flex-row items-center justify-between">
-        <Link to="/" className="text-lg hover:underline">
-          Home
+        <Link
+          to="/"
+          className="text-xl font-semibold text-shadow-2xs hover:text-(--brand-primary)"
+        >
+          BookHive
         </Link>
 
         {!isPending && (
           <div className="flex items-center gap-2 md:gap-4">
             {!session ? (
               <>
-                Wellcome!
                 <Link
                   to="/signin"
                   className="btn btn-primary btn-brand-primary btn-sm cursor-pointer"
@@ -47,25 +49,24 @@ function Header() {
               </>
             ) : (
               <>
-                {isAdmin ? (
+                <Link
+                  to="/profile"
+                  className="flex no-underline hover:text-(--brand-primary) hover:underline"
+                >
+                  {ProfileIcon}
+                  Profile
+                </Link>
+                {isAdmin && (
                   <>
                     <Link
                       to="/admin"
                       className="flex no-underline hover:text-(--brand-primary) hover:underline"
                     >
-                      {ProfileIcon}
-                      Profile
+                      Admin
                     </Link>
                   </>
-                ) : (
-                  <Link
-                    to="/profile"
-                    className="flex no-underline hover:text-(--brand-primary) hover:underline"
-                  >
-                    {ProfileIcon}
-                    Profile
-                  </Link>
                 )}
+
                 <LogoutButton />
               </>
             )}
