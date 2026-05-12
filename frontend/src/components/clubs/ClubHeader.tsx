@@ -1,5 +1,4 @@
 import type { Club } from "@/types";
-import { Book } from "lucide-react";
 
 import Button from "../ui/Button";
 import MembersBadge from "./MembersBadge";
@@ -22,7 +21,6 @@ const ClubHeader = ({
   return (
     <header className="space-y-5">
       <h1 className="flex items-center gap-2 text-2xl font-semibold">
-        <Book />
         {club.name}
       </h1>
       <p className="text-(--gray-primary)">{club.description}</p>
