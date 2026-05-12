@@ -55,7 +55,7 @@ const Users = () => {
   if (isLoading) return <Loading />;
   if (isError) return <div className="alert alert-error">{error.message}</div>;
   return (
-    <section>
+    <section className="overflow-x-auto py-5">
       <div className="flex justify-end text-xs font-semibold">
         Total users: {data?.pagination?.total}
       </div>

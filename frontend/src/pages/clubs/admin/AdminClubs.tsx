@@ -38,7 +38,7 @@ const Clubs = () => {
   if (isError) return <div className="alert alert-error">{error.message}</div>;
 
   return (
-    <section className="overflow-x-auto p-5">
+    <section className="overflow-x-auto py-5">
       <div className="flex justify-end">
         <Link to="create" className="btn btn-primary btn-sm mb-4">
           Add new club
