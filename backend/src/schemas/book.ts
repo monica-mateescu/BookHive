@@ -21,3 +21,13 @@ export const bookSchema = z.strictObject({
   createdAt: z.date(),
   updatedAt: z.date()
 });
+
+export const bookDetailsSchema = bookSchema.extend({
+  club: z
+    .object({
+      id: z.string(),
+      name: z.string(),
+      createdBy: z.string()
+    })
+    .nullable()
+});

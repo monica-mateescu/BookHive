@@ -1,5 +1,6 @@
 import { z } from 'zod';
 import type {
+  bookDetailsSchema,
   bookInputSchema,
   bookSchema,
   clubInputSchema,
@@ -10,6 +11,7 @@ import type {
 
 export type BookInputDTO = z.infer<typeof bookInputSchema>;
 export type BookDTO = z.infer<typeof bookSchema>;
+export type BookDetailsDTO = z.infer<typeof bookDetailsSchema>;
 
 export type BooksQuery = z.infer<typeof paginationQuerySchema>;
 export type BooksPagination = z.infer<typeof paginationSchema>;

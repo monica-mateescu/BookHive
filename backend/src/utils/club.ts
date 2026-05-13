@@ -4,7 +4,7 @@ import type { ClubInputDTO } from '#types';
 export const assertBookExists = async (bookId: ClubInputDTO['bookId']): Promise<void> => {
   const exists = await Book.exists({ _id: bookId });
   if (!exists) {
-    throw new Error('Book not found', { cause: { status: 404 } });
+    throw new Error('Book not found.', { cause: { status: 404 } });
   }
 };
 
@@ -13,8 +13,7 @@ export const assertBookIsAssigned = async (bookId: ClubInputDTO['bookId'], clubI
 
   const filter: Record<string, unknown> = {
     bookId,
-    isActive: true,
-    meetingDate: { $gt: now }
+    isActive: true
   };
 
   if (clubId) {
@@ -24,7 +23,7 @@ export const assertBookIsAssigned = async (bookId: ClubInputDTO['bookId'], clubI
   const exists = await Club.exists(filter);
 
   if (exists) {
-    throw new Error('This book is already assigned to an active club with a future meeting date', {
+    throw new Error('This book is already assigned to an active club.', {
       cause: { status: 400 }
     });
   }

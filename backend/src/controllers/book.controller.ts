@@ -1,6 +1,6 @@
 import type { RequestHandler } from 'express';
-import { Book } from '#models';
-import type { BookDTO, BookInputDTO, BooksPagination, BooksQuery } from '#types';
+import { Book, Club } from '#models';
+import type { BookDetailsDTO, BookDTO, BookInputDTO, BooksPagination, BooksQuery } from '#types';
 import { deleteFromCloudinary } from '#utils';
 
 export const getBooks: RequestHandler<{}, BooksPagination, {}, BooksQuery> = async (req, res) => {
@@ -37,14 +37,28 @@ export const createBook: RequestHandler<{}, BookDTO, BookInputDTO> = async (req,
   res.status(201).json(book);
 };
 
-export const getBookById: RequestHandler<{ id: string }, BookDTO> = async (req, res) => {
+export const getBookById: RequestHandler<{ id: string }, BookDetailsDTO> = async (req, res) => {
   const { id } = req.params;
 
-  const book = await Book.findById(id);
+  const [book, club] = await Promise.all([
+    Book.findById(id).lean(),
+    Club.findOne({ bookId: id, isActive: true }).select('_id name createdBy').lean()
+  ]);
+
   if (!book) {
     throw new Error('Book not found', { cause: { status: 404 } });
   }
-  res.json(book);
+
+  res.json({
+    ...book,
+    club: club
+      ? {
+          id: club._id.toString(),
+          name: club.name,
+          createdBy: club.createdBy.toString()
+        }
+      : null
+  });
 };
 
 export const updateBook: RequestHandler<{ id: string }, BookDTO, BookInputDTO> = async (req, res) => {
