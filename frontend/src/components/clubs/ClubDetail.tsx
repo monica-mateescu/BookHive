@@ -1,9 +1,11 @@
+import { isBookRef } from "@/utils";
 import useAuth from "@contexts/useAuth";
+import { joinClub, leaveClub } from "@data";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import type { Club } from "@types";
 import { useState } from "react";
+import { Link } from "react-router";
 
-import { joinClub, leaveClub } from "../../data/clubs";
-import type { Club } from "../../types/club";
 import ClubHeader from "./ClubHeader";
 import MeetingDetailsCard from "./MeetingDetailsCard";
 
@@ -24,8 +26,9 @@ function ClubDetail({ club }: ClubDetailProps) {
   });
 
   const { mutate, isPending } = useMutation({
-    mutationFn: () =>
-      isAlreadyMember ? leaveClub(club.id) : joinClub(club.id),
+    mutationFn: ({ action }: { action: "join" | "leave" }) =>
+      action === "leave" ? leaveClub(club.id) : joinClub(club.id),
+
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["clubs"] });
       setErrorMessage("");
@@ -35,6 +38,17 @@ function ClubDetail({ club }: ClubDetailProps) {
     },
   });
 
+  const handleToggle = () => {
+    if (!user) {
+      setErrorMessage("You have to be logged in to join a club.");
+      return;
+    }
+
+    mutate({
+      action: isAlreadyMember ? "leave" : "join",
+    });
+  };
+
   const isAlreadyFull =
     !isAlreadyMember && club.maxMembers
       ? club.members.length >= club.maxMembers
@@ -43,19 +57,24 @@ function ClubDetail({ club }: ClubDetailProps) {
   const isJoinDisabled = isPending || (isAlreadyFull && !isAlreadyMember);
 
   const bookImage =
-    typeof club.bookId === "object" && club.bookId !== null
+    isBookRef(club.bookId) && club.bookId.image
       ? club.bookId.image
-      : "default-cover.png";
+      : "../assets/images/books/default-cover.png";
+
+  const bookId = isBookRef(club.bookId) ? club.bookId.id : club.bookId;
 
   return (
     <div className="grid grid-cols-1 gap-5 md:grid-cols-6">
-      <div className="relative h-64 w-full md:col-span-2 md:h-auto">
+      <Link
+        to={`/books/${bookId}`}
+        className="relative h-64 w-full md:col-span-2 md:h-auto"
+      >
         <img
           src={bookImage}
           alt={club.name ?? "Book cover"}
           className="h-full w-full object-contain md:object-cover"
         />
-      </div>
+      </Link>
 
       <div className="flex flex-col p-5 md:col-span-4">
         <div className="grow space-y-5">
@@ -64,7 +83,7 @@ function ClubDetail({ club }: ClubDetailProps) {
             isDisabled={isJoinDisabled}
             errorMessage={errorMessage}
             isMember={isAlreadyMember}
-            onJoinToggle={mutate}
+            onJoinToggle={handleToggle}
           />
           <MeetingDetailsCard
             meetingDate={club.meetingDate}

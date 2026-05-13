@@ -33,6 +33,7 @@ function App() {
             <Route path="signin" element={<SignIn />} />
             <Route path="books" element={<BooksPage />} />
             <Route element={<ProtectedLayout />}>
+              <Route path="clubs/create/:bookId/" element={<ClubCreate />} />
               <Route element={<AdminLayout />}>
                 <Route path="admin" element={<DashboardLayout />}>
                   <Route index element={<Dashboard />} />
@@ -49,7 +50,7 @@ function App() {
             </Route>
             <Route path="books/:id" element={<BookDetailPage />} />
             <Route path="clubs/:id" element={<ClubDetailPage />} />
-            <Route path="clubs/create/:bookId/" element={<ClubCreate />} />
+
             <Route path="*" element={<NotFound />} />
           </Route>
         </Routes>
