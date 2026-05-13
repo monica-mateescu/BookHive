@@ -27,7 +27,7 @@ function BookCard({ book }: BookCardProps) {
         <div className="flex grow flex-col gap-3 rounded-lg">
           <h2 className="mb-1 text-sm">
             {book.author}
-            <p className="font-semibold">{book.title}</p>
+            <span className="block font-semibold">{book.title}</span>
           </h2>
           <Button className="mt-auto"> Create a club</Button>
         </div>
