@@ -41,7 +41,7 @@ export const getBookById: RequestHandler<{ id: string }, BookDetailsDTO> = async
   const { id } = req.params;
 
   const [book, club] = await Promise.all([
-    Book.findById(id).lean(),
+    Book.findById(id),
     Club.findOne({ bookId: id, isActive: true }).select('_id name createdBy').lean()
   ]);
 
@@ -50,7 +50,7 @@ export const getBookById: RequestHandler<{ id: string }, BookDetailsDTO> = async
   }
 
   res.json({
-    ...book,
+    ...book.toJSON(),
     club: club
       ? {
           id: club._id.toString(),
