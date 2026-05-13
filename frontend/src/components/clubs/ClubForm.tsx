@@ -220,10 +220,12 @@ const CreateClubForm = () => {
       fd.append("description", form.description);
       fd.append("meetingLink", form.meetingLink);
       fd.append("meetingDate", form.meetingDate);
-      fd.append("maxMembers", (form.maxMembers ?? 10).toString());
       fd.append("bookId", form.bookId);
 
-      if (form.imageFile) fd.append("image", form.imageFile);
+      if (isAdmin) {
+        fd.append("maxMembers", (form.maxMembers ?? 10).toString());
+        if (form.imageFile) fd.append("image", form.imageFile);
+      }
 
       if (isEdit && id) {
         await updateClubById(id, fd);
@@ -375,22 +377,26 @@ const CreateClubForm = () => {
                     />
                   </div>
 
-                  <div>
-                    <label htmlFor="maxMembers" className="sr-only">
-                      Max members
-                    </label>
-                    <input
-                      id="maxMembers"
-                      name="maxMembers"
-                      type="number"
-                      className="input input-bordered w-full"
-                      placeholder="Max members"
-                      value={form.maxMembers}
-                      onChange={onText("maxMembers")}
-                      required
-                      disabled={submitting || loadingClub}
-                    />
-                  </div>
+                  {isAdmin && (
+                    <>
+                      <div>
+                        <label htmlFor="maxMembers" className="sr-only">
+                          Max members
+                        </label>
+                        <input
+                          id="maxMembers"
+                          name="maxMembers"
+                          type="number"
+                          className="input input-bordered w-full"
+                          placeholder="Max members"
+                          value={form.maxMembers}
+                          onChange={onText("maxMembers")}
+                          required
+                          disabled={submitting || loadingClub}
+                        />
+                      </div>
+                    </>
+                  )}
 
                   <div>
                     <label htmlFor="bookId" className="sr-only">
@@ -423,50 +429,54 @@ const CreateClubForm = () => {
                     </select>
                   </div>
 
-                  <div className="flex items-center gap-3">
-                    <label htmlFor="preview" className="sr-only">
-                      Preview
-                    </label>
-                    <input
-                      id="preview"
-                      name="preview"
-                      className="input input-bordered w-full"
-                      placeholder="Club image"
-                      value={form.imageFile?.name ?? ""}
-                      readOnly
-                      disabled={submitting || loadingClub}
-                    />
-                    <label htmlFor="image" className={uploadClass}>
-                      Upload
-                      <input
-                        id="image"
-                        name="image"
-                        type="file"
-                        accept="image/*"
-                        className="hidden"
-                        onChange={onImage}
-                        disabled={submitting || loadingClub}
-                      />
-                    </label>
-                  </div>
+                  {isAdmin && (
+                    <>
+                      <div className="flex items-center gap-3">
+                        <label htmlFor="preview" className="sr-only">
+                          Preview
+                        </label>
+                        <input
+                          id="preview"
+                          name="preview"
+                          className="input input-bordered w-full"
+                          placeholder="Club image"
+                          value={form.imageFile?.name ?? ""}
+                          readOnly
+                          disabled={submitting || loadingClub}
+                        />
+                        <label htmlFor="image" className={uploadClass}>
+                          Upload
+                          <input
+                            id="image"
+                            name="image"
+                            type="file"
+                            accept="image/*"
+                            className="hidden"
+                            onChange={onImage}
+                            disabled={submitting || loadingClub}
+                          />
+                        </label>
+                      </div>
 
-                  {(form.imageFile || existingImage) && (
-                    <div className="overflow-hidden border border-(--gray-primary)">
-                      <img
-                        src={
-                          form.imageFile
-                            ? URL.createObjectURL(form.imageFile)
-                            : existingImage
-                        }
-                        alt="Club preview"
-                        className="h-150 w-full object-cover"
-                      />
-                    </div>
-                  )}
-                  {isEdit && !form.imageFile && existingImage && (
-                    <p className="mt-2 text-xs text-(--gray-primary)">
-                      Current image will stay unless you upload a new one.
-                    </p>
+                      {(form.imageFile || existingImage) && (
+                        <div className="overflow-hidden border border-(--gray-primary)">
+                          <img
+                            src={
+                              form.imageFile
+                                ? URL.createObjectURL(form.imageFile)
+                                : existingImage
+                            }
+                            alt="Club preview"
+                            className="h-150 w-full object-cover"
+                          />
+                        </div>
+                      )}
+                      {isEdit && !form.imageFile && existingImage && (
+                        <p className="mt-2 text-xs text-(--gray-primary)">
+                          Current image will stay unless you upload a new one.
+                        </p>
+                      )}
+                    </>
                   )}
                 </div>
 

@@ -39,7 +39,7 @@ export const getClubs: RequestHandler<{}, ClubsPagination, {}, ClubsQuery> = asy
 export const createClub: RequestHandler<{}, ClubDTO, ClubInputDTO> = async (req, res) => {
   const {
     user,
-    body: { bookId }
+    body: { bookId, ...clubBody }
   } = req;
   const now = new Date();
 
@@ -55,10 +55,19 @@ export const createClub: RequestHandler<{}, ClubDTO, ClubInputDTO> = async (req,
   await assertBookExists(bookId);
   await assertBookIsAssigned(bookId);
 
-  // Create the club with the creator as the first member
-  const members = [{ userId: user?.id, role: 'admin', joinedAt: now }];
+  const clubData: any = {
+    ...clubBody,
+    bookId,
+    createdBy: user?.id,
+    members: [{ userId: user?.id, role: 'admin', joinedAt: now }]
+  };
 
-  const club = await Club.create({ ...req.body, createdBy: user?.id, members });
+  if (!isAdmin(user?.role)) {
+    clubData.maxMembers = 10;
+    delete clubData.image;
+  }
+
+  const club = await Club.create(clubData);
   const populatedClub = await club.populate(contextData);
 
   res.status(201).json(populatedClub);
