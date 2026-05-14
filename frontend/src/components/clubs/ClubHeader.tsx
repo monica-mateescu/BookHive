@@ -1,6 +1,6 @@
 import type { Club } from "@/types";
 
-import Button from "../ui/Button";
+import { Button, InfoState } from "../ui";
 import MembersBadge from "./MembersBadge";
 
 type ClubHeaderProps = {
@@ -37,11 +37,7 @@ const ClubHeader = ({
           {isMember ? "Leave club" : "Join club"}
         </Button>
       </div>
-      {errorMessage && (
-        <p className="text-right text-xs font-medium text-(--error)">
-          {errorMessage}
-        </p>
-      )}
+      {errorMessage && <InfoState message={errorMessage} />}
     </header>
   );
 };
