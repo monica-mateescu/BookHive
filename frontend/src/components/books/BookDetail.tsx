@@ -3,6 +3,8 @@ import type { Book } from "@/types";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router";
 
+import { InfoState } from "../ui";
+
 type BookDetailProps = {
   book: Book;
 };
@@ -43,48 +45,60 @@ function BookDetail({ book }: BookDetailProps) {
             <h2 className="mb-2 text-lg font-semibold">Summary</h2>
             <p>{book.summary}</p>
           </div>
-          <div className="card rounded-lg bg-(--bg-main)/80 p-2 shadow-sm ring-1 ring-black/5 backdrop-blur-sm">
-            <div className="card-body">
-              {book.club ? (
-                <>
-                  <p className="text-sm">
-                    This book is already being read in the club{" "}
-                    <span className="font-semibold">{book.club.name}</span>.
-                  </p>
-
-                  <div className="flex justify-end">
-                    <Link
-                      to={`/clubs/${book.club.id}`}
-                      className="btn btn-sm btn-primary btn-brand-primary"
-                    >
-                      View club
-                    </Link>
+          <div
+            role="alert"
+            className="alert alert-vertical sm:alert-horizontal"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              className="stroke-info h-6 w-6 shrink-0"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+                d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+              ></path>
+            </svg>
+            {book.club ? (
+              <>
+                <div>
+                  <h3 className="font-bold">{book.club.name}</h3>
+                  <div className="text-xs">
+                    This book is already being read in the club.
                   </div>
-                </>
-              ) : (
-                <>
-                  <p className="text-sm">
-                    This book is not currently being read in any club. You can
-                    create a new club for this book.
-                  </p>
-
-                  <div className="flex justify-end">
-                    <button
-                      onClick={handleCreateClick}
-                      className="btn btn-sm btn-primary btn-brand-primary"
-                    >
-                      Create new club
-                    </button>
+                </div>
+                <Link
+                  to={`/clubs/${book.club.id}`}
+                  className="btn btn-sm btn-primary btn-brand-primary"
+                >
+                  View club
+                </Link>
+              </>
+            ) : (
+              <>
+                <div>
+                  <h3 className="font-bold">
+                    You can create a new club for this book
+                  </h3>
+                  <div className="text-xs">
+                    This book is not currently being read in any club.
                   </div>
-                  {error && (
-                    <p className="text-right text-xs font-medium text-(--error)">
-                      You have to be logged in to create a club.
-                    </p>
-                  )}
-                </>
-              )}
-            </div>
+                </div>
+                <button
+                  onClick={handleCreateClick}
+                  className="btn btn-sm btn-primary btn-brand-primary"
+                >
+                  Create club
+                </button>
+              </>
+            )}
           </div>
+          {error && (
+            <InfoState message="You have to be logged in to create a club." />
+          )}
         </div>
       </div>
     </div>
