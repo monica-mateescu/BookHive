@@ -15,7 +15,7 @@ export type Book = {
   image: string;
   publishedYear: number;
 
-  club: ClubInfo | null;
+  club?: ClubInfo | null;
 };
 
 export type BooksResponse = {
