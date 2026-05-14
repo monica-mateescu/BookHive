@@ -69,20 +69,19 @@ export const updateBook: RequestHandler<{ id: string }, BookDTO, BookInputDTO> =
     throw new Error('Book not found', { cause: { status: 404 } });
   }
 
-  const imageUrl = book.image;
+  const previousImage = book.image;
 
-  const updatedBook = await Book.findByIdAndUpdate(id, req.body, { returnDocument: 'after', runValidators: true });
-  if (!updatedBook) {
-    throw new Error('Book not found', { cause: { status: 404 } });
+  book.set(req.body);
+
+  await book.save();
+
+  const newImage = req.body.image && req.body.image !== previousImage;
+
+  if (newImage && previousImage) {
+    await deleteFromCloudinary(previousImage);
   }
 
-  const newImageUrl = req.body.image && req.body.image !== imageUrl;
-
-  if (updatedBook && newImageUrl && imageUrl) {
-    await deleteFromCloudinary(imageUrl);
-  }
-
-  res.json(updatedBook);
+  res.json(book);
 };
 
 export const deleteBook: RequestHandler<{ id: string }> = async (req, res) => {
