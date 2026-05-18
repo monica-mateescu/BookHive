@@ -18,6 +18,8 @@ const initialForm: CreateClubFormData = {
   maxMembers: 10,
   imageFile: null,
   bookId: "",
+  isActive: false,
+  status: "pending",
 };
 
 const CreateClubForm = () => {
@@ -98,6 +100,8 @@ const CreateClubForm = () => {
                 .substring(0, 16)
             : "",
           maxMembers: club.maxMembers || 10,
+          isActive: club.isActive ?? false,
+          status: club.status ?? "pending",
           imageFile: null,
           bookId: bookId || "",
         });
@@ -145,6 +149,11 @@ const CreateClubForm = () => {
       } else {
         setField(key, value as CreateClubFormData[typeof key]);
       }
+    };
+
+  const onCheckbox =
+    (key: "isActive") => (e: ChangeEvent<HTMLInputElement>) => {
+      setField(key, e.target.checked);
     };
 
   const onImage = (e: ChangeEvent<HTMLInputElement>) => {
@@ -224,6 +233,8 @@ const CreateClubForm = () => {
 
       if (isAdmin) {
         fd.append("maxMembers", (form.maxMembers ?? 10).toString());
+        fd.append("isActive", form.isActive.toString());
+        fd.append("status", form.status);
         if (form.imageFile) fd.append("image", form.imageFile);
       }
 
@@ -476,6 +487,42 @@ const CreateClubForm = () => {
                           Current image will stay unless you upload a new one.
                         </p>
                       )}
+
+                      <div>
+                        <label htmlFor="status" className="sr-only">
+                          Status
+                        </label>
+                        <select
+                          id="status"
+                          name="status"
+                          className="select select-bordered w-full"
+                          value={form.status}
+                          onChange={onText("status")}
+                          disabled={submitting || loadingClub}
+                        >
+                          <option value="pending">Pending</option>
+                          <option value="approved">Approved</option>
+                          <option value="rejected">Rejected</option>
+                        </select>
+                      </div>
+
+                      <div>
+                        <label
+                          htmlFor="isActive"
+                          className="label cursor-pointer text-(--brand-secondary)"
+                        >
+                          <input
+                            id="isActive"
+                            name="isActive"
+                            type="checkbox"
+                            className="checkbox checkbox-sm"
+                            checked={form.isActive}
+                            onChange={onCheckbox("isActive")}
+                            disabled={submitting || loadingClub}
+                          />
+                          Is active club?
+                        </label>
+                      </div>
                     </>
                   )}
                 </div>

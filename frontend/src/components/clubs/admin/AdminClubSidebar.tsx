@@ -3,11 +3,15 @@ import { formatDate, isUserRef } from "@utils";
 
 type ClubSidebarProps = {
   createdBy: string | UserRef;
+  isActive: boolean;
+  status: string;
   createdDate: string;
   updatedDate: string;
 };
 const ClubSidebar = ({
   createdBy,
+  isActive,
+  status,
   createdDate,
   updatedDate,
 }: ClubSidebarProps) => {
@@ -29,6 +33,12 @@ const ClubSidebar = ({
           <h3 className="card-title text-lg">Status Info</h3>
 
           <div className="space-y-2 text-sm">
+            <p>
+              <strong>Active: </strong> {isActive ? "Yes" : "No"}
+            </p>
+            <p>
+              <strong>Status: </strong> {status}
+            </p>
             <p>
               <strong>Created: </strong> {formatDate(createdDate)}
             </p>

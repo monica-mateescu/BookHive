@@ -32,6 +32,7 @@ export type Club = {
   createdBy: string | UserRef;
   members: MemberRef[];
   isActive: boolean;
+  status: "pending" | "approved" | "rejected";
   image?: string | null;
   createdAt: string;
   updatedAt: string;

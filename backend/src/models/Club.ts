@@ -17,7 +17,12 @@ const clubSchema = new Schema(
     ],
     maxMembers: { type: Number, default: 10 },
     bookId: { type: Types.ObjectId, ref: 'Book', required: [true, 'Book ID is required'] },
-    isActive: { type: Boolean, default: true },
+    isActive: { type: Boolean, default: false },
+    status: {
+      type: String,
+      enum: ['pending', 'approved', 'rejected'],
+      default: 'pending'
+    },
     image: { type: String, default: null }
   },
   {

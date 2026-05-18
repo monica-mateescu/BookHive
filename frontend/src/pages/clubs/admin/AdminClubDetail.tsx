@@ -64,6 +64,8 @@ const ClubDetail = () => {
         </div>
         <ClubSidebar
           createdBy={data.createdBy}
+          isActive={data.isActive}
+          status={data.status}
           createdDate={data.createdAt}
           updatedDate={data.updatedAt}
         />

@@ -6,6 +6,10 @@ export const paginationQuerySchema = z.strictObject({
   isActive: z.coerce.boolean().optional()
 });
 
+export const paginationQueryClubSchema = paginationQuerySchema.extend({
+  status: z.enum(['pending', 'approved', 'rejected']).optional()
+});
+
 export const paginationSchema = <T extends z.ZodTypeAny>(schema: T) =>
   z.strictObject({
     data: z.array(schema),

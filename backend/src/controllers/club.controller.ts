@@ -10,11 +10,12 @@ const contextData = [
 ];
 
 export const getClubs: RequestHandler<{}, ClubsPagination, {}, ClubsQuery> = async (req, res) => {
-  const { page = 1, limit = 10, isActive } = req.query;
+  const { page = 1, limit = 10, isActive, status } = req.query;
   const skip = (page - 1) * limit;
   const filter: Record<string, unknown> = {};
 
   if (typeof isActive !== 'undefined') filter.isActive = isActive;
+  if (typeof status !== 'undefined') filter.status = status;
 
   const [total, data] = await Promise.all([
     Club.countDocuments(filter),
@@ -65,6 +66,8 @@ export const createClub: RequestHandler<{}, ClubDTO, ClubInputDTO> = async (req,
   if (!isAdmin(user?.role)) {
     clubData.maxMembers = 10;
     delete clubData.image;
+    delete clubData.status;
+    delete clubData.isActive;
   }
 
   const club = await Club.create(clubData);
@@ -108,7 +111,16 @@ export const updateClub: RequestHandler<{ id: string }, ClubDTO, ClubInputDTO> =
   await assertBookExists(bookId);
   await assertBookIsAssigned(bookId, id);
 
-  club.set(req.body);
+  const clubData = { ...req.body };
+
+  if (!isAdmin(user?.role)) {
+    clubData.maxMembers = 10;
+    delete clubData.image;
+    delete clubData.status;
+    delete clubData.isActive;
+  }
+
+  club.set(clubData);
 
   await club.save();
 
