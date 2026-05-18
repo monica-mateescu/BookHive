@@ -12,3 +12,5 @@ export { default as Clubs } from "./clubs/admin/AdminClubs";
 export { default as ClubDetail } from "./clubs/admin/AdminClubDetail";
 export { default as ClubCreate } from "./clubs/ClubCreate";
 export { default as Users } from "./users/admin/AdminUsers";
+export { default as Profile } from "./users/Profile";
+export { default as EmailVerified } from "./users/EmailVerified";
