@@ -92,12 +92,12 @@ export const deleteBook: RequestHandler<{ id: string }> = async (req, res) => {
     throw new Error('Book not found', { cause: { status: 404 } });
   }
 
-  const imageUrl = book.image;
+  const previousImage = book.image;
 
   await book.deleteOne();
 
-  if (imageUrl) {
-    await deleteFromCloudinary(imageUrl);
+  if (previousImage) {
+    await deleteFromCloudinary(previousImage);
   }
 
   res.status(204).send();
