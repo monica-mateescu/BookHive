@@ -2,6 +2,7 @@ import { MongoMemoryServer } from 'mongodb-memory-server';
 import { MongoClient } from 'mongodb';
 import { testUtils } from 'better-auth/plugins';
 import { createAuth } from '../../src/utils/createAuth.ts';
+import { mailer } from './mailer.ts';
 
 import type { TestHelpers } from 'better-auth/plugins';
 
@@ -23,6 +24,7 @@ export async function setupTest() {
     baseURL: 'http://localhost:3000',
     secret: 'test-secret',
     isProduction: false,
+    mailer,
     plugins: [testUtils()]
   });
 
@@ -36,7 +38,8 @@ export async function setupTest() {
 
   return {
     auth,
-    test
+    test,
+    mailer
   };
 }
 
