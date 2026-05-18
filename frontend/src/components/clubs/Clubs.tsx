@@ -14,8 +14,8 @@ import {
 const Clubs = () => {
   const [page, setPage] = useState(1);
   const { isLoading, isError, data } = useQuery<ClubsResponse, Error>({
-    queryKey: ["clubs", { page }],
-    queryFn: () => getClubs(page),
+    queryKey: ["clubs", { page, isActive: "true", status: "approved" }],
+    queryFn: () => getClubs(page, 8, { isActive: "true", status: "approved" }),
     placeholderData: keepPreviousData,
   });
 

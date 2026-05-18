@@ -24,8 +24,20 @@ export const createClub = async (formData: FormData): Promise<Club> => {
 export const getClubs = async (
   page = 1,
   limit = 10,
+  filters?: { isActive?: string; status?: string },
 ): Promise<ClubsResponse> => {
-  const res = await fetch(`${API_URL}/api/clubs?page=${page}&limit=${limit}`);
+  const params = new URLSearchParams({
+    page: page.toString(),
+    limit: limit.toString(),
+  });
+  if (filters) {
+    Object.entries(filters).forEach(([key, value]) => {
+      if (value !== undefined) {
+        params.append(key, value);
+      }
+    });
+  }
+  const res = await fetch(`${API_URL}/api/clubs?${params.toString()}`);
 
   if (!res.ok) throw new Error("Failed to fetch clubs");
 

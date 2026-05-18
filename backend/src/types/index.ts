@@ -6,6 +6,7 @@ import type {
   clubInputSchema,
   clubSchema,
   paginationQuerySchema,
+  paginationQueryClubSchema,
   paginationSchema
 } from '#schemas';
 
@@ -19,7 +20,7 @@ export type BooksPagination = z.infer<typeof paginationSchema>;
 export type ClubInputDTO = z.infer<typeof clubInputSchema>;
 export type ClubDTO = z.infer<typeof clubSchema>;
 
-export type ClubsQuery = z.infer<typeof paginationQuerySchema>;
+export type ClubsQuery = z.infer<typeof paginationQueryClubSchema>;
 export type ClubsPagination = z.infer<typeof paginationSchema>;
 
 export type UsersQuery = z.infer<typeof paginationQuerySchema>;
