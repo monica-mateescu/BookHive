@@ -25,3 +25,7 @@ export type ClubsPagination = z.infer<typeof paginationSchema>;
 
 export type UsersQuery = z.infer<typeof paginationQuerySchema>;
 export type UsersPagination = z.infer<typeof paginationSchema>;
+
+export type Mailer = {
+  sendEmail: (args: { to: string; subject: string; html: string }) => Promise<void> | void;
+};

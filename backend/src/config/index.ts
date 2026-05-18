@@ -6,7 +6,9 @@ const envSchema = z.object({
   CLIENT_BASE_URL: z.url(),
   BETTER_AUTH_SECRET: z.string(),
   BETTER_AUTH_URL: z.url(),
-  DOMAIN: z.string()
+  DOMAIN: z.string(),
+  RESEND_API_KEY: z.string(),
+  EMAIL_FROM: z.string()
 });
 
 const { data, error, success } = envSchema.safeParse(process.env);
@@ -16,4 +18,13 @@ if (!success) {
   process.exit(1);
 }
 
-export const { MONGO_URI, DB_NAME, CLIENT_BASE_URL, BETTER_AUTH_SECRET, BETTER_AUTH_URL, DOMAIN } = data;
+export const {
+  MONGO_URI,
+  DB_NAME,
+  CLIENT_BASE_URL,
+  BETTER_AUTH_SECRET,
+  BETTER_AUTH_URL,
+  DOMAIN,
+  RESEND_API_KEY,
+  EMAIL_FROM
+} = data;

@@ -4,6 +4,7 @@ import type { Db, MongoClient } from 'mongodb';
 import type { BetterAuthPlugin } from 'better-auth';
 import { createAuthMiddleware } from 'better-auth/api';
 import { APIError } from 'better-auth/api';
+import type { Mailer } from '#types';
 
 type CreateAuthOptions = {
   db: Db;
@@ -12,6 +13,7 @@ type CreateAuthOptions = {
   trustedOrigins?: string[];
   secret: string;
   isProduction: boolean;
+  mailer: Mailer;
 };
 
 export const createAuth = <P extends BetterAuthPlugin[] = []>({
@@ -21,6 +23,7 @@ export const createAuth = <P extends BetterAuthPlugin[] = []>({
   trustedOrigins,
   secret,
   isProduction,
+  mailer,
   plugins = [] as unknown as P
 }: CreateAuthOptions & { plugins?: P }) =>
   betterAuth({
@@ -28,7 +31,7 @@ export const createAuth = <P extends BetterAuthPlugin[] = []>({
     secret,
     baseURL,
     trustedOrigins,
-    emailAndPassword: { enabled: true, minPasswordLength: 8, maxPasswordLength: 128 },
+    emailAndPassword: { enabled: true },
 
     session: {
       cookieCache: {
@@ -55,6 +58,26 @@ export const createAuth = <P extends BetterAuthPlugin[] = []>({
           input: false,
           defaultValue: null
         }
+      },
+      changeEmail: {
+        enabled: true,
+        sendChangeEmailConfirmation: async ({ user, newEmail, url }) => {
+          console.log(`Verification URL for ${user.email}: ${url}`);
+          mailer.sendEmail({
+            to: user.email,
+            subject: 'Approve email change',
+            html: `Click to approve the change to ${newEmail}:  <a href=${url} target='_blank'>Approve</a>`
+          });
+        }
+      }
+    },
+    emailVerification: {
+      sendVerificationEmail: async ({ user, url }) => {
+        mailer.sendEmail({
+          to: user.email,
+          subject: 'Verify your email address',
+          html: `Click to verify your email: <a href=${url} target='_blank'>Verify</a>`
+        });
       }
     },
     advanced: {

@@ -2,6 +2,7 @@ import { MongoClient } from 'mongodb';
 import { admin } from 'better-auth/plugins';
 import { createAuth } from './createAuth.ts';
 import { MONGO_URI, DB_NAME, CLIENT_BASE_URL, BETTER_AUTH_SECRET, BETTER_AUTH_URL } from '#config';
+import { mailer } from './mailer.ts';
 
 const client = new MongoClient(MONGO_URI);
 const db = client.db(DB_NAME);
@@ -13,5 +14,6 @@ export const auth = createAuth({
   trustedOrigins: [CLIENT_BASE_URL!],
   secret: BETTER_AUTH_SECRET!,
   isProduction: true,
+  mailer,
   plugins: [admin()]
 });
