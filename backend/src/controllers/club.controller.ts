@@ -102,7 +102,7 @@ export const updateClub: RequestHandler<{ id: string }, ClubDTO, ClubInputDTO> =
     throw new Error('Club not found', { cause: { status: 404 } });
   }
 
-  const imageUrl = club.image;
+  const previousImage = club.image;
 
   // Validate the book ID and check if the book is already assigned to another active club with a future meeting date (excluding the current club)
   await assertBookExists(bookId);
@@ -114,10 +114,10 @@ export const updateClub: RequestHandler<{ id: string }, ClubDTO, ClubInputDTO> =
 
   const populatedClub = await club.populate(contextData);
 
-  const newImageUrl = req.body.image && req.body.image !== imageUrl;
+  const newImage = req.body.image && req.body.image !== previousImage;
 
-  if (populatedClub && newImageUrl && imageUrl) {
-    await deleteFromCloudinary(imageUrl);
+  if (populatedClub && newImage && previousImage) {
+    await deleteFromCloudinary(previousImage);
   }
 
   res.json(populatedClub);
@@ -141,12 +141,12 @@ export const deleteClub: RequestHandler<{ id: string }> = async (req, res) => {
     throw new Error('Club not found', { cause: { status: 404 } });
   }
 
-  const imageUrl = club.image;
+  const previousImage = club.image;
 
   await club.deleteOne();
 
-  if (imageUrl) {
-    await deleteFromCloudinary(imageUrl);
+  if (previousImage) {
+    await deleteFromCloudinary(previousImage);
   }
 
   res.status(204).send();
