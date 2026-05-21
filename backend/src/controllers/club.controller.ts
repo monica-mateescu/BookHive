@@ -1,40 +1,40 @@
 import type { RequestHandler } from 'express';
 import { Club } from '#models';
 import type { ClubDTO, ClubInputDTO, ClubsPagination, ClubsQuery } from '#types';
-import { assertBookExists, assertBookIsAssigned, isAdmin, deleteFromCloudinary } from '#utils';
-
-const contextData = [
-  { path: 'createdBy', select: 'firstName lastName email' },
-  { path: 'members.userId', select: 'firstName lastName email' },
-  { path: 'bookId', select: 'title author description image publishedYear' }
-];
+import {
+  assertBookExists,
+  assertBookIsAssigned,
+  isAdmin,
+  deleteFromCloudinary,
+  contextData,
+  getPaginatedClubs
+} from '#utils';
 
 export const getClubs: RequestHandler<{}, ClubsPagination, {}, ClubsQuery> = async (req, res) => {
   const { page = 1, limit = 10, isActive, status } = req.query;
-  const skip = (page - 1) * limit;
+
   const filter: Record<string, unknown> = {};
 
   if (typeof isActive !== 'undefined') filter.isActive = isActive;
   if (typeof status !== 'undefined') filter.status = status;
 
-  const [total, data] = await Promise.all([
-    Club.countDocuments(filter),
-    Club.find(filter).sort({ createdAt: -1 }).skip(skip).limit(limit).populate(contextData)
-  ]);
+  const clubs = await getPaginatedClubs({ filter, page, limit });
 
-  const totalPages = Math.max(1, Math.ceil(total / limit));
+  res.json(clubs);
+};
 
-  res.json({
-    data: data as ClubDTO[],
-    pagination: {
-      total,
-      page,
-      limit,
-      totalPages,
-      hasNextPage: page < totalPages,
-      hasPrevPage: page > 1
-    }
-  });
+export const getMyClubs: RequestHandler<{}, ClubsPagination, {}, ClubsQuery> = async (req, res) => {
+  const user = req.user;
+
+  const { page = 1, limit = 10 } = req.query;
+
+  const filter: Record<string, unknown> = {
+    $or: [{ createdBy: user?.id }, { 'members.userId': user?.id }]
+  };
+
+  const clubs = await getPaginatedClubs({ filter, page, limit });
+
+  res.json(clubs);
 };
 
 export const createClub: RequestHandler<{}, ClubDTO, ClubInputDTO> = async (req, res) => {
@@ -148,7 +148,7 @@ export const deleteClub: RequestHandler<{ id: string }> = async (req, res) => {
 
   if (!isAdmin(user?.role)) filter.createdBy = user?.id;
 
-  const club = await Club.findById(filter);
+  const club = await Club.findOne(filter);
   if (!club) {
     throw new Error('Club not found', { cause: { status: 404 } });
   }

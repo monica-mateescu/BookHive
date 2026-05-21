@@ -6,6 +6,7 @@ import { paginationQueryClubSchema, clubInputSchema } from '#schemas';
 const clubRouter = Router();
 
 clubRouter.get('/', validateZod(paginationQueryClubSchema), getClubs);
+clubRouter.get('/me', validateZod(paginationQueryClubSchema), getClubs);
 clubRouter.post('/', authMiddleware, fileHandler, cloudinaryUpload('clubs'), validateZod(clubInputSchema), createClub);
 clubRouter.get('/:id', validateObjectId('id'), getClubById);
 clubRouter.put(
