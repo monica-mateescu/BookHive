@@ -16,6 +16,7 @@ import {
   Dashboard,
   EmailVerified,
   Home,
+  MyClubs,
   NotFound,
   Profile,
   SignIn,
@@ -39,6 +40,7 @@ function App() {
             <Route path="email-verified" element={<EmailVerified />} />
             <Route element={<ProtectedLayout />}>
               <Route path="profile" element={<Profile />} />
+              <Route path="my-clubs" element={<MyClubs />} />
               <Route path="clubs/create/:bookId/" element={<ClubCreate />} />
               <Route element={<AdminLayout />}>
                 <Route path="admin" element={<DashboardLayout />}>

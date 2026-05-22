@@ -45,6 +45,23 @@ export const getClubs = async (
   return data;
 };
 
+export const getMyClubs = async (
+  page = 1,
+  limit = 10,
+): Promise<ClubsResponse> => {
+  const params = new URLSearchParams({
+    page: page.toString(),
+    limit: limit.toString(),
+  });
+
+  const res = await fetch(`${API_URL}/api/clubs/me?${params.toString()}`);
+
+  if (!res.ok) throw new Error("Failed to fetch clubs");
+
+  const data = await res.json();
+  return data;
+};
+
 export const getClubById = async (id: string): Promise<Club> => {
   const res = await fetch(`${API_URL}/api/clubs/${id}`);
 
