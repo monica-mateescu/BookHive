@@ -1,5 +1,5 @@
 import { authClient } from "@utils";
-import { Link } from "react-router";
+import { NavLink } from "react-router";
 
 import LogoutButton from "../auth/LogoutButton";
 
@@ -29,41 +29,65 @@ function Header() {
   return (
     <header className="sticky top-0 z-100 border-b-2 border-b-(--brand-primary) bg-(--bg-main) p-5 text-(--brand-secondary)">
       <nav className="max-w-8xl mx-auto flex w-full flex-row items-center justify-between">
-        <Link
+        <NavLink
           to="/"
           className="text-xl font-semibold text-shadow-2xs hover:text-(--brand-primary)"
         >
           BookHive
-        </Link>
+        </NavLink>
 
         {!isPending && (
           <div className="flex items-center gap-2 md:gap-4">
             {!session ? (
               <>
-                <Link
+                <NavLink
                   to="/signin"
                   className="btn btn-primary btn-brand-primary btn-sm cursor-pointer"
                 >
                   Sign in
-                </Link>
+                </NavLink>
               </>
             ) : (
               <>
-                <Link
+                <NavLink
                   to="/profile"
-                  className="flex no-underline hover:text-(--brand-primary) hover:underline"
+                  className={({ isActive }) =>
+                    `flex no-underline hover:underline ${
+                      isActive
+                        ? "text-(--brand-primary)"
+                        : "text-(--brand-secondar)"
+                    }`
+                  }
                 >
                   {ProfileIcon}
                   Profile
-                </Link>
+                </NavLink>
+                <NavLink
+                  to="/my-clubs"
+                  className={({ isActive }) =>
+                    `flex no-underline hover:underline ${
+                      isActive
+                        ? "text-(--brand-primary)"
+                        : "text-(--brand-secondar)"
+                    }`
+                  }
+                >
+                  My Clubs
+                </NavLink>
                 {isAdmin && (
                   <>
-                    <Link
+                    <NavLink
                       to="/admin"
-                      className="flex no-underline hover:text-(--brand-primary) hover:underline"
+                      className={({ isActive }) =>
+                        `flex no-underline hover:underline ${
+                          isActive
+                            ? "text-(--brand-primary)"
+                            : "text-(--brand-secondary)"
+                        }`
+                      }
                     >
                       Admin
-                    </Link>
+                    </NavLink>
                   </>
                 )}
 
