@@ -9,8 +9,6 @@ export const assertBookExists = async (bookId: ClubInputDTO['bookId']): Promise<
 };
 
 export const assertBookIsAssigned = async (bookId: ClubInputDTO['bookId'], clubId?: string): Promise<void> => {
-  const now = new Date();
-
   const filter: Record<string, unknown> = {
     bookId,
     isActive: true
@@ -27,4 +25,41 @@ export const assertBookIsAssigned = async (bookId: ClubInputDTO['bookId'], clubI
       cause: { status: 400 }
     });
   }
+};
+
+export const contextData = [
+  { path: 'createdBy', select: 'firstName lastName email' },
+  { path: 'members.userId', select: 'firstName lastName email' },
+  { path: 'bookId', select: 'title author description image publishedYear' }
+];
+
+export const getPaginatedClubs = async ({
+  filter,
+  page,
+  limit
+}: {
+  filter: Record<string, unknown>;
+  page: number;
+  limit: number;
+}) => {
+  const skip = (page - 1) * limit;
+
+  const [total, data] = await Promise.all([
+    Club.countDocuments(filter),
+    Club.find(filter).sort({ createdAt: -1 }).skip(skip).limit(limit).populate(contextData)
+  ]);
+
+  const totalPages = Math.max(1, Math.ceil(total / limit));
+
+  return {
+    data,
+    pagination: {
+      total,
+      page,
+      limit,
+      totalPages,
+      hasNextPage: page < totalPages,
+      hasPrevPage: page > 1
+    }
+  };
 };

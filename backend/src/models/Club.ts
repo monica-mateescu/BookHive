@@ -38,7 +38,9 @@ const clubSchema = new Schema(
   }
 );
 
-clubSchema.index({ bookId: 1, isActive: 1, meetingDate: 1 });
-clubSchema.index({ createdBy: 1, isActive: 1, meetingDate: 1 });
+clubSchema.index({ isActive: 1, status: 1, createdAt: -1 });
+clubSchema.index({ createdBy: 1, createdAt: -1 });
+clubSchema.index({ 'members.userId': 1, createdAt: -1 });
+clubSchema.index({ bookId: 1, isActive: 1 });
 
 export default model('Club', clubSchema);
