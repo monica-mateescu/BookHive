@@ -167,7 +167,7 @@ const CreateBookForm = () => {
 
   return (
     <>
-      <h1 className="text-center text-3xl font-semibold">
+      <h1 className="mt-5 text-center text-3xl font-semibold">
         {isEdit ? "Edit book" : "Create new book"}
       </h1>
       <div className="my-5 w-full">

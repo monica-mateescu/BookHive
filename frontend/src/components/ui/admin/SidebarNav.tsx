@@ -2,41 +2,32 @@ import { NavLink } from "react-router";
 
 const SidebarNav = () => {
   return (
-    <div className="drawer-side z-100 md:z-50">
-      <label htmlFor="sidebar-drawer" className="drawer-overlay"></label>
-
-      <ul className="menu bg-base-100 text-base-content min-h-full w-64 p-4 font-bold">
-        <li>
+    <div className="mt-5 w-full rounded bg-(--gray-secondary)">
+      <div className="w-full max-w-xl space-y-5">
+        <div role="tablist" className="tabs tabs-border">
           <NavLink
             to="/admin/users"
-            className={({ isActive }) =>
-              isActive ? "active text-primary" : ""
-            }
+            role="tab"
+            className={`tab ({ isActive }) => isActive ? "tab-active" : ""`}
           >
             Users
           </NavLink>
-        </li>
-        <li>
           <NavLink
             to="/admin/books"
-            className={({ isActive }) =>
-              isActive ? "active text-primary" : ""
-            }
+            role="tab"
+            className={`tab ({ isActive }) => isActive ? "tab-active" : ""`}
           >
             Books
           </NavLink>
-        </li>
-        <li>
           <NavLink
             to="/admin/clubs"
-            className={({ isActive }) =>
-              isActive ? "active text-primary" : ""
-            }
+            role="tab"
+            className={`tab ({ isActive }) => isActive ? "tab-active" : ""`}
           >
             Clubs
           </NavLink>
-        </li>
-      </ul>
+        </div>
+      </div>
     </div>
   );
 };

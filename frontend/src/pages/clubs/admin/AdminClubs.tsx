@@ -40,10 +40,15 @@ const Clubs = () => {
   return (
     <section className="overflow-x-auto py-5">
       <div className="flex justify-end">
-        <Link to="create" className="btn btn-primary btn-sm mb-4">
+        <Link
+          to="create"
+          className="btn btn-primary btn-brand-primary btn-sm mb-2 cursor-pointer"
+        >
           Add new club
         </Link>
       </div>
+
+      <h1 className="flex justify-start text-2xl font-semibold">Clubs</h1>
 
       <div className="flex justify-end text-xs font-semibold">
         Total clubs: {data?.pagination.total}

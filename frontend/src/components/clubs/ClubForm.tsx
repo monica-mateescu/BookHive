@@ -276,7 +276,7 @@ const CreateClubForm = () => {
         </>
       ) : (
         <>
-          <h1 className="text-center text-3xl font-semibold">
+          <h1 className="mt-5 text-center text-3xl font-semibold">
             {isEdit ? "Edit club" : "Create new club"}
           </h1>
           <div className="my-5 w-full">
