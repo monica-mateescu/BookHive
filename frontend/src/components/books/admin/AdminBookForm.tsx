@@ -353,7 +353,7 @@ const CreateBookForm = () => {
                   ? "Saving..."
                   : isEdit
                     ? "Save changes"
-                    : "Save book"}
+                    : "Create book"}
               </button>
             </div>
 

@@ -537,7 +537,7 @@ const CreateClubForm = () => {
                       ? "Saving..."
                       : isEdit
                         ? "Save changes"
-                        : "Save club"}
+                        : "Create club"}
                   </button>
                 </div>
 
