@@ -62,7 +62,24 @@ function BookDetail({ book }: BookDetailProps) {
                 d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
               ></path>
             </svg>
-            {book.club ? (
+            {!book.club ? (
+              <>
+                <div>
+                  <h3 className="font-bold">
+                    You can create a new club for this book
+                  </h3>
+                  <div className="text-xs">
+                    This book is not currently being read in any club.
+                  </div>
+                </div>
+                <button
+                  onClick={handleCreateClick}
+                  className="btn btn-sm btn-primary btn-brand-primary"
+                >
+                  Create club
+                </button>
+              </>
+            ) : book.club.isActive ? (
               <>
                 <div>
                   <h3 className="font-bold">{book.club.name}</h3>
@@ -80,19 +97,12 @@ function BookDetail({ book }: BookDetailProps) {
             ) : (
               <>
                 <div>
-                  <h3 className="font-bold">
-                    You can create a new club for this book
-                  </h3>
+                  <h3 className="font-bold">{book.club.name}</h3>
                   <div className="text-xs">
-                    This book is not currently being read in any club.
+                    This book is already being read in the club, currently
+                    reviewed by the admin.
                   </div>
                 </div>
-                <button
-                  onClick={handleCreateClick}
-                  className="btn btn-sm btn-primary btn-brand-primary"
-                >
-                  Create club
-                </button>
               </>
             )}
           </div>

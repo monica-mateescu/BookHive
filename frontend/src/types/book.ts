@@ -4,6 +4,7 @@ type ClubInfo = {
   id: string;
   name: string;
   createdBy: string;
+  isActive: boolean;
 };
 
 export type Book = {
