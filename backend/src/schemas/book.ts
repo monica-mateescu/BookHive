@@ -27,7 +27,8 @@ export const bookDetailsSchema = bookSchema.extend({
     .object({
       id: z.string(),
       name: z.string(),
-      createdBy: z.string()
+      createdBy: z.string(),
+      isActive: z.boolean()
     })
     .nullable()
 });
