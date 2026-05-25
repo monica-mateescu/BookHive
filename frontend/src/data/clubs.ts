@@ -54,7 +54,10 @@ export const getMyClubs = async (
     limit: limit.toString(),
   });
 
-  const res = await fetch(`${API_URL}/api/clubs/me?${params.toString()}`);
+  const res = await fetch(`${API_URL}/api/clubs/me?${params.toString()}`, {
+    method: "GET",
+    credentials: "include",
+  });
 
   if (!res.ok) throw new Error("Failed to fetch clubs");
 
