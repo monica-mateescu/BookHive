@@ -1,12 +1,21 @@
 import { Router } from 'express';
-import { getClubs, createClub, getClubById, updateClub, deleteClub, joinClub, leaveClub } from '#controllers';
+import {
+  getClubs,
+  getMyClubs,
+  createClub,
+  getClubById,
+  updateClub,
+  deleteClub,
+  joinClub,
+  leaveClub
+} from '#controllers';
 import { authMiddleware, validateZod, validateObjectId, fileHandler, cloudinaryUpload } from '#middlewares';
 import { paginationQueryClubSchema, clubInputSchema } from '#schemas';
 
 const clubRouter = Router();
 
 clubRouter.get('/', validateZod(paginationQueryClubSchema), getClubs);
-clubRouter.get('/me', validateZod(paginationQueryClubSchema), getClubs);
+clubRouter.get('/me', authMiddleware, validateZod(paginationQueryClubSchema), getMyClubs);
 clubRouter.post('/', authMiddleware, fileHandler, cloudinaryUpload('clubs'), validateZod(clubInputSchema), createClub);
 clubRouter.get('/:id', validateObjectId('id'), getClubById);
 clubRouter.put(
