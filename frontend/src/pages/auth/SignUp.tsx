@@ -5,7 +5,7 @@ function SignUp() {
     <>
       <h1 className="text-center text-3xl font-semibold">Sign up</h1>
       <div className="mt-2 text-center text-(--gray-primary)">
-        Sign up to get started
+        Sign up to get started.
       </div>
       <SignUpForm />
     </>

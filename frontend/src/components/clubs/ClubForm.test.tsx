@@ -123,7 +123,7 @@ describe("CreateClubForm", () => {
     expect(screen.getByPlaceholderText(/Meeting date/i)).toBeInTheDocument();
     expect(screen.getByLabelText(/Book/i)).toBeInTheDocument();
     expect(
-      screen.getByRole("button", { name: /Save club/i }),
+      screen.getByRole("button", { name: /Create club/i }),
     ).toBeInTheDocument();
   });
 
@@ -134,7 +134,7 @@ describe("CreateClubForm", () => {
         <CreateClubForm />
       </BrowserRouter>,
     );
-    const submitBtn = screen.getByRole("button", { name: /Save club/i });
+    const submitBtn = screen.getByRole("button", { name: /Create club/i });
     expect(submitBtn).toBeDisabled();
   });
 
@@ -172,7 +172,7 @@ describe("CreateClubForm", () => {
     const fileInput = screen.getByLabelText(/Upload/i);
     fireEvent.change(fileInput, { target: { files: [mockFile] } });
 
-    const submitBtn = screen.getByRole("button", { name: /Save club/i });
+    const submitBtn = screen.getByRole("button", { name: /Create club/i });
     expect(submitBtn).toBeEnabled();
     fireEvent.click(submitBtn);
 
@@ -277,7 +277,7 @@ describe("CreateClubForm", () => {
       target: { value: "456" },
     });
 
-    fireEvent.click(screen.getByRole("button", { name: /Save club/i }));
+    fireEvent.click(screen.getByRole("button", { name: /Create club/i }));
 
     expect(screen.getByText(/Saving\.\.\./i)).toBeInTheDocument();
     expect(screen.getByRole("button")).toBeDisabled();

@@ -69,7 +69,7 @@ describe("CreateBookForm", () => {
     expect(screen.getByPlaceholderText(/Summary/i)).toBeInTheDocument();
     expect(screen.getByPlaceholderText(/Published year/i)).toBeInTheDocument();
     expect(
-      screen.getByRole("button", { name: /Save book/i }),
+      screen.getByRole("button", { name: /Create book/i }),
     ).toBeInTheDocument();
   });
 
@@ -80,7 +80,7 @@ describe("CreateBookForm", () => {
         <CreateBookForm />
       </BrowserRouter>,
     );
-    const submitBtn = screen.getByRole("button", { name: /Save book/i });
+    const submitBtn = screen.getByRole("button", { name: /Create book/i });
     expect(submitBtn).toBeDisabled();
   });
 
@@ -110,7 +110,7 @@ describe("CreateBookForm", () => {
     const fileInput = screen.getByLabelText(/Upload/i);
     fireEvent.change(fileInput, { target: { files: [mockFile] } });
 
-    const submitBtn = screen.getByRole("button", { name: /Save book/i });
+    const submitBtn = screen.getByRole("button", { name: /Create book/i });
     expect(submitBtn).toBeEnabled();
     fireEvent.click(submitBtn);
 
@@ -194,7 +194,7 @@ describe("CreateBookForm", () => {
       target: { files: [mockFile] },
     });
 
-    fireEvent.click(screen.getByRole("button", { name: /Save book/i }));
+    fireEvent.click(screen.getByRole("button", { name: /Create book/i }));
 
     await waitFor(() => {
       expect(screen.getByText(/Creating book failed/i)).toBeInTheDocument();
@@ -229,7 +229,7 @@ describe("CreateBookForm", () => {
       target: { files: [mockFile] },
     });
 
-    fireEvent.click(screen.getByRole("button", { name: /Save book/i }));
+    fireEvent.click(screen.getByRole("button", { name: /Create book/i }));
 
     expect(screen.getByText(/Saving\.\.\./i)).toBeInTheDocument();
     expect(screen.getByRole("button")).toBeDisabled();
@@ -254,7 +254,7 @@ describe("CreateBookForm", () => {
 
     expect(screen.getByText(/Only images are allowed/i)).toBeInTheDocument();
 
-    const submitBtn = screen.getByRole("button", { name: /Save book/i });
+    const submitBtn = screen.getByRole("button", { name: /Create book/i });
     expect(submitBtn).toBeDisabled();
   });
 });
