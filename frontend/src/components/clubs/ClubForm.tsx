@@ -546,7 +546,7 @@ const CreateClubForm = () => {
                     <button
                       type="button"
                       onClick={() =>
-                        isAdmin ? navigate("/dashboard/clubs") : navigate("/")
+                        isAdmin ? navigate("/admin/clubs") : navigate("/")
                       }
                       className="cursor-pointer text-(--brand-primary) no-underline hover:underline"
                     >
