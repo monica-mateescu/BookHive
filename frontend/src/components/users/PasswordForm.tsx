@@ -52,13 +52,13 @@ const PasswordForm = () => {
       <form onSubmit={handleSubmit} className="space-y-5">
         <div className="relative w-full">
           <label htmlFor="password" className="sr-only">
-            Current Password
+            Current password
           </label>
 
           <input
             id="password"
             type={showPassword ? "text" : "password"}
-            placeholder="Current Password*"
+            placeholder="Current password*"
             onChange={(e) => setCurrentPassword(e.target.value.trim())}
             className="input input-bordered w-full"
             required
@@ -74,12 +74,12 @@ const PasswordForm = () => {
 
         <div className="relative w-full">
           <label htmlFor="password" className="sr-only">
-            New Password
+            New password
           </label>
           <input
             id="new-password"
             type={showNewPassword ? "text" : "password"}
-            placeholder="New Password*"
+            placeholder="New password*"
             onChange={(e) => setNewPassword(e.target.value.trim())}
             className="input input-bordered w-full"
             required
@@ -98,7 +98,7 @@ const PasswordForm = () => {
           className={buttonClass}
           disabled={disabled || submitting}
         >
-          {submitting ? "Updating... " : "Change Password"}
+          {submitting ? "Updating password..." : "Change password"}
         </button>
       </form>
     </>

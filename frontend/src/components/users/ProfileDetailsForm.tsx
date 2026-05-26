@@ -83,7 +83,7 @@ const ProfileDetailsForm = () => {
           className={buttonClass}
           disabled={disabled || submitting}
         >
-          {submitting ? "Updating... " : "Save Changes"}
+          {submitting ? "Saving changes..." : "Save changes"}
         </button>
       </form>
     </>

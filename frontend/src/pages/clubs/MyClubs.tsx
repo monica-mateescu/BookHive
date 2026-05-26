@@ -1,4 +1,9 @@
-import { ErrorState, MyClubCard, Pagination } from "@/components";
+import {
+  ErrorState,
+  MyClubCard,
+  MyClubListSkeleton,
+  Pagination,
+} from "@/components";
 import { getMyClubs } from "@/data";
 import type { ClubsResponse } from "@/types";
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
@@ -13,13 +18,9 @@ const MyClubs = () => {
   });
 
   const totalPages = data?.pagination?.totalPages ?? 1;
-  if (isLoading) return "Loading...";
-  if (isError)
-    return (
-      <ErrorState message="Something went wrong, we couldn’t load the data. Please try again later." />
-    );
-
   const clubs = data?.data || [];
+
+  const isEmpty = !isLoading && !isError && clubs.length === 0;
 
   return (
     <>
@@ -29,11 +30,17 @@ const MyClubs = () => {
       </div>
       <div className="my-5 w-full">
         <div className="mx-auto w-full max-w-xl space-y-5">
-          {clubs.length === 0 ? (
+          {isError && (
+            <ErrorState message="Something went wrong, we couldn’t load the data. Please try again later." />
+          )}
+
+          {isLoading && <MyClubListSkeleton />}
+
+          {isEmpty ? (
             <div className="alert alert-info">No clubs found.</div>
           ) : (
             <>
-              <ul className="list rounded-lg bg-(--bg-main)/80 shadow-lg ring-1 ring-black/5 backdrop-blur-sm transition hover:shadow-xl">
+              <ul className="list rounded-lg bg-(--bg-main)/80 shadow-lg ring-1 ring-black/5 backdrop-blur-sm">
                 {clubs.map((club) => (
                   <MyClubCard key={club.id} club={club} />
                 ))}

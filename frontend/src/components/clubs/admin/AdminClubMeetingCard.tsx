@@ -1,4 +1,4 @@
-import { formatDate } from "@utils";
+import { formatDate, formatTime } from "@utils";
 
 type ClubMeetingCardProps = {
   meetingDate: string;
@@ -14,7 +14,8 @@ const ClubMeetingCard = ({
       <div className="card-body">
         <h2 className="card-title">Meeting Details</h2>
         <p>
-          <strong>Date: </strong> {formatDate(meetingDate)}
+          <strong>Date: </strong> {formatDate(meetingDate)} at {""}
+          {formatTime(meetingDate)}
         </p>
         <p>
           <strong>Meeting Link: </strong>
