@@ -42,7 +42,9 @@ export const getBookById: RequestHandler<{ id: string }, BookDetailsDTO> = async
 
   const [book, club] = await Promise.all([
     Book.findById(id),
-    Club.findOne({ bookId: id }).select('_id name createdBy isActive').lean()
+    Club.findOne({ bookId: id, meetingDate: { $gte: new Date() } })
+      .select('_id name createdBy isActive')
+      .lean()
   ]);
 
   if (!book) {

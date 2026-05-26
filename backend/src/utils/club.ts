@@ -11,7 +11,8 @@ export const assertBookExists = async (bookId: ClubInputDTO['bookId']): Promise<
 export const assertBookIsAssigned = async (bookId: ClubInputDTO['bookId'], clubId?: string): Promise<void> => {
   const filter: Record<string, unknown> = {
     bookId,
-    isActive: true
+    isActive: true,
+    meetingDate: { $gte: new Date() }
   };
 
   if (clubId) {
