@@ -23,5 +23,6 @@ export { default as Header } from "./ui/Header";
 export { default as Footer } from "./ui/Footer";
 export { default as EmptyState } from "./ui/EmptyState";
 export { default as ErrorState } from "./ui/alert/ErrorState";
-export { default as ClubListSkeleton } from "./ui/ClubListSkeleton";
-export { default as BookListSkeleton } from "./ui/BookListSkeleton";
+export { default as ClubListSkeleton } from "./ui/skeleton/ClubListSkeleton";
+export { default as BookListSkeleton } from "./ui/skeleton/BookListSkeleton";
+export { default as MyClubListSkeleton } from "./ui/skeleton/MyClubListSkeleton";
