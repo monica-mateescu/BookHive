@@ -40,7 +40,7 @@ const Profile = () => {
               className={`tab ${isActive("profile") ? "tab-active" : ""}`}
               onClick={() => handleChangeTab("profile")}
             >
-              Profile Details
+              Profile details
             </button>
             <button
               role="tab"

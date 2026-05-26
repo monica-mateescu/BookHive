@@ -68,7 +68,7 @@ const EmailForm = () => {
           className={buttonClass}
           disabled={disabled || submitting}
         >
-          {submitting ? "Request... " : "Request Email Change"}
+          {submitting ? "Updating email..." : "Change Email"}
         </button>
       </form>
     </>
