@@ -7,7 +7,9 @@ import type {
   clubSchema,
   paginationQuerySchema,
   paginationQueryClubSchema,
-  paginationSchema
+  paginationSchema,
+  messageInputSchema,
+  messageSchema
 } from '#schemas';
 
 export type BookInputDTO = z.infer<typeof bookInputSchema>;
@@ -25,6 +27,9 @@ export type ClubsPagination = z.infer<typeof paginationSchema>;
 
 export type UsersQuery = z.infer<typeof paginationQuerySchema>;
 export type UsersPagination = z.infer<typeof paginationSchema>;
+
+export type MessageInputDTO = z.infer<typeof messageInputSchema>;
+export type MessageDTO = z.infer<typeof messageSchema>;
 
 export type Mailer = {
   sendEmail: (args: { to: string; subject: string; html: string }) => Promise<void> | void;

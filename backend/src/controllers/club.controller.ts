@@ -1,14 +1,8 @@
 import type { RequestHandler } from 'express';
 import { Club } from '#models';
 import type { ClubDTO, ClubInputDTO, ClubsPagination, ClubsQuery } from '#types';
-import {
-  assertBookExists,
-  assertBookIsAssigned,
-  isAdmin,
-  deleteFromCloudinary,
-  contextData,
-  getPaginatedClubs
-} from '#utils';
+import { clubService } from '#services';
+import { isAdmin, deleteFromCloudinary } from '#utils';
 
 export const getClubs: RequestHandler<{}, ClubsPagination, {}, ClubsQuery> = async (req, res) => {
   const { page = 1, limit = 10, isActive, status } = req.query;
@@ -18,7 +12,7 @@ export const getClubs: RequestHandler<{}, ClubsPagination, {}, ClubsQuery> = asy
   if (typeof isActive !== 'undefined') filter.isActive = isActive;
   if (typeof status !== 'undefined') filter.status = status;
 
-  const clubs = await getPaginatedClubs({ filter, page, limit });
+  const clubs = await clubService.getPaginatedClubs({ filter, page, limit });
 
   res.json(clubs);
 };
@@ -32,7 +26,7 @@ export const getMyClubs: RequestHandler<{}, ClubsPagination, {}, ClubsQuery> = a
     $or: [{ createdBy: user?.id }, { 'members.userId': user?.id }]
   };
 
-  const clubs = await getPaginatedClubs({ filter, page, limit });
+  const clubs = await clubService.getPaginatedClubs({ filter, page, limit });
 
   res.json(clubs);
 };
@@ -53,8 +47,8 @@ export const createClub: RequestHandler<{}, ClubDTO, ClubInputDTO> = async (req,
   }
 
   // Validate the book ID and check if the book is already assigned to another active club with a future meeting date
-  await assertBookExists(bookId);
-  await assertBookIsAssigned(bookId);
+  await clubService.assertBookExists(bookId);
+  await clubService.assertBookIsAssigned(bookId);
 
   const clubData: any = {
     ...clubBody,
@@ -71,7 +65,7 @@ export const createClub: RequestHandler<{}, ClubDTO, ClubInputDTO> = async (req,
   }
 
   const club = await Club.create(clubData);
-  const populatedClub = await club.populate(contextData);
+  const populatedClub = await club.populate(clubService.populatedFields);
 
   res.status(201).json(populatedClub);
 };
@@ -82,7 +76,7 @@ export const getClubById: RequestHandler<{ id: string }, ClubDTO> = async (req, 
   if (!club) {
     throw new Error('Club not found', { cause: { status: 404 } });
   }
-  const populatedClub = await club.populate(contextData);
+  const populatedClub = await club.populate(clubService.populatedFields);
   res.json(populatedClub);
 };
 
@@ -108,8 +102,8 @@ export const updateClub: RequestHandler<{ id: string }, ClubDTO, ClubInputDTO> =
   const previousImage = club.image;
 
   // Validate the book ID and check if the book is already assigned to another active club with a future meeting date (excluding the current club)
-  await assertBookExists(bookId);
-  await assertBookIsAssigned(bookId, id);
+  await clubService.assertBookExists(bookId);
+  await clubService.assertBookIsAssigned(bookId, id);
 
   const clubData = { ...req.body };
 
@@ -124,7 +118,7 @@ export const updateClub: RequestHandler<{ id: string }, ClubDTO, ClubInputDTO> =
 
   await club.save();
 
-  const populatedClub = await club.populate(contextData);
+  const populatedClub = await club.populate(clubService.populatedFields);
 
   const newImage = req.body.image && req.body.image !== previousImage;
 
@@ -198,7 +192,7 @@ export const joinClub: RequestHandler<{ id: string }, ClubDTO> = async (req, res
   });
 
   await club.save();
-  const populatedClub = await club.populate(contextData);
+  const populatedClub = await club.populate(clubService.populatedFields);
   res.json(populatedClub as ClubDTO);
 };
 
@@ -228,6 +222,6 @@ export const leaveClub: RequestHandler<{ id: string }, ClubDTO> = async (req, re
   }) as typeof club.members;
 
   await club.save();
-  const populatedClub = await club.populate(contextData);
+  const populatedClub = await club.populate(clubService.populatedFields);
   res.json(populatedClub as ClubDTO);
 };

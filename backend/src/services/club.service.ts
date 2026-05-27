@@ -1,6 +1,12 @@
 import { Book, Club } from '#models';
 import type { ClubInputDTO } from '#types';
 
+export const populatedFields = [
+  { path: 'createdBy', select: 'firstName lastName email' },
+  { path: 'members.userId', select: 'firstName lastName email' },
+  { path: 'bookId', select: 'title author description image publishedYear' }
+];
+
 export const assertBookExists = async (bookId: ClubInputDTO['bookId']): Promise<void> => {
   const exists = await Book.exists({ _id: bookId });
   if (!exists) {
@@ -28,12 +34,6 @@ export const assertBookIsAssigned = async (bookId: ClubInputDTO['bookId'], clubI
   }
 };
 
-export const contextData = [
-  { path: 'createdBy', select: 'firstName lastName email' },
-  { path: 'members.userId', select: 'firstName lastName email' },
-  { path: 'bookId', select: 'title author description image publishedYear' }
-];
-
 export const getPaginatedClubs = async ({
   filter,
   page,
@@ -47,7 +47,7 @@ export const getPaginatedClubs = async ({
 
   const [total, data] = await Promise.all([
     Club.countDocuments(filter),
-    Club.find(filter).sort({ createdAt: -1 }).skip(skip).limit(limit).populate(contextData)
+    Club.find(filter).sort({ createdAt: -1 }).skip(skip).limit(limit).populate(populatedFields)
   ]);
 
   const totalPages = Math.max(1, Math.ceil(total / limit));

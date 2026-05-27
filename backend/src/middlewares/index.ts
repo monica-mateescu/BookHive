@@ -7,3 +7,5 @@ export { isAdmin } from './isAdmin.ts';
 
 export { fileHandler } from './fileHandler.ts';
 export { cloudinaryUpload } from './cloudinaryUpload.ts';
+
+export { socketAuthMiddleware } from './socket.ts';
