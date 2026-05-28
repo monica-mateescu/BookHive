@@ -34,6 +34,12 @@ export const assertBookIsAssigned = async (bookId: ClubInputDTO['bookId'], clubI
   }
 };
 
+export const isMember = async (clubId: string, userId: string): Promise<boolean> => {
+  const exists = await Club.exists({ _id: clubId, 'members.userId': userId });
+
+  return !!exists;
+};
+
 export const getPaginatedClubs = async ({
   filter,
   page,
