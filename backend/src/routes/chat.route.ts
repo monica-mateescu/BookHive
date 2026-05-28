@@ -4,6 +4,6 @@ import { authMiddleware, validateObjectId } from '#middlewares';
 
 const chatRouter = Router();
 
-chatRouter.get('/:clubId', authMiddleware, validateObjectId('clubId'), getMessages);
+chatRouter.get('/:clubId/messages', authMiddleware, validateObjectId('clubId'), getMessages);
 
 export default chatRouter;
