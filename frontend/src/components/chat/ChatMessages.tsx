@@ -36,10 +36,10 @@ export function ChatMessages({ chatId, isConnected }: ChatMessagesProps) {
     return () => {
       socket.off("message", onNewMessage);
     };
-  }, [chatId, isConnected]); // Kein synchrones SetState mehr im Body!
+  }, [chatId, isConnected]);
 
   return (
-    <div className="flex min-h-[300px] flex-1 flex-col">
+    <div className="flex min-h-75 flex-1 flex-col">
       {!isConnected && <InfoState message="Connecting..." />}
 
       {isConnected && liveMessages.length === 0 && (
