@@ -45,17 +45,15 @@ function ChatForm({ chatId, isConnected }: ChatFormProps) {
     setError("");
 
     socket
-      .timeout(5000)
+      //.timeout(5000)
       .emit(
         "message",
         { clubId: chatId, text: form.message },
-        (err: Error | null, response: ChatResponse | null) => {
+        (error: Error | null, response: ChatResponse | null) => {
           setSubmitting(false);
 
-          if (err) {
-            setError(
-              "Message timed out. Please check your connection and try again.",
-            );
+          if (error) {
+            setError(error.message);
           } else if (response && response.success === false) {
             setError(response.error || "Please check your input.");
           } else {
