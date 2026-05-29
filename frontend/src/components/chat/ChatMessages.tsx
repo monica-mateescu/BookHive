@@ -76,7 +76,7 @@ export function ChatMessages({ chatId, isConnected }: ChatMessagesProps) {
             return (
               <li
                 key={message.id}
-                className={`flex w-full flex-col ${isMyMessage ? "items-start" : "items-end"}`}
+                className={`flex w-full flex-col ${isMyMessage ? "items-end" : "items-start"}`}
               >
                 <div className="mb-2">
                   <b className="mr-2">{name}</b>
@@ -92,8 +92,8 @@ export function ChatMessages({ chatId, isConnected }: ChatMessagesProps) {
                 <div
                   className={`w-[85%] rounded-2xl px-5 py-2 wrap-break-word ${
                     isMyMessage
-                      ? "rounded-tl-none bg-(--brand-primary) text-white"
-                      : "rounded-tr-none bg-(--gray-secondary) text-(--text-main)"
+                      ? "rounded-tr-none bg-(--gray-secondary) text-(--text-main)"
+                      : "rounded-tl-none bg-(--gray-secondary) text-(--text-main)"
                   }`}
                 >
                   {message.text}
