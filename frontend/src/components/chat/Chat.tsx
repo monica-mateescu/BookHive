@@ -42,29 +42,31 @@ export function Chat({ clubId }: ChatProps) {
 
   return (
     <>
-      <div
-        className="my-5 mr-5 flex cursor-pointer items-center gap-5 select-none"
-        onClick={toggleChat}
-      >
-        <h3 className="text-xl font-semibold text-(--brand-primary)">
-          {isChatActive ? "Live-Chat" : "Live-Chat"}
-        </h3>
-        <div className="h-1 flex-1 bg-(--brand-primary)"></div>
-        <span className="text-(--brand-primary) transition-transform duration-200">
-          {isChatActive ? "▲" : "▼"}
-        </span>
-      </div>
+      <div className="px-5 md:pr-5 md:pl-0">
+        <div
+          className="my-5 flex cursor-pointer items-center gap-5 select-none"
+          onClick={toggleChat}
+        >
+          <h3 className="text-xl font-semibold text-(--brand-primary)">
+            {isChatActive ? "Live-Chat" : "Live-Chat"}
+          </h3>
+          <div className="h-1 flex-1 bg-(--brand-primary)"></div>
+          <span className="text-(--brand-primary) transition-transform duration-200">
+            {isChatActive ? "▲" : "▼"}
+          </span>
+        </div>
 
-      {isChatActive && (
-        <>
-          <ChatMessages
-            key={clubId}
-            chatId={clubId}
-            isConnected={isConnected}
-          />
-          <ChatForm chatId={clubId} isConnected={isConnected} />
-        </>
-      )}
+        {isChatActive && (
+          <>
+            <ChatMessages
+              key={clubId}
+              chatId={clubId}
+              isConnected={isConnected}
+            />
+            <ChatForm chatId={clubId} isConnected={isConnected} />
+          </>
+        )}
+      </div>
     </>
   );
 }
