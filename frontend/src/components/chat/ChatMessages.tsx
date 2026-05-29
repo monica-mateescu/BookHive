@@ -1,33 +1,45 @@
-import { useEffect, useState } from "react";
+import { getMessagesByClubId } from "@data";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import type { MessagesResponse } from "@types";
+import { authClient } from "@utils";
+import { useEffect } from "react";
 
 import { InfoState } from "../ui";
 import { socket } from "./socket";
 
-export interface DBMessage {
-  id: string;
-  text: string;
-  clubId: string;
-  senderId: string;
-  createdAt: string;
-  updatedAt: string;
-}
-
-interface ChatMessagesProps {
+type ChatMessagesProps = {
   chatId: string;
   isConnected: boolean;
-}
+};
 
 export function ChatMessages({ chatId, isConnected }: ChatMessagesProps) {
-  const [liveMessages, setLiveMessages] = useState<DBMessage[]>([]);
+  const { data: session } = authClient.useSession();
+  const queryClient = useQueryClient();
+
+  const {
+    data: messages = [],
+    isLoading,
+    isError,
+    error,
+  } = useQuery<MessagesResponse[], Error>({
+    queryKey: ["messages", chatId],
+    queryFn: () => getMessagesByClubId(chatId),
+    enabled: !!chatId,
+  });
 
   useEffect(() => {
-    if (!isConnected) return;
+    if (!isConnected || !chatId) return;
 
     socket.emit("join", { clubId: chatId });
 
-    function onNewMessage(message: DBMessage) {
-      if (message.clubId === chatId) {
-        setLiveMessages((previous) => [...previous, message]);
+    function onNewMessage(newMessage: MessagesResponse) {
+      if (newMessage.clubId === chatId) {
+        queryClient.setQueryData<MessagesResponse[]>(
+          ["messages", chatId],
+          (oldMessages) => {
+            return oldMessages ? [newMessage, ...oldMessages] : [newMessage];
+          },
+        );
       }
     }
 
@@ -36,39 +48,52 @@ export function ChatMessages({ chatId, isConnected }: ChatMessagesProps) {
     return () => {
       socket.off("message", onNewMessage);
     };
-  }, [chatId, isConnected]);
+  }, [chatId, isConnected, queryClient]);
+
+  if (isError) return <InfoState message={error.message} />;
+
+  if (isLoading) return <InfoState message="Loading messages ..." />;
 
   return (
     <div className="flex min-h-75 flex-1 flex-col">
-      {!isConnected && <InfoState message="Connecting..." />}
+      {!isConnected && <InfoState message="Connecting ..." />}
 
-      {isConnected && liveMessages.length === 0 && (
+      {messages.length === 0 && (
         <InfoState message="No messages received yet. Be the first to write something!" />
       )}
 
-      {isConnected && liveMessages.length > 0 && (
+      {messages.length > 0 && (
         <ul className="my-5 flex-1 list-none space-y-2 bg-(--bg-main) text-(--text-main)">
-          {liveMessages.map((message, index) => {
-            const isEven = index % 2 === 0;
+          {messages.map((message) => {
+            const isMyMessage = session?.user?.id
+              ? message.senderId.id === session.user.id
+              : false;
+
+            const name = isMyMessage
+              ? session?.user?.name
+              : `${message.senderId.firstName}`;
 
             return (
               <li
                 key={message.id}
-                className={`flex w-full flex-col ${isEven ? "items-start" : "items-end"}`}
+                className={`flex w-full flex-col ${isMyMessage ? "items-start" : "items-end"}`}
               >
-                <span className="text-(--text-primary)) mb-1 block px-1 text-[10px]">
+                <div className="mb-2">
+                  <b className="mr-2">{name}</b>
                   {new Date(message.createdAt).toLocaleTimeString([], {
+                    day: "2-digit",
+                    month: "2-digit",
+                    year: "numeric",
                     hour: "2-digit",
                     minute: "2-digit",
-                    second: "2-digit",
                   })}
-                </span>
+                </div>
 
                 <div
-                  className={`max-w-[75%] rounded-2xl px-5 py-2 wrap-break-word ${
-                    isEven
-                      ? "rounded-tl-none border border-(--brand-primary) bg-(--bg-main) text-(--text-primary)"
-                      : "rounded-tr-none border border-(--brand-primary) bg-(--bg-main) text-(--text-primary)"
+                  className={`w-[85%] rounded-2xl px-5 py-2 wrap-break-word ${
+                    isMyMessage
+                      ? "rounded-tl-none bg-(--brand-primary) text-white"
+                      : "rounded-tr-none bg-(--gray-secondary) text-(--text-main)"
                   }`}
                 >
                   {message.text}

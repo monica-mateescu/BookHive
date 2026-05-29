@@ -5,5 +5,5 @@ export const createMessage = async (clubId: string, senderId: string, text: stri
 };
 
 export const getMessagesByClubId = async (clubId: string) => {
-  return await Message.find({ clubId }).sort({ createdAt: -1 });
+  return await Message.find({ clubId }).populate('senderId', 'firstName').sort({ createdAt: -1 });
 };
