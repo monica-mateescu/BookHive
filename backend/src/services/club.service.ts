@@ -42,18 +42,28 @@ export const isMember = async (clubId: string, userId: string): Promise<boolean>
 
 export const getPaginatedClubs = async ({
   filter,
+  search,
   page,
   limit
 }: {
   filter: Record<string, unknown>;
+  search?: string;
   page: number;
   limit: number;
 }) => {
   const skip = (page - 1) * limit;
 
+  const query: Record<string, any> = { ...filter };
+
+  if (search) {
+    const regex = new RegExp(search, 'i');
+
+    query.$or = [{ name: regex }, { description: regex }];
+  }
+
   const [total, data] = await Promise.all([
-    Club.countDocuments(filter),
-    Club.find(filter).sort({ createdAt: -1 }).skip(skip).limit(limit).populate(populatedFields)
+    Club.countDocuments(query),
+    Club.find(query).sort({ createdAt: -1 }).skip(skip).limit(limit).populate(populatedFields)
   ]);
 
   const totalPages = Math.max(1, Math.ceil(total / limit));

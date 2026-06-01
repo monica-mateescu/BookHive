@@ -5,14 +5,14 @@ import { clubService } from '#services';
 import { isAdmin, deleteFromCloudinary } from '#utils';
 
 export const getClubs: RequestHandler<{}, ClubsPagination, {}, ClubsQuery> = async (req, res) => {
-  const { page = 1, limit = 10, isActive, status } = req.query;
+  const { q, page = 1, limit = 10, isActive, status } = req.query;
 
   const filter: Record<string, unknown> = {};
 
   if (typeof isActive !== 'undefined') filter.isActive = isActive;
   if (typeof status !== 'undefined') filter.status = status;
 
-  const clubs = await clubService.getPaginatedClubs({ filter, page, limit });
+  const clubs = await clubService.getPaginatedClubs({ filter, search: q, page, limit });
 
   res.json(clubs);
 };
