@@ -1,75 +1,70 @@
-import { type ChangeEvent, useMemo, useState } from "react";
+import type { Chat } from "@types";
+import { useState } from "react";
 
 import { socket } from "./socket";
 
-interface ChatFormProps {
-  chatId: string;
-  isConnected: boolean;
-}
-
-interface ChatFormData {
-  message: string;
-}
-
-interface ChatResponse {
-  id?: string;
-  text?: string;
+type ChatResponse = {
   error?: string;
   success?: boolean;
-  clubId?: string;
-  senderId?: string;
-  createdAt?: string;
-  updatedAt?: string;
-}
+};
 
-const initialForm: ChatFormData = { message: "" };
-
-function ChatForm({ chatId, isConnected }: ChatFormProps) {
-  const [form, setForm] = useState<ChatFormData>(initialForm);
+function ChatForm({ chatId, isConnected }: Chat) {
+  const [message, setMessage] = useState<string>("");
   const [submitting, setSubmitting] = useState(false);
-  const [error, setError] = useState<string>("");
+  const [error, setError] = useState<string | null>(null);
 
-  const canSubmit = useMemo(() => {
-    return form.message.trim().length > 0 && isConnected;
-  }, [form, isConnected]);
+  const canSubmit = message.trim().length > 0 && isConnected;
 
-  const onText = (e: ChangeEvent<HTMLTextAreaElement>) => {
-    setForm({ message: e.target.value });
-  };
+  const handleSubmit = async (e?: React.FormEvent) => {
+    e?.preventDefault();
 
-  const handleSubmit = async (e: React.SubmitEvent<HTMLFormElement>) => {
-    e.preventDefault();
     if (!canSubmit || submitting) return;
 
+    setError(null);
     setSubmitting(true);
-    setError("");
 
-    socket
-      //.timeout(5000)
-      .emit(
-        "message",
-        { clubId: chatId, text: form.message },
-        (error: Error | null, response: ChatResponse | null) => {
-          setSubmitting(false);
+    try {
+      await new Promise<void>((resolve, reject) => {
+        socket.emit(
+          "message",
+          { clubId: chatId, text: message },
+          (error: Error | null, response: ChatResponse | null) => {
+            if (error) reject(error);
+            else if (response && response.success === false) {
+              reject(new Error(response.error || "Please check your input."));
+            } else {
+              resolve();
+            }
+          },
+        );
+      });
 
-          if (error) {
-            setError(error.message);
-          } else if (response && response.success === false) {
-            setError(response.error || "Please check your input.");
-          } else {
-            setForm(initialForm);
-          }
-        },
-      );
+      setMessage("");
+    } catch (e) {
+      if (e instanceof Error) {
+        setError(e.message);
+      } else {
+        setError("An unexpected error occurred.");
+      }
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+    if (e.key === "Enter" && !e.shiftKey) {
+      e.preventDefault();
+      handleSubmit();
+    }
   };
 
   const buttonClass =
     !canSubmit || submitting
-      ? "btn btn-disabled w-full"
-      : "btn btn-primary btn-brand-primary w-full cursor-pointer";
+      ? "absolute right-5 inset-y-0 my-auto h-fit text-(--gray-primary) cursor-not-allowed transition-colors"
+      : "absolute right-5 inset-y-0 my-auto h-fit text-(--brand-primary) hover:text-(--brand-secondary) focus:text-(--brand-secondary) cursor-pointer transition-colors";
 
   return (
-    <div className="mt-auto">
+    <div className="mt-auto w-full">
       <form onSubmit={handleSubmit} className="w-full">
         {error && (
           <div role="alert" className="alert alert-error mb-4">
@@ -90,7 +85,7 @@ function ChatForm({ chatId, isConnected }: ChatFormProps) {
           </div>
         )}
 
-        <div className="space-y-5">
+        <div className="relative w-full">
           <div>
             <label htmlFor="message" className="sr-only">
               Message
@@ -98,23 +93,30 @@ function ChatForm({ chatId, isConnected }: ChatFormProps) {
             <textarea
               id="message"
               name="message"
-              className="textarea textarea-bordered w-full"
+              className="textarea textarea-bordered max-h-24 min-h-24 w-full resize-none"
               placeholder="Write a message..."
-              value={form.message}
-              onChange={onText}
+              value={message}
+              onChange={(e) => setMessage(e.target.value)}
+              onKeyDown={handleKeyDown}
               required
               disabled={submitting}
             />
           </div>
-        </div>
-
-        <div className="mt-4 flex justify-center">
           <button
             type="submit"
             disabled={!canSubmit || submitting}
             className={buttonClass}
+            aria-label="Send message"
           >
-            {submitting ? "Sending..." : "Send"}
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+              <path
+                d="M1 8H15M15 8L8 1M15 8L8 15"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </svg>
           </button>
         </div>
       </form>

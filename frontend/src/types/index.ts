@@ -3,4 +3,4 @@ export type { CreateBookFormData } from "./bookForm";
 export type { UserRef, MemberRef, Club, ClubsResponse } from "./club";
 export type { CreateClubFormData } from "./clubForm";
 export type { UsersResponse } from "./users";
-export type { MessagesResponse } from "./messages";
+export type { Chat, MessageResponse } from "./message";

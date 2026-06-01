@@ -1,4 +1,9 @@
-export type MessagesResponse = {
+export type Chat = {
+  chatId: string;
+  isConnected: boolean;
+};
+
+export type MessageResponse = {
   id: string;
   text: string;
   clubId: string;
