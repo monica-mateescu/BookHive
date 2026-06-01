@@ -1,12 +1,6 @@
+import { sendMessageViaSocket } from "@/data/chat";
 import type { Chat } from "@types";
 import { useState } from "react";
-
-import { socket } from "./socket";
-
-type ChatResponse = {
-  error?: string;
-  success?: boolean;
-};
 
 function ChatForm({ chatId, isConnected }: Chat) {
   const [message, setMessage] = useState<string>("");
@@ -24,25 +18,11 @@ function ChatForm({ chatId, isConnected }: Chat) {
     setSubmitting(true);
 
     try {
-      await new Promise<void>((resolve, reject) => {
-        socket.emit(
-          "message",
-          { clubId: chatId, text: message },
-          (error: Error | null, response: ChatResponse | null) => {
-            if (error) reject(error);
-            else if (response && response.success === false) {
-              reject(new Error(response.error || "Please check your input."));
-            } else {
-              resolve();
-            }
-          },
-        );
-      });
-
+      await sendMessageViaSocket(chatId, message);
       setMessage("");
-    } catch (e) {
-      if (e instanceof Error) {
-        setError(e.message);
+    } catch (error) {
+      if (error instanceof Error) {
+        setError(error.message);
       } else {
         setError("An unexpected error occurred.");
       }
