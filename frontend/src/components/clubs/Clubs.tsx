@@ -2,6 +2,7 @@ import { getClubs } from "@data";
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import type { ClubsResponse } from "@types";
 import { useState } from "react";
+import { useSearchParams } from "react-router";
 
 import {
   ClubCard,
@@ -13,9 +14,19 @@ import {
 
 const Clubs = () => {
   const [page, setPage] = useState(1);
+  const [searchParams] = useSearchParams();
+
+  const q = searchParams.get("q") || "";
+
+  const filters = {
+    isActive: "true",
+    status: "approved",
+    q: q || undefined,
+  };
+
   const { isLoading, isError, data } = useQuery<ClubsResponse, Error>({
-    queryKey: ["clubs", { page, isActive: "true", status: "approved" }],
-    queryFn: () => getClubs(page, 8, { isActive: "true", status: "approved" }),
+    queryKey: ["clubs", q, page],
+    queryFn: () => getClubs(page, 8, filters),
     placeholderData: keepPreviousData,
   });
 

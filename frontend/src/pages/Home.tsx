@@ -1,9 +1,10 @@
-import { Clubs } from "@/components";
+import { Clubs, SearchClub } from "@/components";
 import { Link } from "react-router";
 
 function Home() {
   return (
     <>
+      <SearchClub />
       <section className="mb-10 text-center">
         <h1 className="text-3xl font-semibold">
           Welcome to our vibrant book club community!
