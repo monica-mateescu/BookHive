@@ -10,12 +10,9 @@ export const messageInputSchema = z.strictObject({
 });
 
 export const messageSchema = z.strictObject({
-  id: z.instanceof(Types.ObjectId),
+  _id: z.instanceof(Types.ObjectId),
   ...messageInputSchema.shape,
-  senderId: z.object({
-    id: z.instanceof(Types.ObjectId),
-    firstName: z.string()
-  }),
+  senderId: z.instanceof(Types.ObjectId),
   createdAt: z.date(),
   updatedAt: z.date()
 });
