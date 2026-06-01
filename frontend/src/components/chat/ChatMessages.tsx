@@ -1,18 +1,13 @@
 import { getMessagesByClubId } from "@data";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import type { MessagesResponse } from "@types";
+import type { Chat, MessageResponse } from "@types";
 import { authClient } from "@utils";
 import { useEffect } from "react";
 
 import { InfoState } from "../ui";
 import { socket } from "./socket";
 
-type ChatMessagesProps = {
-  chatId: string;
-  isConnected: boolean;
-};
-
-export function ChatMessages({ chatId, isConnected }: ChatMessagesProps) {
+export function ChatMessages({ chatId, isConnected }: Chat) {
   const { data: session } = authClient.useSession();
   const queryClient = useQueryClient();
 
@@ -21,20 +16,20 @@ export function ChatMessages({ chatId, isConnected }: ChatMessagesProps) {
     isLoading,
     isError,
     error,
-  } = useQuery<MessagesResponse[], Error>({
+  } = useQuery<MessageResponse[], Error>({
     queryKey: ["messages", chatId],
     queryFn: () => getMessagesByClubId(chatId),
     enabled: !!chatId,
   });
 
   useEffect(() => {
-    if (!isConnected || !chatId) return;
+    if (!chatId || !isConnected) return;
 
     socket.emit("join", { clubId: chatId });
 
-    function onNewMessage(newMessage: MessagesResponse) {
+    function onNewMessage(newMessage: MessageResponse) {
       if (newMessage.clubId === chatId) {
-        queryClient.setQueryData<MessagesResponse[]>(
+        queryClient.setQueryData<MessageResponse[]>(
           ["messages", chatId],
           (oldMessages) => {
             return oldMessages ? [newMessage, ...oldMessages] : [newMessage];
@@ -47,6 +42,7 @@ export function ChatMessages({ chatId, isConnected }: ChatMessagesProps) {
 
     return () => {
       socket.off("message", onNewMessage);
+      socket.emit("leave", { clubId: chatId });
     };
   }, [chatId, isConnected, queryClient]);
 
@@ -55,7 +51,7 @@ export function ChatMessages({ chatId, isConnected }: ChatMessagesProps) {
   if (isLoading) return <InfoState message="Loading messages ..." />;
 
   return (
-    <div className="flex min-h-75 flex-1 flex-col">
+    <div className="flex flex-1 flex-col">
       {!isConnected && <InfoState message="Connecting ..." />}
 
       {messages.length === 0 && (
@@ -90,7 +86,7 @@ export function ChatMessages({ chatId, isConnected }: ChatMessagesProps) {
                 </div>
 
                 <div
-                  className={`w-[85%] rounded-2xl px-5 py-2 wrap-break-word ${
+                  className={`wrap-break-words w-[85%] rounded-2xl px-5 py-2 ${
                     isMyMessage
                       ? "rounded-tr-none bg-(--gray-secondary) text-(--text-main)"
                       : "rounded-tl-none bg-(--gray-secondary) text-(--text-main)"

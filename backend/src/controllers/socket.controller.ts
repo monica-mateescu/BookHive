@@ -43,7 +43,7 @@ export const handleSocketConnection = (io: Server) => {
 
       io.to(clubId.toString()).emit('message', populatedMessage);
 
-      callback?.({
+      callback?.(null, {
         success: true
       });
     });
