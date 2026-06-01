@@ -39,9 +39,7 @@ export const handleSocketConnection = (io: Server) => {
 
       const message = await messageService.createMessage(clubId.toString(), senderId, text);
 
-      const populatedMessage = await message.populate('senderId', 'firstName');
-
-      io.to(clubId.toString()).emit('message', populatedMessage);
+      io.to(clubId.toString()).emit('message', message);
 
       callback?.(null, {
         success: true

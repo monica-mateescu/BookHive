@@ -1,9 +1,11 @@
 import { Message } from '#models';
 
 export const createMessage = async (clubId: string, senderId: string, text: string) => {
-  return await Message.create({ clubId, senderId, text });
+  const message = await Message.create({ clubId, senderId, text });
+
+  return message.populate('senderId', 'firstName');
 };
 
 export const getMessagesByClubId = async (clubId: string) => {
-  return await Message.find({ clubId }).populate('senderId', 'firstName').sort({ createdAt: -1 });
+  return Message.find({ clubId }).populate('senderId', 'firstName').sort({ createdAt: 1 });
 };
