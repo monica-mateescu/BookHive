@@ -29,3 +29,4 @@ export { default as MyClubListSkeleton } from "./ui/skeleton/MyClubListSkeleton"
 export { default as ChatForm } from "./chat/ChatForm";
 export { default as ChatMessages } from "./chat/ChatMessages";
 export { default as Chat } from "./chat/Chat";
+export { default as SearchClub } from "./clubs/SearchClub";

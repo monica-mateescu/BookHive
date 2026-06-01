@@ -13,6 +13,7 @@ import {
   ClubDetail,
   ClubDetailPage,
   Clubs,
+  ClubsPage,
   Dashboard,
   EmailVerified,
   Home,
@@ -36,6 +37,7 @@ function App() {
             <Route path="signin" element={<SignIn />} />
             <Route path="books" element={<BooksPage />} />
             <Route path="books/:id" element={<BookDetailPage />} />
+            <Route path="clubs" element={<ClubsPage />} />
             <Route path="clubs/:id" element={<ClubDetailPage />} />
             <Route path="email-verified" element={<EmailVerified />} />
             <Route element={<ProtectedLayout />}>
