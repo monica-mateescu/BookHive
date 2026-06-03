@@ -4,6 +4,7 @@ import {
   MyClubListSkeleton,
   Pagination,
 } from "@/components";
+import { InfoState } from "@/components/ui";
 import { getMyClubs } from "@/data";
 import type { ClubsResponse } from "@/types";
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
@@ -37,7 +38,7 @@ const MyClubs = () => {
           {isLoading && <MyClubListSkeleton />}
 
           {isEmpty ? (
-            <div className="alert alert-info">No clubs found.</div>
+            <InfoState message="You haven't joined or created any clubs yet." />
           ) : (
             <>
               <ul className="list rounded-lg bg-(--bg-main)/80 shadow-lg ring-1 ring-black/5 backdrop-blur-sm">
