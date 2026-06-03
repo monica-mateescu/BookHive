@@ -18,14 +18,14 @@ export const getMessagesByClubId = async (clubId: string, cursor?: string, limit
     .sort({ _id: -1 })
     .limit(parsedLimit + 1);
 
-  const lastMessage = messages.at(-1);
   const hasMore = messages.length > parsedLimit;
-
   if (hasMore) messages.pop();
+
+  const lastMessage = messages.at(-1);
 
   return {
     data: messages.reverse(),
     nextCursor: lastMessage?._id.toString() || null,
-    hasMore: messages.length > parsedLimit
+    hasMore: hasMore
   };
 };

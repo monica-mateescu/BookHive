@@ -1,8 +1,12 @@
 import { getMessagesByClubId } from "@data";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import {
+  type InfiniteData,
+  useInfiniteQuery,
+  useQueryClient,
+} from "@tanstack/react-query";
 import type { Chat, MessageCursorResponse, MessageResponse } from "@types";
 import { authClient } from "@utils";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 
 import { InfoState } from "../ui";
 import { socket } from "./socket";
@@ -10,17 +14,64 @@ import { socket } from "./socket";
 export function ChatMessages({ chatId, isConnected }: Chat) {
   const { data: session } = authClient.useSession();
   const queryClient = useQueryClient();
+  const cursorRef = useRef<HTMLDivElement>(null);
 
-  const { data, isLoading, isError, error } = useQuery<
-    MessageCursorResponse,
-    Error
-  >({
+  const delay = (ms: number) =>
+    new Promise((resolve) => setTimeout(resolve, ms));
+
+  const {
+    data,
+    error,
+    isError,
+    isLoading,
+    hasNextPage,
+    fetchNextPage,
+    isFetchingNextPage,
+  } = useInfiniteQuery<MessageCursorResponse, Error>({
     queryKey: ["messages", chatId],
-    queryFn: () => getMessagesByClubId(chatId),
+    queryFn: async ({ pageParam }) => {
+      await delay(5000);
+      return getMessagesByClubId(chatId, pageParam as string);
+    },
+    initialPageParam: undefined,
     enabled: !!chatId,
+    getNextPageParam: (lastPage) => lastPage.nextCursor ?? undefined,
   });
 
-  const messages = data?.data ?? [];
+  const reversedPages = data?.pages ? [...data.pages].reverse() : [];
+  const messages = reversedPages.flatMap((page) => page.data);
+
+  useEffect(() => {
+    if (isLoading || isError) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (
+          hasNextPage &&
+          !isFetchingNextPage &&
+          entries[0].rootBounds &&
+          entries[0]?.isIntersecting
+        ) {
+          fetchNextPage();
+        }
+      },
+      {
+        threshold: 0.1,
+        rootMargin: "100px 0px 0px 0px",
+      },
+    );
+
+    const currentCursor = cursorRef.current;
+    if (currentCursor) {
+      observer.observe(currentCursor);
+    }
+
+    return () => {
+      if (currentCursor) {
+        observer.unobserve(currentCursor);
+      }
+    };
+  }, [hasNextPage, isFetchingNextPage, fetchNextPage, isLoading, isError]);
 
   useEffect(() => {
     if (!chatId || !isConnected) return;
@@ -29,10 +80,23 @@ export function ChatMessages({ chatId, isConnected }: Chat) {
 
     function onNewMessage(newMessage: MessageResponse) {
       if (newMessage.clubId === chatId) {
-        queryClient.setQueryData<MessageResponse[]>(
+        queryClient.setQueryData<InfiniteData<MessageCursorResponse>>(
           ["messages", chatId],
-          (oldMessages) => {
-            return oldMessages ? [newMessage, ...oldMessages] : [newMessage];
+          (oldData) => {
+            if (!oldData) return oldData;
+
+            const updatedPages = [...oldData.pages];
+            if (updatedPages[0]) {
+              updatedPages[0] = {
+                ...updatedPages[0],
+                data: [...updatedPages[0].data, newMessage],
+              };
+            }
+
+            return {
+              ...oldData,
+              pages: updatedPages,
+            };
           },
         );
       }
@@ -48,19 +112,26 @@ export function ChatMessages({ chatId, isConnected }: Chat) {
 
   if (isError) return <InfoState message={error.message} />;
 
+  if (!isConnected) return <InfoState message="Connecting ..." />;
+
   if (isLoading) return <InfoState message="Loading messages ..." />;
 
+  if (messages.length === 0)
+    return (
+      <InfoState message="No messages received yet. Be the first to write something!" />
+    );
+
   return (
-    <div className="flex flex-1 flex-col">
-      {!isConnected && <InfoState message="Connecting ..." />}
-
-      {messages.length === 0 && (
-        <InfoState message="No messages received yet. Be the first to write something!" />
-      )}
-
+    <div className="flex flex-1 flex-col overflow-y-auto">
       {messages.length > 0 && (
-        <ul className="my-5 flex-1 list-none space-y-2 bg-(--bg-main) text-(--text-main)">
-          {messages.map((message) => {
+        <ul className="my-5 flex flex-1 list-none flex-col-reverse space-y-2 space-y-reverse bg-(--bg-main) text-(--text-main)">
+          {isFetchingNextPage && (
+            <li className="mt-5 rounded-2xl bg-(--gray-secondary) px-5 py-2 text-(--text-main)">
+              Loading older messages...
+            </li>
+          )}
+
+          {messages.map((message, index) => {
             const isMyMessage = session?.user?.id
               ? message.senderId.id === session.user.id
               : false;
@@ -71,7 +142,7 @@ export function ChatMessages({ chatId, isConnected }: Chat) {
 
             return (
               <li
-                key={message.id}
+                key={`${message.id}-${index}`}
                 className={`flex w-full flex-col ${isMyMessage ? "items-end" : "items-start"}`}
               >
                 <div className="mb-2">
@@ -97,6 +168,10 @@ export function ChatMessages({ chatId, isConnected }: Chat) {
               </li>
             );
           })}
+
+          <li>
+            <div ref={cursorRef} className="h-1 w-full" />
+          </li>
         </ul>
       )}
     </div>
