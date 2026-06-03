@@ -30,6 +30,15 @@ const Clubs = () => {
     placeholderData: keepPreviousData,
   });
 
+  const { data: fallbackData } = useQuery<ClubsResponse, Error>({
+    queryKey: ["fallback-clubs"],
+    queryFn: () => getClubs(page, 8, { isActive: "true", status: "approved" }),
+    enabled: !!q && data?.data?.length === 0,
+  });
+
+  const noSearchResults = data?.data?.length === 0 && q;
+  const clubs = noSearchResults ? fallbackData?.data || [] : data?.data || [];
+
   const totalPages = data?.pagination?.totalPages ?? 1;
   if (isLoading) return <ClubListSkeleton />;
   if (isError)
@@ -39,16 +48,23 @@ const Clubs = () => {
 
   return (
     <>
-      {data?.data?.length === 0 ? (
+      {noSearchResults && (
+        <p className="mb-6 text-center text-(--gray-primary)">
+          No clubs found for “{q}”. Here are some active clubs you may like
+          instead.
+        </p>
+      )}
+
+      {clubs.length === 0 ? (
         <EmptyState message="There are no clubs available at the moment." />
       ) : (
         <>
           <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-            {data?.data.map((club) => (
+            {clubs.map((club) => (
               <ClubCard key={club.id} club={club} />
             ))}
           </div>
-          {totalPages > 1 && (
+          {!noSearchResults && totalPages > 1 && (
             <Pagination
               page={page}
               totalPages={totalPages}
