@@ -1,6 +1,6 @@
 import { getMessagesByClubId } from "@data";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import type { Chat, MessageResponse } from "@types";
+import type { Chat, MessageCursorResponse, MessageResponse } from "@types";
 import { authClient } from "@utils";
 import { useEffect } from "react";
 
@@ -11,16 +11,16 @@ export function ChatMessages({ chatId, isConnected }: Chat) {
   const { data: session } = authClient.useSession();
   const queryClient = useQueryClient();
 
-  const {
-    data: messages = [],
-    isLoading,
-    isError,
-    error,
-  } = useQuery<MessageResponse[], Error>({
+  const { data, isLoading, isError, error } = useQuery<
+    MessageCursorResponse,
+    Error
+  >({
     queryKey: ["messages", chatId],
     queryFn: () => getMessagesByClubId(chatId),
     enabled: !!chatId,
   });
+
+  const messages = data?.data ?? [];
 
   useEffect(() => {
     if (!chatId || !isConnected) return;
