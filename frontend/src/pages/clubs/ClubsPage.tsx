@@ -1,7 +1,12 @@
-import { Clubs } from "@/components";
+import { Clubs, SearchClub } from "@/components";
 
 const ClubsPage = () => {
-  return <Clubs />;
+  return (
+    <>
+      <SearchClub />
+      <Clubs />
+    </>
+  );
 };
 
 export default ClubsPage;
