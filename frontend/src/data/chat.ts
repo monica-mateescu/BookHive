@@ -1,6 +1,6 @@
 import { socket } from "@/components/chat/socket";
 import { API_URL } from "@config";
-import type { MessageResponse } from "@types";
+import type { MessageCursorResponse } from "@types";
 
 type ChatResponse = {
   error?: string;
@@ -9,7 +9,7 @@ type ChatResponse = {
 
 export const getMessagesByClubId = async (
   clubId: string,
-): Promise<MessageResponse[]> => {
+): Promise<MessageCursorResponse> => {
   const res = await fetch(`${API_URL}/api/chat/${clubId}/messages`, {
     method: "GET",
     credentials: "include",
@@ -20,8 +20,7 @@ export const getMessagesByClubId = async (
     throw new Error(error.message || "Failed to load messages");
   }
 
-  const data: MessageResponse[] = await res.json();
-  return data;
+  return await res.json();
 };
 
 export const sendMessageViaSocket = async (
