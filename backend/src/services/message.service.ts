@@ -8,16 +8,24 @@ export const createMessage = async (clubId: string, senderId: string, text: stri
 
 export const getMessagesByClubId = async (clubId: string, cursor?: string, limit = 20) => {
   const query: any = { clubId };
+  const parsedLimit = Number(limit);
+
   if (cursor) {
     query._id = { $lt: cursor };
   }
-  const messages = await Message.find(query).populate('senderId', 'firstName').sort({ _id: 1 }).limit(limit);
+  const messages = await Message.find(query)
+    .populate('senderId', 'firstName')
+    .sort({ _id: -1 })
+    .limit(parsedLimit + 1);
 
   const lastMessage = messages.at(-1);
+  const hasMore = messages.length > parsedLimit;
+
+  if (hasMore) messages.pop();
 
   return {
-    data: messages,
+    data: messages.reverse(),
     nextCursor: lastMessage?._id.toString() || null,
-    hasMore: messages.length === limit
+    hasMore: messages.length > parsedLimit
   };
 };
