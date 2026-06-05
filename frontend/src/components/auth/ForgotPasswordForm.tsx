@@ -1,13 +1,11 @@
 import { BASE_APP_URL } from "@/config";
-import useAuth from "@/contexts/useAuth";
 import { authClient } from "@/utils";
 import { useState } from "react";
 
 import { ErrorAlert, SuccessAlert } from "../ui";
 
-const EmailForm = () => {
-  const { user } = useAuth();
-  const [email, setEmail] = useState(user?.email || "");
+const ForgotPasswordForm = () => {
+  const [email, setEmail] = useState("");
 
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
@@ -22,27 +20,30 @@ const EmailForm = () => {
     setSuccess(null);
     setSubmitting(true);
 
-    const { error } = await authClient.changeEmail({
-      newEmail: email,
-      callbackURL: `${BASE_APP_URL}/email-verified`,
+    const { error } = await authClient.requestPasswordReset({
+      email,
+      redirectTo: `${BASE_APP_URL}/reset-password`,
     });
 
     if (error) {
-      setError(error.message || "Failed to request email change.");
-      setEmail(user?.email || "");
+      setError(
+        error.message ||
+          "Something went wrong. Failed to send password reset email.",
+      );
     } else {
-      setSuccess("Verification email sent to your current address.");
+      setSuccess("We've sent a password reset link. Please check your inbox.");
+      setEmail("");
     }
 
     setSubmitting(false);
   };
 
-  const disabled = !email || email === user?.email;
+  const disabled = !email || submitting;
 
-  const buttonClass =
-    disabled || submitting
-      ? "btn btn-disabled w-full"
-      : "btn btn-primary btn-brand-primary w-full cursor-pointer";
+  const buttonClass = disabled
+    ? "btn btn-disabled w-full"
+    : "btn btn-primary btn-brand-primary w-full cursor-pointer";
+
   return (
     <>
       {error && <ErrorAlert message={error} />}
@@ -63,16 +64,12 @@ const EmailForm = () => {
           />
         </div>
 
-        <button
-          type="submit"
-          className={buttonClass}
-          disabled={disabled || submitting}
-        >
-          {submitting ? "Updating email..." : "Change email"}
+        <button type="submit" className={buttonClass} disabled={disabled}>
+          {submitting ? "Reseting..." : "Reset password"}
         </button>
       </form>
     </>
   );
 };
 
-export default EmailForm;
+export default ForgotPasswordForm;
