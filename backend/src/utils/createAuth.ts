@@ -31,7 +31,16 @@ export const createAuth = <P extends BetterAuthPlugin[] = []>({
     secret,
     baseURL,
     trustedOrigins,
-    emailAndPassword: { enabled: true },
+    emailAndPassword: {
+      enabled: true,
+      sendResetPassword: async ({ user, url }) => {
+        void mailer.sendEmail({
+          to: user.email,
+          subject: 'Reset your password',
+          html: `Click the link to reset your password: ${url}`
+        });
+      }
+    },
 
     session: {
       cookieCache: {
