@@ -1,3 +1,9 @@
+export {
+  SignInForm,
+  SignUpForm,
+  ForgotPasswordForm,
+  ResetPasswordForm,
+} from "./auth";
 export { default as Clubs } from "./clubs/Clubs";
 export { default as ClubCard } from "./clubs/ClubCard";
 export { default as MyClubCard } from "./clubs/MyClubCard";
@@ -17,8 +23,6 @@ export { default as ClubSidebar } from "./clubs/admin/AdminClubSidebar";
 export { default as ClubMeetingCard } from "./clubs/admin/AdminClubMeetingCard";
 export { default as ClubMembers } from "./clubs/admin/AdminClubMembers";
 export { default as UserRow } from "./users/admin/AdminUserRow";
-export { default as SignInForm } from "./auth/SignInForm";
-export { default as SignUpForm } from "./auth/SignUpForm";
 export { default as Header } from "./ui/Header";
 export { default as Footer } from "./ui/Footer";
 export { default as EmptyState } from "./ui/EmptyState";
