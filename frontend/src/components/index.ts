@@ -7,6 +7,7 @@ export {
 export { Hero } from "./ui";
 export { default as Clubs } from "./clubs/Clubs";
 export { default as UpcomingClubs } from "./clubs/UpcomingClubs";
+export { default as PopularClubs } from "./clubs/PopularClubs";
 export { default as ClubCard } from "./clubs/ClubCard";
 export { default as MyClubCard } from "./clubs/MyClubCard";
 export { default as ClubDetail } from "./clubs/ClubDetail";
