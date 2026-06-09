@@ -29,6 +29,7 @@ export type Club = {
   meetingDate: string;
   maxMembers?: number;
   bookId: string | BookRef;
+  book?: BookRef;
   createdBy: string | UserRef;
   members: MemberRef[];
   isActive: boolean;

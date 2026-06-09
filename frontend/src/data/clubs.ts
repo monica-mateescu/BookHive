@@ -50,6 +50,15 @@ export const getClubs = async (
   return data;
 };
 
+export const getPopularClubs = async (): Promise<Club[]> => {
+  const res = await fetch(`${API_URL}/api/clubs/popular`);
+
+  if (!res.ok) throw new Error("Failed to fetch popular clubs");
+
+  const data: Club[] = await res.json();
+  return data;
+};
+
 export const getMyClubs = async (
   page = 1,
   limit = 10,
