@@ -44,12 +44,14 @@ export const getPaginatedClubs = async ({
   filter,
   search,
   page,
-  limit
+  limit,
+  sort = { createdAt: -1 }
 }: {
   filter: Record<string, unknown>;
   search?: string;
   page: number;
   limit: number;
+  sort?: Record<string, 1 | -1>;
 }) => {
   const skip = (page - 1) * limit;
 
@@ -63,7 +65,7 @@ export const getPaginatedClubs = async ({
 
   const [total, data] = await Promise.all([
     Club.countDocuments(query),
-    Club.find(query).sort({ createdAt: -1 }).skip(skip).limit(limit).populate(populatedFields)
+    Club.find(query).sort(sort).skip(skip).limit(limit).populate(populatedFields)
   ]);
 
   const totalPages = Math.max(1, Math.ceil(total / limit));

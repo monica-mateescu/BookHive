@@ -5,14 +5,47 @@ import { clubService } from '#services';
 import { isAdmin, deleteFromCloudinary } from '#utils';
 
 export const getClubs: RequestHandler<{}, ClubsPagination, {}, ClubsQuery> = async (req, res) => {
-  const { q, page = 1, limit = 10, isActive, status } = req.query;
+  const { q, page = 1, limit = 10, isActive, status, upcoming } = req.query;
 
   const filter: Record<string, unknown> = {};
 
   if (typeof isActive !== 'undefined') filter.isActive = isActive;
   if (typeof status !== 'undefined') filter.status = status;
 
-  const clubs = await clubService.getPaginatedClubs({ filter, search: q, page, limit });
+  if (upcoming) {
+    filter.meetingDate = { $gte: new Date() };
+  }
+  const sort: Record<string, 1 | -1> = upcoming ? { meetingDate: 1 } : { createdAt: -1 };
+
+  const clubs = await clubService.getPaginatedClubs({ filter, search: q, page, limit, sort });
+
+  res.json(clubs);
+};
+
+export const getPopularClubs: RequestHandler<{}, ClubDTO[], {}, {}> = async (_req, res) => {
+  const sixtyDaysAgo = new Date();
+  sixtyDaysAgo.setDate(sixtyDaysAgo.getDate() - 60);
+
+  const clubs = await Club.aggregate<ClubDTO>([
+    { $match: { isActive: true, status: 'approved', meetingDate: { $gte: sixtyDaysAgo } } },
+    { $addFields: { memberCount: { $size: '$members' } } },
+    { $sort: { memberCount: -1, meetingDate: -1 } },
+    { $limit: 8 },
+    {
+      $lookup: {
+        from: 'books',
+        localField: 'bookId',
+        foreignField: '_id',
+        as: 'book'
+      }
+    },
+    {
+      $unwind: {
+        path: '$book',
+        preserveNullAndEmptyArrays: true
+      }
+    }
+  ]);
 
   res.json(clubs);
 };

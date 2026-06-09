@@ -24,7 +24,12 @@ export const createClub = async (formData: FormData): Promise<Club> => {
 export const getClubs = async (
   page = 1,
   limit = 10,
-  filters?: { isActive?: string; status?: string; q?: string },
+  filters?: {
+    isActive?: string;
+    status?: string;
+    upcoming?: string;
+    q?: string;
+  },
 ): Promise<ClubsResponse> => {
   const params = new URLSearchParams({
     page: page.toString(),
@@ -42,6 +47,15 @@ export const getClubs = async (
   if (!res.ok) throw new Error("Failed to fetch clubs");
 
   const data = await res.json();
+  return data;
+};
+
+export const getPopularClubs = async (): Promise<Club[]> => {
+  const res = await fetch(`${API_URL}/api/clubs/popular`);
+
+  if (!res.ok) throw new Error("Failed to fetch popular clubs");
+
+  const data: Club[] = await res.json();
   return data;
 };
 

@@ -1,5 +1,7 @@
-import { isBookRef } from "@/utils";
+import { useCountdown } from "@/hooks";
+import { formatCountdown, isBookRef } from "@/utils";
 import type { Club } from "@types";
+import { Calendar } from "lucide-react";
 import { Link } from "react-router";
 
 import clubImage from "../../assets/images/clubs/bc-3.png";
@@ -7,15 +9,23 @@ import Button from "../ui/Button";
 
 type ClubCardProps = {
   club: Club;
+  variant?: "upcoming" | "popular";
 };
 
-function ClubCard({ club }: ClubCardProps) {
+function ClubCard({ club, variant }: ClubCardProps) {
   const bookImage =
     isBookRef(club.bookId) && club.bookId.image
       ? club.bookId.image
-      : "../assets/images/books/default-cover.png";
+      : club.book
+        ? club.book.image
+        : null;
 
-  const bookTitle = isBookRef(club.bookId) ? club.bookId.title : "Unknown Book";
+  const bookTitle = isBookRef(club.bookId)
+    ? club.bookId.title
+    : club.book
+      ? club.book.title
+      : "Unknown Book";
+  const countdown = useCountdown(club.meetingDate);
 
   return (
     <Link to={`/clubs/${club.id}`}>
@@ -29,20 +39,31 @@ function ClubCard({ club }: ClubCardProps) {
         </div>
         <div className="p-5">
           <h2 className="mb-1 text-sm font-semibold">{club.name}</h2>
-
           <div className="flex items-stretch gap-3 text-(--brand-secondary)">
-            <div className="h-24 shrink-0">
-              <img
-                src={bookImage}
-                alt={bookTitle}
-                className="h-full w-auto object-cover"
-              />
-            </div>
+            {bookImage && (
+              <div className="h-24 shrink-0">
+                <img
+                  src={bookImage}
+                  alt={bookTitle}
+                  className="h-full w-auto object-cover"
+                />
+              </div>
+            )}
 
             <div className="flex h-24 flex-1 flex-col">
               <div className="flex flex-1 flex-col justify-center text-xs">
                 <h3 className="font-medium">{bookTitle}</h3>
-                <span>Members: {club.members.length}</span>
+                <div className="mt-2 text-xs">
+                  {variant === "popular" && (
+                    <span>Members: {club.members.length}</span>
+                  )}
+
+                  {variant === "upcoming" && (
+                    <span className="inline-flex items-center gap-1 text-(--brand-primary)">
+                      <Calendar size={16} /> Starts {formatCountdown(countdown)}
+                    </span>
+                  )}
+                </div>
               </div>
 
               <div className="flex justify-end">
