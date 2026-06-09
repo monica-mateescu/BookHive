@@ -1,6 +1,8 @@
 import { socket } from "@/components/chat/socket";
+import { authClient } from "@utils";
 import { useEffect, useState } from "react";
 
+import { EmptyState } from "..";
 import ChatForm from "./ChatForm";
 import ChatMessages from "./ChatMessages";
 
@@ -9,10 +11,13 @@ interface ChatProps {
 }
 
 export function Chat({ clubId }: ChatProps) {
+  const { data: session } = authClient.useSession();
   const [isChatActive, setIsChatActive] = useState(false);
   const [isConnected, setIsConnected] = useState(socket.connected);
 
   useEffect(() => {
+    if (!session) return;
+
     function handleConnect() {
       setIsConnected(true);
     }
@@ -28,7 +33,7 @@ export function Chat({ clubId }: ChatProps) {
       socket.off("disconnect", handleDisconnect);
       socket.disconnect();
     };
-  }, []);
+  }, [session]);
 
   const toggleChat = () => {
     if (isChatActive) {
@@ -40,6 +45,15 @@ export function Chat({ clubId }: ChatProps) {
     }
   };
 
+  if (!session) {
+    return (
+      <>
+        <br />
+        <EmptyState message="Please sign in to use the chat feature." />
+      </>
+    );
+  }
+
   return (
     <>
       <div className="px-5 md:pr-5 md:pl-0">
@@ -48,7 +62,7 @@ export function Chat({ clubId }: ChatProps) {
           onClick={toggleChat}
         >
           <h3 className="text-xl font-semibold text-(--brand-primary)">
-            {isChatActive ? "Live-Chat" : "Live-Chat"}
+            Live-Chat
           </h3>
           <div className="h-1 flex-1 bg-(--brand-primary)"></div>
           <span className="text-(--brand-primary) transition-transform duration-200">
