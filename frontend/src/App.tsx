@@ -14,6 +14,7 @@ import {
   ClubDetailPage,
   Clubs,
   ClubsPage,
+  Contact,
   Dashboard,
   EmailVerified,
   ForgotPassword,
@@ -39,6 +40,7 @@ function App() {
             <Route path="signin" element={<SignIn />} />
             <Route path="forgot-password" element={<ForgotPassword />} />
             <Route path="reset-password" element={<ResetPassword />} />
+            <Route path="contact" element={<Contact />} />
             <Route path="books" element={<BooksPage />} />
             <Route path="books/:id" element={<BookDetailPage />} />
             <Route path="clubs" element={<ClubsPage />} />

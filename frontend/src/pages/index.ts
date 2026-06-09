@@ -1,6 +1,7 @@
 export { default as Home } from "./Home";
 export { SignIn, SignUp, ForgotPassword, ResetPassword } from "./auth";
 export { default as NotFound } from "./NotFound";
+export { default as Contact } from "./Contact";
 export { default as ClubDetailPage } from "./clubs/ClubDetail";
 export { default as BookDetailPage } from "./books/BookDetail";
 export { default as BooksPage } from "./books/BooksPage";
