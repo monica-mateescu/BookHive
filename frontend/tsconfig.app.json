@@ -33,6 +33,7 @@
       "@pages": ["./src/pages/index.ts"],
       "@data": ["./src/data/index.ts"],
       "@utils": ["./src/utils/index.ts"],
+      "@hooks": ["./src/hooks/index.ts"],
       "@types": ["./src/types/index.ts"],
       "@assets/*": ["./src/assets/*"]
     }
