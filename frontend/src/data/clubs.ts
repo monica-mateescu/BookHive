@@ -24,7 +24,12 @@ export const createClub = async (formData: FormData): Promise<Club> => {
 export const getClubs = async (
   page = 1,
   limit = 10,
-  filters?: { isActive?: string; status?: string; q?: string },
+  filters?: {
+    isActive?: string;
+    status?: string;
+    upcoming?: string;
+    q?: string;
+  },
 ): Promise<ClubsResponse> => {
   const params = new URLSearchParams({
     page: page.toString(),
