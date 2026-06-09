@@ -67,12 +67,12 @@ function ClubDetail({ club }: ClubDetailProps) {
     <div className="grid grid-cols-1 gap-5 md:grid-cols-6">
       <Link
         to={`/books/${bookId}`}
-        className="relative h-64 w-full md:col-span-2 md:h-auto"
+        className="relative h-64 w-full md:col-span-2 lg:h-auto"
       >
         <img
           src={bookImage}
           alt={club.name ?? "Book cover"}
-          className="h-full w-full object-contain md:object-cover"
+          className="h-full w-full object-contain lg:h-auto lg:object-cover"
         />
       </Link>
 

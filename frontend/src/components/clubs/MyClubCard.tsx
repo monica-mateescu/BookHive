@@ -16,7 +16,7 @@ const MyClubCard = ({ club }: ClubCardProps) => {
     : club.createdBy;
   const isOwner = user?.id === ownerId;
   return (
-    <li className="list-row flex items-center justify-between gap-3">
+    <li className="list-row flex items-center justify-between gap-0 md:gap-3">
       <div>
         <h2 className="font-semibold">{club.name}</h2>
         <div className="text-xs uppercase">
