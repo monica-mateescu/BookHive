@@ -13,7 +13,7 @@ function Header() {
       height="20"
       viewBox="0 0 18 20"
       fill="none"
-      className="mr-2"
+      className="md:mr-2"
       xmlns="http://www.w3.org/2000/svg"
     >
       <path
@@ -28,7 +28,7 @@ function Header() {
 
   return (
     <header className="sticky top-0 z-100 border-b-2 border-b-(--brand-primary) bg-(--bg-main) p-5 text-(--brand-secondary)">
-      <nav className="max-w-8xl mx-auto flex w-full flex-row items-center justify-between">
+      <nav className="max-w-8xl mx-auto flex w-full flex-col items-center justify-start gap-5 md:flex-row md:justify-between md:gap-0">
         <NavLink
           to="/"
           className="text-xl font-semibold text-shadow-2xs hover:text-(--brand-primary)"
@@ -37,7 +37,31 @@ function Header() {
         </NavLink>
 
         {!isPending && (
-          <div className="flex items-center gap-2 md:gap-4">
+          <div className="flex items-center justify-between gap-5">
+            <NavLink
+              to="/clubs"
+              className={({ isActive }) =>
+                `flex text-center no-underline hover:underline ${
+                  isActive
+                    ? "text-(--brand-primary)"
+                    : "text-(--brand-secondar)"
+                }`
+              }
+            >
+              Join club
+            </NavLink>
+            <NavLink
+              to="/books"
+              className={({ isActive }) =>
+                `flex text-center no-underline hover:underline ${
+                  isActive
+                    ? "text-(--brand-primary)"
+                    : "text-(--brand-secondar)"
+                }`
+              }
+            >
+              Find book
+            </NavLink>
             {!session ? (
               <>
                 <NavLink
@@ -52,7 +76,7 @@ function Header() {
                 <NavLink
                   to="/profile"
                   className={({ isActive }) =>
-                    `flex no-underline hover:underline ${
+                    `flex flex-col items-center text-center no-underline hover:underline md:flex-row ${
                       isActive
                         ? "text-(--brand-primary)"
                         : "text-(--brand-secondar)"
@@ -65,7 +89,7 @@ function Header() {
                 <NavLink
                   to="/my-clubs"
                   className={({ isActive }) =>
-                    `flex no-underline hover:underline ${
+                    `flex text-center no-underline hover:underline ${
                       isActive
                         ? "text-(--brand-primary)"
                         : "text-(--brand-secondar)"
@@ -79,7 +103,7 @@ function Header() {
                     <NavLink
                       to="/admin"
                       className={({ isActive }) =>
-                        `flex no-underline hover:underline ${
+                        `flex text-center no-underline hover:underline ${
                           isActive
                             ? "text-(--brand-primary)"
                             : "text-(--brand-secondary)"
