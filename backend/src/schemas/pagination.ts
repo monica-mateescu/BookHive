@@ -8,6 +8,7 @@ export const paginationQuerySchema = z.strictObject({
 
 export const paginationQueryClubSchema = paginationQuerySchema.extend({
   status: z.enum(['pending', 'approved', 'rejected']).optional(),
+  upcoming: z.coerce.boolean().optional(),
   q: z.string().trim().min(1).max(100).optional()
 });
 
