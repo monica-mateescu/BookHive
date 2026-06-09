@@ -12,21 +12,24 @@ import {
   Pagination,
 } from "..";
 
+const isActive = "true";
+const status = "approved";
+
 const Clubs = () => {
   const [page, setPage] = useState(1);
   const [searchParams] = useSearchParams();
-
   const q = searchParams.get("q") || "";
 
-  const filters = {
-    isActive: "true",
-    status: "approved",
-    q: q || undefined,
-  };
+  const search = q || "";
 
   const { isLoading, isError, data } = useQuery<ClubsResponse, Error>({
-    queryKey: ["clubs", q, page],
-    queryFn: () => getClubs(page, 8, filters),
+    queryKey: ["clubs", page, 8, isActive, status, search],
+    queryFn: () =>
+      getClubs(page, 8, {
+        isActive,
+        status,
+        q: q || undefined,
+      }),
     placeholderData: keepPreviousData,
   });
 
