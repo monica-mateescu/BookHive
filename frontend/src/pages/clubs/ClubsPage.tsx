@@ -1,4 +1,4 @@
-import { Clubs, SearchClub } from "@/components";
+import { Clubs } from "@/components";
 
 const ClubsPage = () => {
   return (
@@ -11,7 +11,6 @@ const ClubsPage = () => {
           Join discussions, explore books, connect with readers
         </p>
       </section>
-      <SearchClub />
       <Clubs />
     </>
   );
