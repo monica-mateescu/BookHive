@@ -12,12 +12,9 @@ import { InfoState } from "../ui";
 import { socket } from "./socket";
 
 export function ChatMessages({ chatId, isConnected }: Chat) {
-  const { data: session } = authClient.useSession();
   const queryClient = useQueryClient();
   const cursorRef = useRef<HTMLDivElement>(null);
-
-  const delay = (ms: number) =>
-    new Promise((resolve) => setTimeout(resolve, ms));
+  const { data: session } = authClient.useSession();
 
   const {
     data,
@@ -30,7 +27,6 @@ export function ChatMessages({ chatId, isConnected }: Chat) {
   } = useInfiniteQuery<MessageCursorResponse, Error>({
     queryKey: ["messages", chatId],
     queryFn: async ({ pageParam }) => {
-      await delay(5000);
       return getMessagesByClubId(chatId, pageParam as string);
     },
     initialPageParam: undefined,
@@ -38,8 +34,8 @@ export function ChatMessages({ chatId, isConnected }: Chat) {
     getNextPageParam: (lastPage) => lastPage.nextCursor ?? undefined,
   });
 
-  const reversedPages = data?.pages ? [...data.pages].reverse() : [];
-  const messages = reversedPages.flatMap((page) => page.data);
+  const pages = data?.pages ?? [];
+  const messages = pages.flatMap((page) => page.data);
 
   useEffect(() => {
     if (isLoading || isError) return;
@@ -89,7 +85,7 @@ export function ChatMessages({ chatId, isConnected }: Chat) {
             if (updatedPages[0]) {
               updatedPages[0] = {
                 ...updatedPages[0],
-                data: [...updatedPages[0].data, newMessage],
+                data: [newMessage, ...updatedPages[0].data],
               };
             }
 
@@ -122,11 +118,11 @@ export function ChatMessages({ chatId, isConnected }: Chat) {
     );
 
   return (
-    <div className="flex flex-1 flex-col overflow-y-auto">
+    <div className="mt-5 flex flex-1 flex-col overflow-y-auto">
       {messages.length > 0 && (
-        <ul className="my-5 flex flex-1 list-none flex-col-reverse space-y-2 space-y-reverse bg-(--bg-main) text-(--text-main)">
+        <ul className="flex flex-1 list-none flex-col space-y-2 bg-(--bg-main) text-(--text-main)">
           {isFetchingNextPage && (
-            <li className="mt-5 rounded-2xl bg-(--gray-secondary) px-5 py-2 text-(--text-main)">
+            <li className="rounded-2xl bg-(--gray-secondary) px-5 py-2 text-(--text-main)">
               Loading older messages...
             </li>
           )}

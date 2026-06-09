@@ -7,10 +7,10 @@ function ChatForm({ chatId, isConnected }: Chat) {
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const canSubmit = message.trim().length > 0 && isConnected;
+  const canSubmit = message.trim().length > 0 && isConnected && !submitting;
 
-  const handleSubmit = async (e?: React.FormEvent) => {
-    e?.preventDefault();
+  const onSubmit = async (e: React.SubmitEvent<HTMLFormElement>) => {
+    e.preventDefault();
 
     if (!canSubmit || submitting) return;
 
@@ -34,7 +34,10 @@ function ChatForm({ chatId, isConnected }: Chat) {
   const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
     if (e.key === "Enter" && !e.shiftKey) {
       e.preventDefault();
-      handleSubmit();
+      if (canSubmit) {
+        const form = e.currentTarget.form;
+        if (form) form.requestSubmit();
+      }
     }
   };
 
@@ -45,7 +48,7 @@ function ChatForm({ chatId, isConnected }: Chat) {
 
   return (
     <div className="mt-auto w-full">
-      <form onSubmit={handleSubmit} className="w-full">
+      <form onSubmit={onSubmit} className="mt-5 w-full">
         {error && (
           <div role="alert" className="alert alert-error mb-4">
             <svg
