@@ -22,6 +22,34 @@ export const getClubs: RequestHandler<{}, ClubsPagination, {}, ClubsQuery> = asy
   res.json(clubs);
 };
 
+export const getPopularClubs: RequestHandler<{}, ClubDTO[], {}, {}> = async (_req, res) => {
+  const sixtyDaysAgo = new Date();
+  sixtyDaysAgo.setDate(sixtyDaysAgo.getDate() - 60);
+
+  const clubs = await Club.aggregate<ClubDTO>([
+    { $match: { isActive: true, status: 'approved', meetingDate: { $gte: sixtyDaysAgo } } },
+    { $addFields: { memberCount: { $size: '$members' } } },
+    { $sort: { memberCount: -1, meetingDate: -1 } },
+    { $limit: 8 },
+    {
+      $lookup: {
+        from: 'books',
+        localField: 'bookId',
+        foreignField: '_id',
+        as: 'book'
+      }
+    },
+    {
+      $unwind: {
+        path: '$book',
+        preserveNullAndEmptyArrays: true
+      }
+    }
+  ]);
+
+  res.json(clubs);
+};
+
 export const getMyClubs: RequestHandler<{}, ClubsPagination, {}, ClubsQuery> = async (req, res) => {
   const user = req.user;
 
