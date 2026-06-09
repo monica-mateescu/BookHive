@@ -9,10 +9,10 @@ import Button from "../ui/Button";
 
 type ClubCardProps = {
   club: Club;
-  variant?: "upcoming" | "popular";
+  variant?: "upcoming" | "popular" | "default";
 };
 
-function ClubCard({ club, variant }: ClubCardProps) {
+function ClubCard({ club, variant = "default" }: ClubCardProps) {
   const bookImage =
     isBookRef(club.bookId) && club.bookId.image
       ? club.bookId.image
@@ -54,9 +54,10 @@ function ClubCard({ club, variant }: ClubCardProps) {
               <div className="flex flex-1 flex-col justify-center text-xs">
                 <h3 className="font-medium">{bookTitle}</h3>
                 <div className="mt-2 text-xs">
-                  {variant === "popular" && (
-                    <span>Members: {club.members.length}</span>
-                  )}
+                  {variant === "popular" ||
+                    (variant === "default" && (
+                      <span>Members: {club.members.length}</span>
+                    ))}
 
                   {variant === "upcoming" && (
                     <span className="inline-flex items-center gap-1 text-(--brand-primary)">
