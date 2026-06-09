@@ -7,22 +7,6 @@ type ChatResponse = {
   success?: boolean;
 };
 
-/*export const getMessagesByClubId = async (
-  clubId: string,
-): Promise<MessageCursorResponse> => {
-  const res = await fetch(`${API_URL}/api/chat/${clubId}/messages`, {
-    method: "GET",
-    credentials: "include",
-  });
-
-  if (!res.ok) {
-    const error = await res.json().catch(() => null);
-    throw new Error(error.message || "Failed to load messages");
-  }
-
-  return await res.json();
-};*/
-
 export const getMessagesByClubId = async (
   clubId: string,
   cursor?: string,
@@ -36,13 +20,12 @@ export const getMessagesByClubId = async (
     credentials: "include",
   });
 
-  const data = await res.json().catch(() => null);
-
   if (!res.ok) {
-    throw new Error(data?.message || "Failed to load messages");
+    const error = await res.json().catch(() => null);
+    throw new Error(error.message || "Failed to load messages");
   }
 
-  return data;
+  return await res.json();
 };
 
 export const sendMessageViaSocket = async (

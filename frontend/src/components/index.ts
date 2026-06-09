@@ -34,3 +34,4 @@ export { default as ChatForm } from "./chat/ChatForm";
 export { default as ChatMessages } from "./chat/ChatMessages";
 export { default as Chat } from "./chat/Chat";
 export { default as SearchClub } from "./clubs/SearchClub";
+export { default as ContactForm } from "./ui/ContactForm";

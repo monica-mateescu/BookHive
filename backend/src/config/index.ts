@@ -8,7 +8,9 @@ const envSchema = z.object({
   BETTER_AUTH_URL: z.url(),
   DOMAIN: z.string(),
   RESEND_API_KEY: z.string(),
-  EMAIL_FROM: z.string()
+  EMAIL_FROM: z.string(),
+  EMAIL_TO: z.string().optional(),
+  TURNSTILE_SECRET_KEY: z.string().optional()
 });
 
 const { data, error, success } = envSchema.safeParse(process.env);
@@ -26,5 +28,7 @@ export const {
   BETTER_AUTH_URL,
   DOMAIN,
   RESEND_API_KEY,
-  EMAIL_FROM
+  EMAIL_FROM,
+  EMAIL_TO,
+  TURNSTILE_SECRET_KEY
 } = data;

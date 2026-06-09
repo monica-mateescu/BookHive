@@ -7,7 +7,7 @@ import { toNodeHandler } from 'better-auth/node';
 import { CLIENT_BASE_URL } from '#config';
 import { notFoundHandler, errorHandler, socketAuthMiddleware } from '#middlewares';
 import { auth } from '#utils';
-import { authRouter, bookRouter, chatRouter, clubRouter, usersRouter } from '#routes';
+import { authRouter, bookRouter, chatRouter, clubRouter, usersRouter, contactRouter } from '#routes';
 import { handleSocketConnection } from '#controllers';
 
 const app = express();
@@ -46,6 +46,7 @@ app.use('/api/books', bookRouter);
 app.use('/api/clubs', clubRouter);
 app.use('/api/users', usersRouter);
 app.use('/api/chat', chatRouter);
+app.use('/contact', contactRouter);
 
 app.use('/*splat', notFoundHandler);
 app.use(errorHandler);
