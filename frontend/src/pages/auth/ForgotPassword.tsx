@@ -1,4 +1,4 @@
-import { ForgotPasswordForm } from "@/components";
+import { Container, ForgotPasswordForm } from "@/components";
 import useAuth from "@/contexts/useAuth";
 import { getPageTitle } from "@/utils";
 import { Navigate } from "react-router";
@@ -9,7 +9,7 @@ const ForgotPassword = () => {
   return user ? (
     <Navigate to="/profile" replace />
   ) : (
-    <>
+    <Container>
       <title>{pageTitle}</title>
       <h1 className="text-center text-3xl font-semibold">
         Forgot your password?
@@ -23,7 +23,7 @@ const ForgotPassword = () => {
           <ForgotPasswordForm />
         </div>
       </div>
-    </>
+    </Container>
   );
 };
 

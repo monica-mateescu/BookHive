@@ -3,6 +3,7 @@ import {
   PasswordForm,
   ProfileDetailsForm,
 } from "@/components/users";
+import { Container } from "lucide-react";
 import { useState } from "react";
 
 const Profile = () => {
@@ -27,7 +28,7 @@ const Profile = () => {
   };
 
   return (
-    <>
+    <Container>
       <h1 className="text-center text-3xl font-semibold">Profile</h1>
       <div className="mt-2 text-center text-(--gray-primary)">
         Update your account details, email, and password.
@@ -60,7 +61,7 @@ const Profile = () => {
           {renderActiveTab()}
         </div>
       </div>
-    </>
+    </Container>
   );
 };
 

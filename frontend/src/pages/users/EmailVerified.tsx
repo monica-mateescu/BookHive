@@ -1,8 +1,9 @@
+import { Container } from "lucide-react";
 import { Link } from "react-router";
 
 const EmailVerified = () => {
   return (
-    <section className="mb-10 text-center">
+    <Container className="text-center">
       <h1 className="mb-10 text-center text-3xl font-semibold">
         Email verified
       </h1>
@@ -12,7 +13,7 @@ const EmailVerified = () => {
           See your profile
         </Link>
       </p>
-    </section>
+    </Container>
   );
 };
 

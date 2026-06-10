@@ -4,7 +4,7 @@ import {
   MyClubListSkeleton,
   Pagination,
 } from "@/components";
-import { InfoState } from "@/components/ui";
+import { Container, InfoState } from "@/components/ui";
 import { getMyClubs } from "@/data";
 import type { ClubsResponse } from "@/types";
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
@@ -24,7 +24,7 @@ const MyClubs = () => {
   const isEmpty = !isLoading && !isError && clubs.length === 0;
 
   return (
-    <>
+    <Container>
       <h1 className="text-center text-3xl font-semibold">My Clubs</h1>
       <div className="mt-2 text-center text-(--gray-primary)">
         View the book clubs you have joined or created.
@@ -57,7 +57,7 @@ const MyClubs = () => {
           )}
         </div>
       </div>
-    </>
+    </Container>
   );
 };
 

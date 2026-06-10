@@ -1,7 +1,11 @@
-import { ClubForm } from "@/components";
+import { ClubForm, Container } from "@/components";
 
 const ClubCreate = () => {
-  return <ClubForm />;
+  return (
+    <Container>
+      <ClubForm />
+    </Container>
+  );
 };
 
 export default ClubCreate;
