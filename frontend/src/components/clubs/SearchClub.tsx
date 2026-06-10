@@ -19,7 +19,7 @@ const SearchClub = () => {
   };
 
   return (
-    <section className="mb-10 flex items-center justify-center">
+    <section className="flex items-center justify-center">
       <form onSubmit={handleSubmit} className="relative w-full max-w-md">
         <label htmlFor="search" className="sr-only">
           Search clubs by keyword

@@ -1,10 +1,14 @@
+import hero from "@/assets/images/hero.png";
 import { BookOpen } from "lucide-react";
 
 import ButtonLink from "./ButtonLink";
 
 const Hero = () => {
   return (
-    <section className="mx-auto mb-14 max-w-3xl text-center">
+    <section
+      className="relative overflow-hidden rounded-lg bg-cover bg-center p-10 text-center lg:p-26"
+      style={{ backgroundImage: `url(${hero})` }}
+    >
       <div className="mb-4 inline-flex items-center gap-2 rounded-full bg-(--gray-secondary) px-4 py-2 text-sm font-medium text-(--brand-primary)">
         <BookOpen className="h-4 w-4" /> Online book clubs
       </div>
