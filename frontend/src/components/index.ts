@@ -4,7 +4,7 @@ export {
   ForgotPasswordForm,
   ResetPasswordForm,
 } from "./auth";
-export { Hero } from "./ui";
+export { Hero, Container } from "./ui";
 export { default as Clubs } from "./clubs/Clubs";
 export { default as UpcomingClubs } from "./clubs/UpcomingClubs";
 export { default as PopularClubs } from "./clubs/PopularClubs";
