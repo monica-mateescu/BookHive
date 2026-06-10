@@ -1,4 +1,4 @@
-import { Chat, ClubDetail, Loading } from "@/components";
+import { Chat, ClubDetail, Container, Loading } from "@/components";
 import { getClubById } from "@/data";
 import { useQuery } from "@tanstack/react-query";
 import { useParams } from "react-router";
@@ -22,10 +22,12 @@ function ClubDetailPage() {
     return <div className="alert alert-error">{error?.message}</div>;
 
   return (
-    <section className="mx-auto w-full md:w-[80%]">
-      <ClubDetail club={club} />
-      <Chat clubId={club.id} />
-    </section>
+    <Container>
+      <div className="mx-auto md:w-[80%]">
+        <ClubDetail club={club} />
+        <Chat clubId={club.id} />
+      </div>
+    </Container>
   );
 }
 

@@ -1,8 +1,8 @@
-import { Clubs } from "@/components";
+import { Clubs, Container } from "@/components";
 
 const ClubsPage = () => {
   return (
-    <>
+    <Container>
       <section className="mx-auto mb-14 max-w-3xl text-center">
         <h1 className="text-center text-3xl font-semibold">
           Discover book clubs
@@ -12,7 +12,7 @@ const ClubsPage = () => {
         </div>
       </section>
       <Clubs />
-    </>
+    </Container>
   );
 };
 

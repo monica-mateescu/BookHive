@@ -24,7 +24,7 @@ const UpcomingClubs = () => {
     );
 
   return (
-    <section aria-labelledby="clubs-title" className="mb-10">
+    <section aria-labelledby="clubs-title">
       <div className="mb-6 flex items-center justify-between">
         <h2
           id="clubs-title"

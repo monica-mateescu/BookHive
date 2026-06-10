@@ -1,4 +1,4 @@
-import { BookDetail, Loading } from "@/components";
+import { BookDetail, Container, Loading } from "@/components";
 import { getBookById } from "@data";
 import { useQuery } from "@tanstack/react-query";
 import { useParams } from "react-router";
@@ -22,9 +22,11 @@ function BookDetailPage() {
     return <div className="alert alert-error">{error?.message}</div>;
 
   return (
-    <section className="mx-auto w-full md:w-[80%]">
-      <BookDetail book={book} />
-    </section>
+    <Container>
+      <div className="mx-auto md:w-[80%]">
+        <BookDetail book={book} />
+      </div>
+    </Container>
   );
 }
 

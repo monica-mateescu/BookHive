@@ -124,7 +124,7 @@ function SignInForm() {
               />
               <Link
                 to="/forgot-password"
-                className="mt-2 text-xs text-(--brand-primary) no-underline hover:underline"
+                className="mt-2 inline-block text-(--brand-primary) no-underline hover:underline"
               >
                 I forgot my password
               </Link>

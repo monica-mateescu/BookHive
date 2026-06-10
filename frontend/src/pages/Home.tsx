@@ -4,9 +4,23 @@ function Home() {
   return (
     <>
       <Hero />
-      <SearchClub />
-      <UpcomingClubs />
-      <PopularClubs />
+
+      <div className="section">
+        <div className="container">
+          <SearchClub />
+        </div>
+      </div>
+      <div className="section section--muted">
+        <div className="container">
+          <UpcomingClubs />
+        </div>
+      </div>
+
+      <div className="section">
+        <div className="container">
+          <PopularClubs />
+        </div>
+      </div>
     </>
   );
 }

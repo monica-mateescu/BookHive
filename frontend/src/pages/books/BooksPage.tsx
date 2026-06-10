@@ -1,8 +1,8 @@
-import { Books } from "@/components";
+import { Books, Container } from "@/components";
 
 const BooksPage = () => {
   return (
-    <>
+    <Container>
       <section className="mx-auto mb-14 max-w-3xl text-center">
         <h1 className="text-center text-3xl font-semibold">
           Explore our book collection
@@ -17,7 +17,7 @@ const BooksPage = () => {
         </h2>
         <Books />
       </section>
-    </>
+    </Container>
   );
 };
 
