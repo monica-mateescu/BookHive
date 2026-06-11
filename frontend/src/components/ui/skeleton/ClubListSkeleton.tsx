@@ -1,4 +1,4 @@
-import { Container } from "lucide-react";
+import { Container } from "@/components";
 
 import ClubCardSkeleton from "./ClubCardSkeleton";
 
