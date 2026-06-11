@@ -24,7 +24,7 @@ export const getMessagesByClubId = async (clubId: string, cursor?: string, limit
   const lastMessage = messages.at(-1);
 
   return {
-    data: messages,
+    data: messages.reverse(),
     nextCursor: lastMessage?._id.toString() || null,
     hasMore: hasMore
   };
