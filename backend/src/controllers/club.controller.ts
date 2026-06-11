@@ -28,7 +28,11 @@ export const getPopularClubs: RequestHandler<{}, ClubDTO[], {}, {}> = async (_re
 
   const clubs = await Club.aggregate<ClubDTO>([
     { $match: { isActive: true, status: 'approved', meetingDate: { $gte: sixtyDaysAgo } } },
-    { $addFields: { memberCount: { $size: '$members' } } },
+    {
+      $addFields: {
+        memberCount: { $size: '$members' }
+      }
+    },
     { $sort: { memberCount: -1, meetingDate: -1 } },
     { $limit: 8 },
     {
@@ -41,8 +45,24 @@ export const getPopularClubs: RequestHandler<{}, ClubDTO[], {}, {}> = async (_re
     },
     {
       $unwind: {
-        path: '$book',
-        preserveNullAndEmptyArrays: true
+        path: '$book'
+      }
+    },
+    {
+      $project: {
+        _id: 0,
+        id: '$_id',
+        name: 1,
+        members: 1,
+        bookId: 1,
+        meetingDate: 1,
+        maxMembers: 1,
+        image: '$image',
+        'book.id': '$book._id',
+        'book.title': '$book.title',
+        'book.author': '$book.author',
+        'book.image': '$book.image',
+        'book.publishedYear': '$book.publishedYear'
       }
     }
   ]);
