@@ -1,9 +1,9 @@
+import { Container } from "@/components";
 import {
   EmailForm,
   PasswordForm,
   ProfileDetailsForm,
 } from "@/components/users";
-import { Container } from "lucide-react";
 import { useState } from "react";
 
 const Profile = () => {
