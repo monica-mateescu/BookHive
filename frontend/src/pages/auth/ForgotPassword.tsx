@@ -1,21 +1,17 @@
 import { Container, ForgotPasswordForm } from "@/components";
 import useAuth from "@/contexts/useAuth";
 import { getPageTitle } from "@/utils";
-import { useEffect } from "react";
 import { Navigate } from "react-router";
 
 const ForgotPassword = () => {
   const pageTitle = getPageTitle("Forgot password");
   const { user } = useAuth();
 
-  useEffect(() => {
-    document.title = pageTitle;
-  }, [pageTitle]);
-
   return user ? (
     <Navigate to="/profile" replace />
   ) : (
     <Container>
+      <title>{pageTitle}</title>
       <h1 className="text-center text-3xl font-semibold">
         Forgot your password?
       </h1>

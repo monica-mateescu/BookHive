@@ -1,7 +1,6 @@
 import { Container, ResetPasswordForm } from "@/components";
 import useAuth from "@/contexts/useAuth";
 import { getPageTitle } from "@/utils";
-import { useEffect } from "react";
 import { Navigate, useSearchParams } from "react-router";
 
 const ResetPassword = () => {
@@ -10,16 +9,13 @@ const ResetPassword = () => {
   const [searchParams] = useSearchParams();
   const token = searchParams.get("token") || undefined;
 
-  useEffect(() => {
-    document.title = pageTitle;
-  }, [pageTitle]);
-
   if (!token) return <Navigate to="/signin" replace />;
 
   return user ? (
     <Navigate to="/profile" replace />
   ) : (
     <Container>
+      <title>{pageTitle}</title>
       <h1 className="text-center text-3xl font-semibold">
         Reset your password
       </h1>
