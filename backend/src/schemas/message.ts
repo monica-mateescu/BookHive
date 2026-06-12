@@ -6,7 +6,7 @@ export const messageInputSchema = z.strictObject({
     .string()
     .refine(id => Types.ObjectId.isValid(id), 'Invalid club ID')
     .transform(id => new Types.ObjectId(id)),
-  text: z.string().min(1, 'Message text is required').max(200, 'Message text must be at most 200 characters')
+  text: z.string().trim().min(1, 'Message text is required').max(200, 'Message text must be at most 200 characters')
 });
 
 export const messageSchema = z.strictObject({
