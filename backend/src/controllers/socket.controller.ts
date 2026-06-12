@@ -24,26 +24,34 @@ export const handleSocketConnection = (io: Server) => {
     });
 
     socket.on('message', async (payload, callback) => {
-      const { data, error, success } = messageInputSchema.safeParse(payload);
+      try {
+        const { data, error, success } = messageInputSchema.safeParse(payload);
 
-      if (!success) {
-        return callback?.({
+        if (!success) {
+          return callback?.({
+            success: false,
+            error: z.prettifyError(error)
+          });
+        }
+
+        const { text, clubId } = data;
+
+        const senderId = socket.data.user.id;
+
+        const message = await messageService.createMessage(clubId.toString(), senderId, text);
+
+        callback?.({
+          success: true
+        });
+
+        io.to(clubId.toString()).emit('message', message);
+      } catch (err: any) {
+        console.error('Error handling message event:', err);
+        callback?.({
           success: false,
-          error: z.prettifyError(error)
+          error: err.message || 'An error occurred while sending the message'
         });
       }
-
-      const { text, clubId } = data;
-
-      const senderId = socket.data.user.id;
-
-      const message = await messageService.createMessage(clubId.toString(), senderId, text);
-
-      io.to(clubId.toString()).emit('message', message);
-
-      callback?.(null, {
-        success: true
-      });
     });
 
     socket.on('disconnect', async () => {
