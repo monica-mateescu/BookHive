@@ -71,14 +71,18 @@ export function Chat({ clubId }: ChatProps) {
         </div>
 
         {isChatActive && (
-          <>
-            <ChatMessages
-              key={clubId}
-              chatId={clubId}
-              isConnected={isConnected}
-            />
-            <ChatForm chatId={clubId} isConnected={isConnected} />
-          </>
+          <div className="relative flex flex-col rounded-xl bg-(--bg-main)">
+            <div className="min-h-0">
+              <ChatMessages
+                key={clubId}
+                chatId={clubId}
+                isConnected={isConnected}
+              />
+            </div>
+            <div className="sticky bottom-2 z-10 mt-2 bg-(--bg-main)/75">
+              <ChatForm chatId={clubId} isConnected={isConnected} />
+            </div>
+          </div>
         )}
       </div>
     </>

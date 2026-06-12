@@ -35,7 +35,7 @@ export function ChatMessages({ chatId, isConnected }: Chat) {
   });
 
   const pages = data?.pages ?? [];
-  const messages = pages.flatMap((page) => page.data);
+  const messages = [...pages].reverse().flatMap((page) => page.data);
 
   useEffect(() => {
     if (isLoading || isError) return;
@@ -85,7 +85,7 @@ export function ChatMessages({ chatId, isConnected }: Chat) {
             if (updatedPages[0]) {
               updatedPages[0] = {
                 ...updatedPages[0],
-                data: [newMessage, ...updatedPages[0].data],
+                data: [...updatedPages[0].data, newMessage],
               };
             }
 
@@ -118,9 +118,13 @@ export function ChatMessages({ chatId, isConnected }: Chat) {
     );
 
   return (
-    <div className="mt-5 flex flex-1 flex-col overflow-y-auto">
+    <>
       {messages.length > 0 && (
-        <ul className="flex flex-1 list-none flex-col space-y-2 bg-(--bg-main) text-(--text-main)">
+        <ul className="mb-2 flex flex-1 list-none flex-col space-y-2 bg-(--bg-main) text-(--text-main)">
+          <li>
+            <div ref={cursorRef} className="h-1 w-full" />
+          </li>
+
           {isFetchingNextPage && (
             <li className="rounded-2xl bg-(--gray-secondary) px-5 py-2 text-(--text-main)">
               Loading older messages...
@@ -164,13 +168,9 @@ export function ChatMessages({ chatId, isConnected }: Chat) {
               </li>
             );
           })}
-
-          <li>
-            <div ref={cursorRef} className="h-1 w-full" />
-          </li>
         </ul>
       )}
-    </div>
+    </>
   );
 }
 
