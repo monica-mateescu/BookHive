@@ -21,6 +21,7 @@ import {
   Home,
   MyClubs,
   NotFound,
+  PrivacyPolicy,
   Profile,
   ResetPassword,
   SignIn,
@@ -41,6 +42,7 @@ function App() {
             <Route path="forgot-password" element={<ForgotPassword />} />
             <Route path="reset-password" element={<ResetPassword />} />
             <Route path="contact" element={<Contact />} />
+            <Route path="privacy-policy" element={<PrivacyPolicy />} />
             <Route path="books" element={<BooksPage />} />
             <Route path="books/:id" element={<BookDetailPage />} />
             <Route path="clubs" element={<ClubsPage />} />
