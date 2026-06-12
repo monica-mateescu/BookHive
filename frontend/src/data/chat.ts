@@ -33,7 +33,7 @@ export const sendMessageViaSocket = async (
   text: string,
 ): Promise<void> => {
   if (!socket.connected) {
-    throw new Error("No internet connection to live chat.");
+    console.warn("Socket disconnected, sending will retry automatically.");
   }
 
   const response: ChatResponse = await socket.emitWithAck("message", {
