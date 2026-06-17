@@ -3,8 +3,8 @@ import type { Pagination } from "./pagination";
 type ClubInfo = {
   id: string;
   name: string;
+  status: "pending" | "approved" | "rejected";
   createdBy: string;
-  isActive: boolean;
 };
 
 export type Book = {
