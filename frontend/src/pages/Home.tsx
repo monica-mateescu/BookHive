@@ -3,10 +3,9 @@ import { Hero, PopularClubs, SearchClub, UpcomingClubs } from "@/components";
 function Home() {
   return (
     <>
-      <Hero />
-
-      <div className="section">
-        <div className="container">
+      <div className="relative">
+        <Hero />
+        <div className="absolute -bottom-5 left-0 z-20 w-full">
           <SearchClub />
         </div>
       </div>
