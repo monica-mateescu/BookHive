@@ -1,5 +1,4 @@
 import { Book, Club } from '#models';
-import type { ClubInputDTO } from '#types';
 
 export const populatedFields = [
   { path: 'createdBy', select: 'firstName lastName email' },
@@ -7,17 +6,10 @@ export const populatedFields = [
   { path: 'bookId', select: 'title author description image publishedYear' }
 ];
 
-export const assertBookExists = async (bookId: ClubInputDTO['bookId']): Promise<void> => {
-  const exists = await Book.exists({ _id: bookId });
-  if (!exists) {
-    throw new Error('Book not found.', { cause: { status: 404 } });
-  }
-};
-
-export const assertBookIsAssigned = async (bookId: ClubInputDTO['bookId'], clubId?: string): Promise<void> => {
+export const bookIsAssigned = async (bookId: string, clubId?: string): Promise<void> => {
   const filter: Record<string, unknown> = {
     bookId,
-    isActive: true,
+    status: { $in: ['pending', 'approved'] },
     meetingDate: { $gte: new Date() }
   };
 
@@ -26,6 +18,8 @@ export const assertBookIsAssigned = async (bookId: ClubInputDTO['bookId'], clubI
   }
 
   const exists = await Club.exists(filter);
+
+  console.log('bookIsAssigned check:', { bookId, clubId, exists });
 
   if (exists) {
     throw new Error('This book is already assigned to an active club.', {
@@ -44,14 +38,12 @@ export const getPaginatedClubs = async ({
   filter,
   search,
   page,
-  limit,
-  sort = { createdAt: -1 }
+  limit
 }: {
   filter: Record<string, unknown>;
   search?: string;
   page: number;
   limit: number;
-  sort?: Record<string, 1 | -1>;
 }) => {
   const skip = (page - 1) * limit;
 
@@ -65,7 +57,7 @@ export const getPaginatedClubs = async ({
 
   const [total, data] = await Promise.all([
     Club.countDocuments(query),
-    Club.find(query).sort(sort).skip(skip).limit(limit).populate(populatedFields)
+    Club.find(query).sort({ meetingDate: 1 }).skip(skip).limit(limit).populate(populatedFields)
   ]);
 
   const totalPages = Math.max(1, Math.ceil(total / limit));
