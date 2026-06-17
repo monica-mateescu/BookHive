@@ -12,7 +12,6 @@ import {
   Pagination,
 } from "..";
 
-const isActive = "true";
 const status = "approved";
 
 const Clubs = () => {
@@ -23,10 +22,9 @@ const Clubs = () => {
   const search = q || "";
 
   const { isLoading, isError, data } = useQuery<ClubsResponse, Error>({
-    queryKey: ["clubs", page, 8, isActive, status, search],
+    queryKey: ["clubs", page, 8, status, search],
     queryFn: () =>
       getClubs(page, 8, {
-        isActive,
         status,
         q: q || undefined,
       }),
@@ -35,7 +33,7 @@ const Clubs = () => {
 
   const { data: fallbackData } = useQuery<ClubsResponse, Error>({
     queryKey: ["fallback-clubs"],
-    queryFn: () => getClubs(page, 8, { isActive: "true", status: "approved" }),
+    queryFn: () => getClubs(page, 8, { status: "approved" }),
     enabled: !!q && data?.data?.length === 0,
   });
 
