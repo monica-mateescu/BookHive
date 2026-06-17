@@ -79,7 +79,7 @@ function BookDetail({ book }: BookDetailProps) {
                   Create club
                 </button>
               </>
-            ) : book.club.isActive ? (
+            ) : book.club.status === "approved" ? (
               <>
                 <div>
                   <h3 className="font-bold">{book.club.name}</h3>
@@ -99,8 +99,9 @@ function BookDetail({ book }: BookDetailProps) {
                 <div>
                   <h3 className="font-bold">{book.club.name}</h3>
                   <div className="text-xs">
-                    This book is already being read in the club, currently
-                    reviewed by the admin.
+                    This book is reserved for a club that is pending approval.
+                    You can check back later to see if the club has been
+                    approved.
                   </div>
                 </div>
               </>
