@@ -1,23 +1,21 @@
 import type { RequestHandler } from 'express';
 import { Club } from '#models';
 import type { ClubDTO, ClubInputDTO, ClubsPagination, ClubsQuery } from '#types';
-import { clubService } from '#services';
+import { bookService, clubService } from '#services';
 import { isAdmin, deleteFromCloudinary } from '#utils';
 
 export const getClubs: RequestHandler<{}, ClubsPagination, {}, ClubsQuery> = async (req, res) => {
-  const { q, page = 1, limit = 10, isActive, status, upcoming } = req.query;
+  const { q, page = 1, limit = 10, status, upcoming } = req.query;
 
   const filter: Record<string, unknown> = {};
 
-  if (typeof isActive !== 'undefined') filter.isActive = isActive;
   if (typeof status !== 'undefined') filter.status = status;
 
   if (upcoming) {
     filter.meetingDate = { $gte: new Date() };
   }
-  const sort: Record<string, 1 | -1> = upcoming ? { meetingDate: 1 } : { createdAt: -1 };
 
-  const clubs = await clubService.getPaginatedClubs({ filter, search: q, page, limit, sort });
+  const clubs = await clubService.getPaginatedClubs({ filter, search: q, page, limit });
 
   res.json(clubs);
 };
@@ -27,7 +25,15 @@ export const getPopularClubs: RequestHandler<{}, ClubDTO[], {}, {}> = async (_re
   sixtyDaysAgo.setDate(sixtyDaysAgo.getDate() - 60);
 
   const clubs = await Club.aggregate<ClubDTO>([
-    { $match: { isActive: true, status: 'approved', meetingDate: { $gte: sixtyDaysAgo } } },
+    {
+      $match: {
+        status: 'approved',
+        meetingDate: { $gte: sixtyDaysAgo },
+        $expr: {
+          $gt: [{ $size: '$members' }, 2]
+        }
+      }
+    },
     {
       $addFields: {
         memberCount: { $size: '$members' }
@@ -87,35 +93,35 @@ export const getMyClubs: RequestHandler<{}, ClubsPagination, {}, ClubsQuery> = a
 export const createClub: RequestHandler<{}, ClubDTO, ClubInputDTO> = async (req, res) => {
   const {
     user,
-    body: { bookId, ...clubBody }
+    body: { bookId }
   } = req;
+
   const now = new Date();
+
+  await bookService.bookExists(bookId.toString());
 
   // Check if the user already has an active club with a future meeting date
   if (!isAdmin(user?.role)) {
-    const exists = await Club.exists({ createdBy: user?.id, isActive: true, meetingDate: { $gt: now } });
-    if (exists) {
-      throw new Error('You already have an active club with a future meeting date', { cause: { status: 400 } });
+    const existing = await Club.findOne({
+      createdBy: user?.id,
+      status: { $in: ['pending', 'approved'] },
+      meetingDate: { $gte: now }
+    });
+
+    if (existing) {
+      throw new Error('You already have an active club', {
+        cause: { status: 400 }
+      });
     }
   }
 
-  // Validate the book ID and check if the book is already assigned to another active club with a future meeting date
-  await clubService.assertBookExists(bookId);
-  await clubService.assertBookIsAssigned(bookId);
+  await clubService.bookIsAssigned(bookId.toString());
 
   const clubData: any = {
-    ...clubBody,
-    bookId,
+    ...req.body,
     createdBy: user?.id,
     members: [{ userId: user?.id, role: 'admin', joinedAt: now }]
   };
-
-  if (!isAdmin(user?.role)) {
-    clubData.maxMembers = 10;
-    delete clubData.image;
-    delete clubData.status;
-    delete clubData.isActive;
-  }
 
   const club = await Club.create(clubData);
   const populatedClub = await club.populate(clubService.populatedFields);
@@ -134,7 +140,8 @@ export const getClubById: RequestHandler<{ id: string }, ClubDTO> = async (req, 
 };
 
 /**
- * Update a club by ID. Only admins or the club owner can update the club. The request body can include any of the club fields except createdBy and members.
+ * Update a club by ID. Only admins or the club owner can update the club.
+ * The request body can include any of the club fields except createdBy and members.
  */
 export const updateClub: RequestHandler<{ id: string }, ClubDTO, ClubInputDTO> = async (req, res) => {
   const {
@@ -142,6 +149,8 @@ export const updateClub: RequestHandler<{ id: string }, ClubDTO, ClubInputDTO> =
     params: { id },
     body: { bookId }
   } = req;
+
+  await bookService.bookExists(bookId.toString());
 
   const filter: Record<string, unknown> = { _id: id };
 
@@ -152,24 +161,11 @@ export const updateClub: RequestHandler<{ id: string }, ClubDTO, ClubInputDTO> =
     throw new Error('Club not found', { cause: { status: 404 } });
   }
 
+  await clubService.bookIsAssigned(bookId.toString(), id);
+
   const previousImage = club.image;
 
-  // Validate the book ID and check if the book is already assigned to another active club with a future meeting date (excluding the current club)
-  await clubService.assertBookExists(bookId);
-  await clubService.assertBookIsAssigned(bookId, id);
-
-  const clubData = { ...req.body };
-
-  if (!isAdmin(user?.role)) {
-    clubData.maxMembers = 10;
-    delete clubData.image;
-    delete clubData.status;
-    delete clubData.isActive;
-  }
-
-  club.set(clubData);
-
-  await club.save();
+  await club.set(req.body).save();
 
   const populatedClub = await club.populate(clubService.populatedFields);
 

@@ -81,7 +81,6 @@ const mockClubData: Club = {
   bookId: "456",
   createdBy: "1234567890",
   members: [],
-  isActive: true,
   status: "pending",
   createdAt: new Date().toISOString(),
   updatedAt: new Date().toISOString(),

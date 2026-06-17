@@ -28,7 +28,7 @@ export const bookDetailsSchema = bookSchema.extend({
       id: z.string(),
       name: z.string(),
       createdBy: z.string(),
-      isActive: z.boolean()
+      status: z.enum(['pending', 'approved', 'rejected'])
     })
     .nullable()
 });

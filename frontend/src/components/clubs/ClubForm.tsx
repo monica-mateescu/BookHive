@@ -1,11 +1,5 @@
 import useAuth from "@contexts/useAuth";
-import {
-  createClub,
-  getBooks,
-  getClubById,
-  getClubs,
-  updateClubById,
-} from "@data";
+import { createClub, getBooks, getClubById, updateClubById } from "@data";
 import type { Book, Club, CreateClubFormData } from "@types";
 import { type ChangeEvent, useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router";
@@ -18,7 +12,6 @@ const initialForm: CreateClubFormData = {
   maxMembers: 10,
   imageFile: null,
   bookId: "",
-  isActive: false,
   status: "pending",
 };
 
@@ -100,7 +93,6 @@ const CreateClubForm = () => {
                 .substring(0, 16)
             : "",
           maxMembers: club.maxMembers || 10,
-          isActive: club.isActive ?? false,
           status: club.status ?? "pending",
           imageFile: null,
           bookId: bookId || "",
@@ -151,11 +143,6 @@ const CreateClubForm = () => {
       }
     };
 
-  const onCheckbox =
-    (key: "isActive") => (e: ChangeEvent<HTMLInputElement>) => {
-      setField(key, e.target.checked);
-    };
-
   const onImage = (e: ChangeEvent<HTMLInputElement>) => {
     const f = e.target.files?.[0] ?? null;
 
@@ -188,41 +175,6 @@ const CreateClubForm = () => {
     try {
       setSubmitting(true);
 
-      if (!isAdmin) {
-        const { data: existingClubs } = await getClubs();
-
-        const isBookInAnyClub = existingClubs.some((club) => {
-          const clubBookId =
-            typeof club.bookId === "object" && club.bookId !== null
-              ? club.bookId.id
-              : club.bookId;
-
-          return clubBookId === form.bookId;
-        });
-
-        const isCreator = existingClubs.some((club) => {
-          const clubBookId =
-            typeof club.bookId === "object" && club.bookId !== null
-              ? club.bookId.id
-              : club.bookId;
-
-          const creatorId =
-            typeof club.createdBy === "object" && club.createdBy !== null
-              ? club.createdBy.id
-              : club.createdBy;
-
-          return clubBookId === form.bookId && creatorId === user?.id;
-        });
-
-        if (isBookInAnyClub) {
-          throw new Error("A club for this book already exists.");
-        }
-
-        if (isCreator) {
-          throw new Error("You have already created a club for this book.");
-        }
-      }
-
       const fd = new FormData();
 
       fd.append("name", form.name);
@@ -233,7 +185,6 @@ const CreateClubForm = () => {
 
       if (isAdmin) {
         fd.append("maxMembers", (form.maxMembers ?? 10).toString());
-        fd.append("isActive", form.isActive.toString());
         fd.append("status", form.status);
         if (form.imageFile) fd.append("image", form.imageFile);
       }
@@ -247,12 +198,8 @@ const CreateClubForm = () => {
       }
 
       scrollToTop();
-
-      if (!isEdit) {
-        setForm(initialForm);
-      } else {
-        navigate("/");
-      }
+      setForm(initialForm);
+      return isAdmin ? navigate("/admin/clubs") : navigate("/my-clubs");
     } catch (e) {
       setError(e instanceof Error ? e.message : "Failed to create a club");
       scrollToTop();
@@ -504,24 +451,6 @@ const CreateClubForm = () => {
                           <option value="approved">Approved</option>
                           <option value="rejected">Rejected</option>
                         </select>
-                      </div>
-
-                      <div>
-                        <label
-                          htmlFor="isActive"
-                          className="label cursor-pointer text-(--brand-secondary)"
-                        >
-                          <input
-                            id="isActive"
-                            name="isActive"
-                            type="checkbox"
-                            className="checkbox checkbox-sm"
-                            checked={form.isActive}
-                            onChange={onCheckbox("isActive")}
-                            disabled={submitting || loadingClub}
-                          />
-                          Is active club?
-                        </label>
                       </div>
                     </>
                   )}

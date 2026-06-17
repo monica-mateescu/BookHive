@@ -13,7 +13,6 @@ const ClubRow = ({ index, club, onDelete }: ClubRowProps) => {
       <th>{index}</th>
       <td>{club.name}</td>
       <td>{club.description}</td>
-      <td>{club.isActive ? "Yes" : "No"}</td>
       <td>{new Date(club.createdAt).toLocaleDateString()}</td>
       <th>
         <div className="flex justify-end gap-3">

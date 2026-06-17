@@ -42,8 +42,8 @@ export const getBookById: RequestHandler<{ id: string }, BookDetailsDTO> = async
 
   const [book, club] = await Promise.all([
     Book.findById(id),
-    Club.findOne({ bookId: id, meetingDate: { $gte: new Date() } })
-      .select('_id name createdBy isActive')
+    Club.findOne({ bookId: id, meetingDate: { $gte: new Date() }, status: { $in: ['pending', 'approved'] } })
+      .select('_id name createdBy status')
       .lean()
   ]);
 
@@ -58,7 +58,7 @@ export const getBookById: RequestHandler<{ id: string }, BookDetailsDTO> = async
           id: club._id.toString(),
           name: club.name,
           createdBy: club.createdBy.toString(),
-          isActive: club.isActive
+          status: club.status
         }
       : null
   });
