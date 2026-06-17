@@ -33,10 +33,13 @@ const SearchClub = () => {
           className="input input-bordered w-full"
           required
         />
-        <SearchIcon
+        <button
+          type="submit"
           className="absolute top-1/2 right-3 -translate-y-1/2 text-gray-400"
-          size={20}
-        />
+        >
+          <span className="sr-only">Search</span>
+          <SearchIcon size={20} />
+        </button>
       </form>
     </section>
   );
