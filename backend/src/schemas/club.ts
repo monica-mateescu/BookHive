@@ -11,14 +11,6 @@ export const clubInputSchema = z.strictObject({
     .string()
     .refine(id => isValidObjectId(id), 'Invalid book ID')
     .transform(id => new Types.ObjectId(id)),
-  //isActive: z.boolean().optional(),
-  isActive: z
-    .preprocess(val => {
-      if (val === 'true') return true;
-      if (val === 'false') return false;
-      return val;
-    }, z.boolean())
-    .optional(),
   status: z.enum(['pending', 'approved', 'rejected']).optional(),
   image: z
     .url({
@@ -39,7 +31,6 @@ export const clubSchema = z.strictObject({
       joinedAt: z.date()
     })
   ),
-  isActive: z.boolean(),
   status: z.enum(['pending', 'approved', 'rejected']),
   createdAt: z.date(),
   updatedAt: z.date()
