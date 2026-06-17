@@ -17,7 +17,6 @@ const clubSchema = new Schema(
     ],
     maxMembers: { type: Number, default: 10 },
     bookId: { type: Types.ObjectId, ref: 'Book', required: [true, 'Book ID is required'] },
-    isActive: { type: Boolean, default: false },
     status: {
       type: String,
       enum: ['pending', 'approved', 'rejected'],
@@ -38,10 +37,8 @@ const clubSchema = new Schema(
   }
 );
 
-clubSchema.index({ isActive: 1, status: 1, createdAt: -1 });
-clubSchema.index({ createdBy: 1, createdAt: -1 });
-clubSchema.index({ 'members.userId': 1, createdAt: -1 });
-clubSchema.index({ bookId: 1, isActive: 1 });
-clubSchema.index({ isActive: 1, status: 1, meetingDate: 1 });
+clubSchema.index({ createdBy: 1, meetingDate: 1 });
+clubSchema.index({ 'members.userId': 1, meetingDate: 1 });
+clubSchema.index({ status: 1, meetingDate: 1 });
 
 export default model('Club', clubSchema);
