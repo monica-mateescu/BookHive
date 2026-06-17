@@ -1,5 +1,11 @@
+import { Container } from "@/components";
+
 const Loading = () => {
-  return <div className="text-sm font-semibold">Loading...</div>;
+  return (
+    <Container>
+      <div className="text-center text-sm font-semibold">Loading...</div>
+    </Container>
+  );
 };
 
 export default Loading;
