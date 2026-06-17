@@ -20,21 +20,19 @@ const MyClubCard = ({ club }: ClubCardProps) => {
       <div>
         <h2 className="font-semibold">{club.name}</h2>
         <div className="text-xs uppercase">
-          <span>{isOwner ? "Owner" : "Member"}</span> |{" "}
-          {club.isActive ? (
-            <span className="text-success">Active</span>
-          ) : (
-            <span className="opacity-60">Inactive</span>
-          )}{" "}
-          |{" "}
+          <span>{isOwner ? "Owner" : "Member"}</span>
           {isOwner && (
-            <span
-              className={
-                club.status === "approved" ? "text-success" : "opacity-60"
-              }
-            >
-              {club.status}
-            </span>
+            <>
+              {" "}
+              |{" "}
+              <span
+                className={
+                  club.status === "approved" ? "text-success" : "opacity-60"
+                }
+              >
+                {club.status}
+              </span>
+            </>
           )}
         </div>
       </div>
