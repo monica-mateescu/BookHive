@@ -155,7 +155,7 @@ const CreateBookForm = () => {
         setForm(initialForm);
         setExistingImage("");
       } else {
-        navigate("/");
+        navigate("/admin/books");
       }
     } catch (e) {
       setError(e instanceof Error ? e.message : "Failed to create a book");
