@@ -36,6 +36,7 @@ const mockBookData: Book = {
   isbn: "123-1234567890",
   summary: "Book summary",
   publishedYear: 2026,
+  isActive: true,
   image: "book-cover-1.png",
 };
 

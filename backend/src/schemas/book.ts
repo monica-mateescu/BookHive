@@ -13,7 +13,13 @@ export const bookInputSchema = z.strictObject({
     })
     .nullish(),
   publishedYear: z.coerce.number().int().nullish(),
-  isActive: z.boolean().optional()
+  isActive: z
+    .preprocess(val => {
+      if (val === 'true') return true;
+      if (val === 'false') return false;
+      return val;
+    }, z.boolean())
+    .optional()
 });
 
 export const bookSchema = z.strictObject({

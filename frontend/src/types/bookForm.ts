@@ -5,4 +5,5 @@ export type CreateBookFormData = {
   summary: string;
   imageFile?: File | null;
   publishedYear: number;
+  isActive: boolean;
 };
