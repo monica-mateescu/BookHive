@@ -68,7 +68,6 @@ const Clubs = () => {
                 <th></th>
                 <th>Name</th>
                 <th>Description</th>
-                <th>Active</th>
                 <th>Created Date</th>
                 <th></th>
               </tr>
