@@ -23,7 +23,7 @@
    Dark theme
 ====================== */
 body {
-  @apply font-roboto text-sm;
+  @apply font-roboto text-base;
   color: var(--text-main);
   background-color: var(--bg-main);
 }
@@ -61,4 +61,10 @@ body {
 .btn-brand-secondary:hover {
   color: var(--brand-secondary);
   border-color: var(--brand-secondary);
+}
+
+@media only screen and (max-width: 600px) {
+  body {
+    font-size: 14px;
+  }
 }
