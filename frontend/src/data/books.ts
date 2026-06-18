@@ -20,8 +20,23 @@ export const createBook = async (formData: FormData): Promise<Book> => {
 export const getBooks = async (
   page = 1,
   limit = 10,
+  filters?: {
+    isActive?: string;
+  },
 ): Promise<BooksResponse> => {
-  const res = await fetch(`${API_URL}/api/books?page=${page}&limit=${limit}`);
+  const params = new URLSearchParams({
+    page: page.toString(),
+    limit: limit.toString(),
+  });
+  if (filters) {
+    Object.entries(filters).forEach(([key, value]) => {
+      if (value !== undefined) {
+        params.append(key, value);
+      }
+    });
+  }
+
+  const res = await fetch(`${API_URL}/api/books?${params.toString()}`);
 
   if (!res.ok) throw new Error("Failed to fetch books");
 

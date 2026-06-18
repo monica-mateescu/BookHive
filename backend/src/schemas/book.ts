@@ -12,7 +12,8 @@ export const bookInputSchema = z.strictObject({
       hostname: z.regexes.domain
     })
     .nullish(),
-  publishedYear: z.coerce.number().int().nullish()
+  publishedYear: z.coerce.number().int().nullish(),
+  isActive: z.boolean().optional()
 });
 
 export const bookSchema = z.strictObject({
