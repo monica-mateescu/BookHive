@@ -9,13 +9,13 @@ function Home() {
           <SearchClub />
         </div>
       </div>
-      <div className="section section--muted">
+      <div className="section">
         <div className="container">
           <UpcomingClubs />
         </div>
       </div>
 
-      <div className="section">
+      <div className="section section--muted">
         <div className="container">
           <PopularClubs />
         </div>
