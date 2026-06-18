@@ -1,7 +1,7 @@
 import type { RequestHandler } from 'express';
 import { Book, Club } from '#models';
 import type { BookDetailsDTO, BookDTO, BookInputDTO, BooksPagination, BooksQuery } from '#types';
-import { bookService } from '#services';
+import { bookService, clubService } from '#services';
 import { deleteFromCloudinary } from '#utils';
 
 export const getBooks: RequestHandler<{}, BooksPagination, {}, BooksQuery> = async (req, res) => {
@@ -55,10 +55,15 @@ export const getBookById: RequestHandler<{ id: string }, BookDetailsDTO> = async
 
 export const updateBook: RequestHandler<{ id: string }, BookDTO, BookInputDTO> = async (req, res) => {
   const { id } = req.params;
+  const { isActive } = req.body;
 
   const book = await Book.findById(id);
   if (!book) {
     throw new Error('Book not found', { cause: { status: 404 } });
+  }
+
+  if (isActive === false) {
+    await clubService.bookIsAssigned(id);
   }
 
   const previousImage = book.image;
@@ -83,6 +88,8 @@ export const deleteBook: RequestHandler<{ id: string }> = async (req, res) => {
   if (!book) {
     throw new Error('Book not found', { cause: { status: 404 } });
   }
+
+  await clubService.bookIsAssigned(id);
 
   const previousImage = book.image;
 
