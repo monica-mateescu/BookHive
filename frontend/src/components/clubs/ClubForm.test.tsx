@@ -49,6 +49,7 @@ const mockBooks: BooksResponse = {
       summary: "Book summary 1",
       publishedYear: 2026,
       image: "book-cover-1.png",
+      isActive: true,
     },
     {
       id: "456",
@@ -58,6 +59,7 @@ const mockBooks: BooksResponse = {
       summary: "Book summary 2",
       publishedYear: 2026,
       image: "book-cover-2.png",
+      isActive: true,
     },
   ],
   pagination: {
@@ -225,7 +227,7 @@ describe("CreateClubForm", () => {
       expect(
         screen.getByText(/Club updated successfully/i),
       ).toBeInTheDocument();
-      expect(mockedNavigate).toHaveBeenCalledWith("/");
+      expect(mockedNavigate).toHaveBeenCalledWith("/admin/clubs");
     });
   });
 

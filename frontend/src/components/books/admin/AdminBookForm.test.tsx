@@ -165,7 +165,7 @@ describe("CreateBookForm", () => {
       expect(
         screen.getByText(/Book updated successfully/i),
       ).toBeInTheDocument();
-      expect(mockedNavigate).toHaveBeenCalledWith("/");
+      expect(mockedNavigate).toHaveBeenCalledWith("/admin/books");
     });
   });
 
