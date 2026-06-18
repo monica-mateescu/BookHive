@@ -74,19 +74,6 @@ function Header() {
             ) : (
               <>
                 <NavLink
-                  to="/profile"
-                  className={({ isActive }) =>
-                    `flex flex-col items-center text-center no-underline hover:underline md:flex-row ${
-                      isActive
-                        ? "text-(--brand-primary)"
-                        : "text-(--brand-secondar)"
-                    }`
-                  }
-                >
-                  {ProfileIcon}
-                  Profile
-                </NavLink>
-                <NavLink
                   to="/my-clubs"
                   className={({ isActive }) =>
                     `flex text-center no-underline hover:underline ${
@@ -114,7 +101,19 @@ function Header() {
                     </NavLink>
                   </>
                 )}
-
+                <NavLink
+                  to="/profile"
+                  className={({ isActive }) =>
+                    `flex flex-col items-center text-center no-underline hover:underline md:flex-row ${
+                      isActive
+                        ? "text-(--brand-primary)"
+                        : "text-(--brand-secondar)"
+                    }`
+                  }
+                >
+                  {ProfileIcon}
+                  Profile
+                </NavLink>
                 <LogoutButton />
               </>
             )}
