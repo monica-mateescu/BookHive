@@ -4,6 +4,7 @@ import { Link } from "react-router";
 type BookRowProps = {
   index: number;
   book: Book;
+  isActive: boolean;
   onDelete: () => void;
 };
 
@@ -25,6 +26,7 @@ const BookRow = ({ index, book, onDelete }: BookRowProps) => {
         </div>
       </td>
       <td>{book.publishedYear}</td>
+      <td>{book.isActive ? "Yes" : "No"}</td>
       <th>
         <div className="flex justify-end gap-3">
           <Link to={`${book.id}/edit`} className="btn btn-warning btn-xs">

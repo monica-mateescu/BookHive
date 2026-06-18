@@ -1,30 +1,19 @@
 import type { RequestHandler } from 'express';
 import { Book, Club } from '#models';
 import type { BookDetailsDTO, BookDTO, BookInputDTO, BooksPagination, BooksQuery } from '#types';
+import { bookService } from '#services';
 import { deleteFromCloudinary } from '#utils';
 
 export const getBooks: RequestHandler<{}, BooksPagination, {}, BooksQuery> = async (req, res) => {
-  const { page = 1, limit = 10 } = req.query;
-  const skip = (page - 1) * limit;
+  const { page = 1, limit = 10, isActive } = req.query;
 
-  const [total, data] = await Promise.all([
-    Book.countDocuments(),
-    Book.find().sort({ createdAt: -1 }).skip(skip).limit(limit)
-  ]);
+  const filter: Record<string, unknown> = {};
 
-  const totalPages = Math.max(1, Math.ceil(total / limit));
+  if (typeof isActive !== 'undefined') filter.isActive = isActive;
 
-  res.json({
-    data: data as BookDTO[],
-    pagination: {
-      total,
-      page,
-      limit,
-      totalPages,
-      hasNextPage: page < totalPages,
-      hasPrevPage: page > 1
-    }
-  });
+  const books = await bookService.getPaginatedBooks({ filter, page, limit });
+
+  res.json(books);
 };
 
 export const createBook: RequestHandler<{}, BookDTO, BookInputDTO> = async (req, res) => {

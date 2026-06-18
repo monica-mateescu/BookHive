@@ -11,11 +11,13 @@ import {
   Pagination,
 } from "..";
 
+const isActive = "true";
+
 const Books = () => {
   const [page, setPage] = useState(1);
   const { isLoading, isError, data } = useQuery<BooksResponse, Error>({
-    queryKey: ["books", { page }],
-    queryFn: () => getBooks(page),
+    queryKey: ["books", page, 8, isActive],
+    queryFn: () => getBooks(page, 8, { isActive }),
     placeholderData: keepPreviousData,
   });
 

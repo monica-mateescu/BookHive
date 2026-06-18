@@ -15,7 +15,7 @@ export type Book = {
   summary: string;
   image: string;
   publishedYear: number;
-
+  isActive: boolean;
   club?: ClubInfo | null;
 };
 

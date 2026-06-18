@@ -11,6 +11,7 @@ const initialForm: CreateBookFormData = {
   summary: "",
   imageFile: null,
   publishedYear: new Date().getFullYear(),
+  isActive: false,
 };
 
 const CreateBookForm = () => {
@@ -56,6 +57,7 @@ const CreateBookForm = () => {
           summary: book.summary || "",
           imageFile: null,
           publishedYear: book.publishedYear || new Date().getFullYear(),
+          isActive: book.isActive ?? false,
         });
 
         setExistingImage(book.image ?? "");
@@ -99,6 +101,11 @@ const CreateBookForm = () => {
       setField(key, e.target.value as CreateBookFormData[typeof key]);
     };
 
+  const onCheckbox =
+    (key: "isActive") => (e: ChangeEvent<HTMLInputElement>) => {
+      setField(key, e.target.checked);
+    };
+
   const onImage = (e: ChangeEvent<HTMLInputElement>) => {
     const f = e.target.files?.[0] ?? null;
 
@@ -138,6 +145,7 @@ const CreateBookForm = () => {
       fd.append("isbn", form.isbn);
       fd.append("summary", form.summary);
       fd.append("publishedYear", form.publishedYear.toString());
+      fd.append("isActive", form.isActive.toString());
 
       if (form.imageFile) fd.append("image", form.imageFile);
 
@@ -341,6 +349,24 @@ const CreateBookForm = () => {
                   Current image will stay unless you upload a new one.
                 </p>
               )}
+            </div>
+
+            <div className="mt-10">
+              <label
+                htmlFor="isActive"
+                className="label cursor-pointer text-(--brand-secondary)"
+              >
+                <input
+                  id="isActive"
+                  name="isActive"
+                  type="checkbox"
+                  className="checkbox checkbox-sm"
+                  checked={form.isActive}
+                  onChange={onCheckbox("isActive")}
+                  disabled={submitting || loadingBook}
+                />
+                Is active book?
+              </label>
             </div>
 
             <div className="mt-10 flex justify-center">
