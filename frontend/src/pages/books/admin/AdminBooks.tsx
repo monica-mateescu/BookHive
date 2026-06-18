@@ -68,6 +68,7 @@ const Books = () => {
                 <th></th>
                 <th>Title</th>
                 <th>Year</th>
+                <th>Active</th>
                 <th></th>
               </tr>
             </thead>
@@ -76,6 +77,7 @@ const Books = () => {
                 <BookRow
                   key={book.id}
                   index={(page - 1) * data.pagination.limit + index + 1}
+                  isActive={book.isActive}
                   book={book}
                   onDelete={() => setSelectedBook(book)}
                 />
