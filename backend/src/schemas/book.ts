@@ -14,11 +14,8 @@ export const bookInputSchema = z.strictObject({
     .nullish(),
   publishedYear: z.coerce.number().int().nullish(),
   isActive: z
-    .preprocess(val => {
-      if (val === 'true') return true;
-      if (val === 'false') return false;
-      return val;
-    }, z.boolean())
+    .string()
+    .transform(val => val === 'true')
     .optional()
 });
 
