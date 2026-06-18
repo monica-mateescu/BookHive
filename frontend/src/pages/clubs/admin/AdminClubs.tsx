@@ -26,13 +26,16 @@ const Clubs = () => {
       queryClient.invalidateQueries({ queryKey: ["clubs"] });
       setSelectedClub(null);
     },
+    onError: () => {
+      setSelectedClub(null);
+    },
   });
 
   const handleDelete = (id: string) => {
     deleteMutation.mutate(id);
   };
 
-  const errorMessage = deleteMutation.error ? "Failed to delete" : null;
+  const errorMessage = deleteMutation.error?.message || null;
 
   if (isLoading) return <Loading />;
   if (isError) return <div className="alert alert-error">{error.message}</div>;

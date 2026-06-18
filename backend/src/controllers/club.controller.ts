@@ -196,6 +196,10 @@ export const deleteClub: RequestHandler<{ id: string }> = async (req, res) => {
     throw new Error('Club not found', { cause: { status: 404 } });
   }
 
+  if (club.members && club.members.length > 0) {
+    throw new Error('It is not possible to delete a club with members.', { cause: { status: 400 } });
+  }
+
   const previousImage = club.image;
 
   await club.deleteOne();
@@ -231,7 +235,7 @@ export const joinClub: RequestHandler<{ id: string }, ClubDTO> = async (req, res
 
   // Check if the club is already full (maxMembers)
   if (club.maxMembers && club.members.length >= club.maxMembers) {
-    throw new Error('This Club is already full', { cause: { status: 400 } });
+    throw new Error('This club is already full', { cause: { status: 400 } });
   }
 
   club.members.push({
