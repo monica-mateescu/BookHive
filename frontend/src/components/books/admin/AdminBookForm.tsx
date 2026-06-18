@@ -145,7 +145,7 @@ const CreateBookForm = () => {
       fd.append("isbn", form.isbn);
       fd.append("summary", form.summary);
       fd.append("publishedYear", form.publishedYear.toString());
-      fd.append("isActive", form.isActive.toString());
+      fd.append("isActive", form.isActive ? "true" : "false");
 
       if (form.imageFile) fd.append("image", form.imageFile);
 
