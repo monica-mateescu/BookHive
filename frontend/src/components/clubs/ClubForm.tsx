@@ -199,6 +199,8 @@ const CreateClubForm = () => {
 
       scrollToTop();
       setForm(initialForm);
+      setExistingImage("");
+
       return isAdmin ? navigate("/admin/clubs") : navigate("/my-clubs");
     } catch (e) {
       setError(e instanceof Error ? e.message : "Failed to create a club");
