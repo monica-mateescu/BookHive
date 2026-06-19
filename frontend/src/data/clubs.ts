@@ -90,6 +90,18 @@ export const getClubById = async (id: string): Promise<Club> => {
   return data;
 };
 
+export const getClubBySlug = async (slug: string): Promise<Club> => {
+  const res = await fetch(`${API_URL}/api/clubs/slug/${slug}`);
+
+  if (!res.ok) {
+    const error = await res.json().catch(() => null);
+    throw new Error(error.message || "Failed to fetch club");
+  }
+
+  const data: Club = await res.json();
+  return data;
+};
+
 export const updateClubById = async (
   id: string,
   formData: FormData,
