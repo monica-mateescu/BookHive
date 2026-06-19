@@ -1,4 +1,5 @@
 import type { Club } from "@/types";
+import { isUserRef } from "@/utils";
 
 import { Button, InfoState } from "../ui";
 import MembersBadge from "./MembersBadge";
@@ -8,6 +9,7 @@ type ClubHeaderProps = {
   errorMessage: string;
   isDisabled: boolean;
   isMember: boolean;
+  authUserId?: string;
   onJoinToggle: () => void;
 };
 
@@ -16,8 +18,14 @@ const ClubHeader = ({
   errorMessage,
   isDisabled,
   isMember,
+  authUserId,
   onJoinToggle,
 }: ClubHeaderProps) => {
+  const ownerId = isUserRef(club.createdBy)
+    ? `${club.createdBy.id}`
+    : club.createdBy;
+  const isOwner = authUserId === ownerId;
+
   return (
     <header className="space-y-5">
       <h1 className="text-2xl font-semibold">{club.name}</h1>
@@ -29,13 +37,15 @@ const ClubHeader = ({
           max={club.maxMembers ?? 0}
         />
 
-        <Button
-          onClick={onJoinToggle}
-          disabled={isDisabled}
-          variant={isMember ? "neutral" : "primary"}
-        >
-          {isMember ? "Leave club" : "Join club"}
-        </Button>
+        {!isOwner && (
+          <Button
+            onClick={onJoinToggle}
+            disabled={isDisabled}
+            variant={isMember ? "neutral" : "primary"}
+          >
+            {isMember ? "Leave club" : "Join club"}
+          </Button>
+        )}
       </div>
       {errorMessage && <InfoState message={errorMessage} />}
     </header>
