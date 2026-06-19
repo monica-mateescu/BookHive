@@ -1,8 +1,10 @@
-import { model, Schema, Types } from 'mongoose';
+import { Model, model, Schema, Types } from 'mongoose';
+import { generateSlug } from '#utils';
 
 const clubSchema = new Schema(
   {
     name: { type: String, required: [true, 'Name is required'] },
+    slug: { type: String, unique: true, index: true },
     description: { type: String, required: [true, 'Description is required'] },
     meetingLink: { type: String, required: [true, 'Meeting link is required'] },
     meetingDate: { type: Date, required: [true, 'Meeting date is required'] },
@@ -27,7 +29,7 @@ const clubSchema = new Schema(
   {
     timestamps: true,
     toJSON: {
-      transform: (doc, ret: any) => {
+      transform: (_doc, ret: any) => {
         ret.id = ret._id;
         delete ret._id;
         delete ret.__v;
@@ -40,5 +42,15 @@ const clubSchema = new Schema(
 clubSchema.index({ createdBy: 1, meetingDate: 1 });
 clubSchema.index({ 'members.userId': 1, meetingDate: 1 });
 clubSchema.index({ status: 1, meetingDate: 1 });
+
+clubSchema.pre('save', async function () {
+  if (this.isModified('name')) {
+    this.slug = await generateSlug({
+      model: this.constructor as Model<any>,
+      sourceValue: this.name,
+      excludeId: this._id.toString()
+    });
+  }
+});
 
 export default model('Club', clubSchema);
