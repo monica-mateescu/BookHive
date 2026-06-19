@@ -1,25 +1,29 @@
-import { Chat, ClubDetail, Container, Loading } from "@/components";
-import { getClubById } from "@/data";
+import { Chat, ClubDetail, Container, ErrorState, Loading } from "@/components";
+import { getClubBySlug } from "@/data";
 import { useQuery } from "@tanstack/react-query";
 import { useParams } from "react-router";
 
 function ClubDetailPage() {
-  const { id } = useParams();
+  const { slug } = useParams();
 
   const {
     data: club,
     isError,
     isLoading,
-    error,
   } = useQuery({
-    queryKey: ["clubs", id],
-    queryFn: () => getClubById(id!),
-    enabled: !!id,
+    queryKey: ["clubs", slug],
+    queryFn: () => getClubBySlug(slug!),
+    enabled: !!slug,
   });
 
   if (isLoading) return <Loading />;
+
   if (isError || !club)
-    return <div className="alert alert-error">{error?.message}</div>;
+    return (
+      <Container>
+        <ErrorState message="Something went wrong, we couldn’t load the data. Please try again later." />
+      </Container>
+    );
 
   return (
     <Container>
