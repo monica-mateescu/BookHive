@@ -3,6 +3,7 @@ import type { Pagination } from "./pagination";
 type ClubInfo = {
   id: string;
   name: string;
+  slug: string;
   status: "pending" | "approved" | "rejected";
   createdBy: string;
 };
