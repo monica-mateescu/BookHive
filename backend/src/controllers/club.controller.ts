@@ -126,7 +126,7 @@ export const createClub: RequestHandler<{}, ClubDTO, ClubInputDTO> = async (req,
   const club = await Club.create(clubData);
   const populatedClub = await club.populate(clubService.populatedFields);
 
-  res.status(201).json(populatedClub);
+  res.status(201).json(populatedClub as ClubDTO);
 };
 
 export const getClubById: RequestHandler<{ id: string }, ClubDTO> = async (req, res) => {
@@ -136,7 +136,8 @@ export const getClubById: RequestHandler<{ id: string }, ClubDTO> = async (req, 
     throw new Error('Club not found', { cause: { status: 404 } });
   }
   const populatedClub = await club.populate(clubService.populatedFields);
-  res.json(populatedClub);
+
+  res.json(populatedClub as ClubDTO);
 };
 
 /**
@@ -175,7 +176,7 @@ export const updateClub: RequestHandler<{ id: string }, ClubDTO, ClubInputDTO> =
     await deleteFromCloudinary(previousImage);
   }
 
-  res.json(populatedClub);
+  res.json(populatedClub as ClubDTO);
 };
 
 /**
