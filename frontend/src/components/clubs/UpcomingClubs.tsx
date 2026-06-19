@@ -10,7 +10,7 @@ const upcoming = "true";
 const UpcomingClubs = () => {
   const { isLoading, isError, data } = useQuery<ClubsResponse, Error>({
     queryKey: ["clubs", status, upcoming],
-    queryFn: () => getClubs(1, 8, { status, upcoming }),
+    queryFn: () => getClubs(1, 4, { status, upcoming }),
     staleTime: 1000 * 60 * 5,
   });
 
