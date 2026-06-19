@@ -19,8 +19,6 @@ export const bookIsAssigned = async (bookId: string, clubId?: string): Promise<v
 
   const exists = await Club.exists(filter);
 
-  console.log('bookIsAssigned check:', { bookId, clubId, exists });
-
   if (exists) {
     throw new Error('This book is already assigned to an active club.', {
       cause: { status: 400 }

@@ -31,6 +31,7 @@ export const bookDetailsSchema = bookSchema.extend({
     .object({
       id: z.string(),
       name: z.string(),
+      slug: z.string().nullish(),
       createdBy: z.string(),
       status: z.enum(['pending', 'approved', 'rejected'])
     })

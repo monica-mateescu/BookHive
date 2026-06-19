@@ -76,6 +76,7 @@ const mockBooks: BooksResponse = {
 const mockClubData: Club = {
   id: "123",
   name: "Club name",
+  slug: "club-name",
   description: "Club description",
   meetingLink: "https://link.com/m/123",
   meetingDate: "2026-01-01T10:00",

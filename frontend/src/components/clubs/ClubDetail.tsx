@@ -83,6 +83,7 @@ function ClubDetail({ club }: ClubDetailProps) {
             isDisabled={isJoinDisabled}
             errorMessage={errorMessage}
             isMember={isAlreadyMember}
+            authUserId={userId}
             onJoinToggle={handleToggle}
           />
           <MeetingDetailsCard

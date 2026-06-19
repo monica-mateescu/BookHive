@@ -8,9 +8,17 @@ import {
   deleteClub,
   joinClub,
   leaveClub,
-  getPopularClubs
+  getPopularClubs,
+  getClubBySlug
 } from '#controllers';
-import { authMiddleware, validateZod, validateObjectId, fileHandler, cloudinaryUpload } from '#middlewares';
+import {
+  authMiddleware,
+  validateZod,
+  validateObjectId,
+  sanitizeSlug,
+  fileHandler,
+  cloudinaryUpload
+} from '#middlewares';
 import { paginationQueryClubSchema, clubInputSchema } from '#schemas';
 
 const clubRouter = Router();
@@ -20,6 +28,7 @@ clubRouter.get('/popular', getPopularClubs);
 clubRouter.get('/me', authMiddleware, validateZod(paginationQueryClubSchema), getMyClubs);
 clubRouter.post('/', authMiddleware, fileHandler, cloudinaryUpload('clubs'), validateZod(clubInputSchema), createClub);
 clubRouter.get('/:id', validateObjectId('id'), getClubById);
+clubRouter.get('/slug/:slug', sanitizeSlug('slug'), getClubBySlug);
 clubRouter.put(
   '/:id',
   authMiddleware,

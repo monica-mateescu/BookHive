@@ -28,7 +28,7 @@ function ClubCard({ club, variant = "default" }: ClubCardProps) {
   const countdown = useCountdown(club.meetingDate);
 
   return (
-    <Link to={`/clubs/${club.id}`}>
+    <Link to={`/clubs/${club.slug}`}>
       <div className="flex flex-col rounded-lg bg-(--bg-main)/80 shadow-lg ring-1 ring-black/5 backdrop-blur-sm transition hover:shadow-xl">
         <div className="h-44 overflow-hidden rounded-tl-lg rounded-tr-lg">
           <img

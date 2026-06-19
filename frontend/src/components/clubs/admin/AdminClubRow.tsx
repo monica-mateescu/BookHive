@@ -12,7 +12,8 @@ const ClubRow = ({ index, club, onDelete }: ClubRowProps) => {
     <tr>
       <th>{index}</th>
       <td>{club.name}</td>
-      <td>{club.description}</td>
+      <td>{club.status}</td>
+      <td>{new Date(club.meetingDate).toLocaleDateString()}</td>
       <td>{new Date(club.createdAt).toLocaleDateString()}</td>
       <th>
         <div className="flex justify-end gap-3">

@@ -46,6 +46,7 @@ export const getBookById: RequestHandler<{ id: string }, BookDetailsDTO> = async
       ? {
           id: club._id.toString(),
           name: club.name,
+          slug: club.slug,
           createdBy: club.createdBy.toString(),
           status: club.status
         }
