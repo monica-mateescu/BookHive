@@ -24,6 +24,7 @@ export type BookRef = {
 export type Club = {
   id: string;
   name: string;
+  slug: string;
   description: string;
   meetingLink: string;
   meetingDate: string;
