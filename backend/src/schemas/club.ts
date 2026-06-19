@@ -23,6 +23,7 @@ export const clubInputSchema = z.strictObject({
 export const clubSchema = z.strictObject({
   _id: z.instanceof(Types.ObjectId),
   ...clubInputSchema.shape,
+  slug: z.string(),
   createdBy: z.instanceof(Types.ObjectId),
   members: z.array(
     z.object({
