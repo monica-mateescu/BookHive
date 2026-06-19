@@ -44,7 +44,7 @@ const MyClubCard = ({ club }: ClubCardProps) => {
       </p>
 
       <Link
-        to={`/clubs/${club.id}`}
+        to={`/clubs/${club.slug}`}
         className="btn btn-sm btn-primary btn-brand-primary"
       >
         View club
