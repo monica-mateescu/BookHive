@@ -4,6 +4,15 @@ import type { ClubDTO, ClubInputDTO, ClubsPagination, ClubsQuery } from '#types'
 import { bookService, clubService } from '#services';
 import { isAdmin, deleteFromCloudinary } from '#utils';
 
+/**
+ * Get a paginated list of clubs with optional search and filters.
+ * Query parameters:
+ * - q: search query to match club names(optional)
+ * - page: page number for pagination (default: 1)
+ * - limit: number of items per page (default: 10)
+ * - status: filter by club status (pending, approved, rejected) (optional)
+ * - upcoming: if true, only return clubs with a future meeting date (optional)
+ */
 export const getClubs: RequestHandler<{}, ClubsPagination, {}, ClubsQuery> = async (req, res) => {
   const { q, page = 1, limit = 10, status, upcoming } = req.query;
 
@@ -20,6 +29,10 @@ export const getClubs: RequestHandler<{}, ClubsPagination, {}, ClubsQuery> = asy
   res.json(clubs);
 };
 
+/**
+ * Get a list of popular clubs with more than 2 members and a meeting date within the last 60 days,
+ * sorted by member count and meeting date.
+ */
 export const getPopularClubs: RequestHandler<{}, ClubDTO[], {}, {}> = async (_req, res) => {
   const sixtyDaysAgo = new Date();
   sixtyDaysAgo.setDate(sixtyDaysAgo.getDate() - 60);
@@ -76,6 +89,12 @@ export const getPopularClubs: RequestHandler<{}, ClubDTO[], {}, {}> = async (_re
   res.json(clubs);
 };
 
+/**
+ * Get clubs created by or joined by the authenticated user, with pagination.
+ * Query parameters:
+ * - page: page number for pagination (default: 1)
+ * - limit: number of items per page (default: 10)
+ */
 export const getMyClubs: RequestHandler<{}, ClubsPagination, {}, ClubsQuery> = async (req, res) => {
   const user = req.user;
 
@@ -90,6 +109,10 @@ export const getMyClubs: RequestHandler<{}, ClubsPagination, {}, ClubsQuery> = a
   res.json(clubs);
 };
 
+/**
+ * Create a new club. The authenticated user will be the owner of the club.
+ * The request body should include all required club fields except createdBy and members.
+ */
 export const createClub: RequestHandler<{}, ClubDTO, ClubInputDTO> = async (req, res) => {
   const {
     user,
@@ -124,20 +147,36 @@ export const createClub: RequestHandler<{}, ClubDTO, ClubInputDTO> = async (req,
   };
 
   const club = await Club.create(clubData);
-  const populatedClub = await club.populate(clubService.populatedFields);
+  const populatedClub = await Club.findById(club._id).populate(clubService.populatedFields);
 
   res.status(201).json(populatedClub as ClubDTO);
 };
 
+/**
+ * Get a club by ID.
+ */
 export const getClubById: RequestHandler<{ id: string }, ClubDTO> = async (req, res) => {
   const { id } = req.params;
-  const club = await Club.findById(id);
+  const club = await Club.findById(id).populate(clubService.populatedFields);
   if (!club) {
     throw new Error('Club not found', { cause: { status: 404 } });
   }
-  const populatedClub = await club.populate(clubService.populatedFields);
 
-  res.json(populatedClub as ClubDTO);
+  res.json(club as ClubDTO);
+};
+
+/**
+ * Get a club by slug.
+ */
+export const getClubBySlug: RequestHandler<{ slug: string }, ClubDTO> = async (req, res) => {
+  const { slug } = req.params;
+
+  const club = await Club.findOne({ slug }).populate(clubService.populatedFields);
+  if (!club) {
+    throw new Error('Club not found', { cause: { status: 404 } });
+  }
+
+  res.json(club as ClubDTO);
 };
 
 /**
@@ -168,7 +207,7 @@ export const updateClub: RequestHandler<{ id: string }, ClubDTO, ClubInputDTO> =
 
   await club.set(req.body).save();
 
-  const populatedClub = await club.populate(clubService.populatedFields);
+  const populatedClub = await Club.findById(club._id).populate(clubService.populatedFields);
 
   const newImage = req.body.image && req.body.image !== previousImage;
 
@@ -197,7 +236,7 @@ export const deleteClub: RequestHandler<{ id: string }> = async (req, res) => {
     throw new Error('Club not found', { cause: { status: 404 } });
   }
 
-  if (club.members && club.members.length > 0) {
+  if (club.members && club.members.length > 1) {
     throw new Error('It is not possible to delete a club with members.', { cause: { status: 400 } });
   }
 
