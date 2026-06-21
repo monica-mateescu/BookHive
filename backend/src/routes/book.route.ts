@@ -1,6 +1,14 @@
 import { Router } from 'express';
-import { createBook, deleteBook, getBookById, getBooks, updateBook } from '#controllers';
-import { authMiddleware, fileHandler, cloudinaryUpload, isAdmin, validateObjectId, validateZod } from '#middlewares';
+import { createBook, deleteBook, getBookById, getBooks, updateBook, getBookBySlug } from '#controllers';
+import {
+  authMiddleware,
+  fileHandler,
+  cloudinaryUpload,
+  isAdmin,
+  validateObjectId,
+  validateZod,
+  sanitizeSlug
+} from '#middlewares';
 import { paginationQuerySchema, bookInputSchema } from '#schemas';
 
 const bookRouter = Router();
@@ -16,6 +24,7 @@ bookRouter.post(
   createBook
 );
 bookRouter.get('/:id', validateObjectId('id'), getBookById);
+bookRouter.get('/slug/:slug', sanitizeSlug('slug'), getBookBySlug);
 bookRouter.put(
   '/:id',
   authMiddleware,

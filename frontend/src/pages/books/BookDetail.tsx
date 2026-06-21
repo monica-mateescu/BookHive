@@ -1,10 +1,10 @@
 import { BookDetail, Container, Loading } from "@/components";
-import { getBookById } from "@data";
+import { getBookBySlug } from "@/data";
 import { useQuery } from "@tanstack/react-query";
 import { useParams } from "react-router";
 
 function BookDetailPage() {
-  const { id } = useParams();
+  const { slug } = useParams();
 
   const {
     data: book,
@@ -12,9 +12,9 @@ function BookDetailPage() {
     isLoading,
     error,
   } = useQuery({
-    queryKey: ["books", id],
-    queryFn: () => getBookById(id!),
-    enabled: !!id,
+    queryKey: ["books", slug],
+    queryFn: () => getBookBySlug(slug!),
+    enabled: !!slug,
   });
 
   if (isLoading) return <Loading />;

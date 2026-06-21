@@ -88,7 +88,7 @@ function BookDetail({ book }: BookDetailProps) {
                   </div>
                 </div>
                 <Link
-                  to={`/clubs/${book.club.id}`}
+                  to={`/clubs/${book.club.slug}`}
                   className="btn btn-sm btn-primary btn-brand-primary"
                 >
                   View club
