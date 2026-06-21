@@ -22,6 +22,7 @@ export const bookInputSchema = z.strictObject({
 export const bookSchema = z.strictObject({
   _id: z.instanceof(Types.ObjectId),
   ...bookInputSchema.shape,
+  slug: z.string(),
   createdAt: z.date(),
   updatedAt: z.date()
 });

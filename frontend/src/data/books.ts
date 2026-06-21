@@ -56,6 +56,18 @@ export const getBookById = async (id: string): Promise<Book> => {
   return data;
 };
 
+export const getBookBySlug = async (slug: string): Promise<Book> => {
+  const res = await fetch(`${API_URL}/api/books/slug/${slug}`);
+
+  if (!res.ok) {
+    const error = await res.json().catch(() => null);
+    throw new Error(error?.message || "Failed to fetch book");
+  }
+
+  const data: Book = await res.json();
+  return data;
+};
+
 export const updateBookById = async (
   id: string,
   formData: FormData,

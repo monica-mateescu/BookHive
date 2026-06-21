@@ -44,7 +44,7 @@ function App() {
             <Route path="contact" element={<Contact />} />
             <Route path="privacy-policy" element={<PrivacyPolicy />} />
             <Route path="books" element={<BooksPage />} />
-            <Route path="books/:id" element={<BookDetailPage />} />
+            <Route path="books/:slug" element={<BookDetailPage />} />
             <Route path="clubs" element={<ClubsPage />} />
             <Route path="clubs/:slug" element={<ClubDetailPage />} />
             <Route path="email-verified" element={<EmailVerified />} />

@@ -33,6 +33,7 @@ const mockBookData: Book = {
   id: "123",
   title: "Book title",
   author: "Book author",
+  slug: "book-title",
   isbn: "123-1234567890",
   summary: "Book summary",
   publishedYear: 2026,
