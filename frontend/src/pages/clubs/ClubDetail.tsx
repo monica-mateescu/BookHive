@@ -3,7 +3,9 @@ import { Seo } from "@/components/seo";
 import useAuth from "@/contexts/useAuth";
 import { getClubBySlug } from "@/data";
 import { useQuery } from "@tanstack/react-query";
-import { Navigate, useParams } from "react-router";
+import { useParams } from "react-router";
+
+import NotFound from "../NotFound";
 
 function ClubDetailPage() {
   const { slug } = useParams();
@@ -21,7 +23,7 @@ function ClubDetailPage() {
 
   if (isLoading) return <Loading />;
 
-  if (!club || club.status != "approved") return <Navigate to="/" replace />;
+  if (!club || club.status !== "approved") return <NotFound />;
 
   return (
     <>
