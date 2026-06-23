@@ -1,4 +1,5 @@
 export { default as Home } from "./Home";
+export { default as About } from "./About";
 export { SignIn, SignUp, ForgotPassword, ResetPassword } from "./auth";
 export { default as NotFound } from "./NotFound";
 export { default as Contact } from "./Contact";
