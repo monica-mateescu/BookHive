@@ -1,5 +1,5 @@
 import { ConfirmModal, Loading, Pagination, UserRow } from "@/components";
-import { SeoNoIndex } from "@/components/seo";
+import { Seo } from "@/components/seo";
 import { deleteUser, getUsers, restoreUser } from "@/data/users";
 import {
   keepPreviousData,
@@ -57,7 +57,7 @@ const Users = () => {
   if (isError) return <div className="alert alert-error">{error.message}</div>;
   return (
     <>
-      <SeoNoIndex title="User list" />
+      <Seo title="User list" index={false} />
       <section className="overflow-x-auto py-5">
         <h1 className="flex justify-start text-2xl font-semibold">Users</h1>
 

@@ -1,4 +1,4 @@
-import { SeoNoIndex } from "@/components/seo";
+import { Seo } from "@/components/seo";
 import { createBook, getBookById, updateBookById } from "@data";
 import type { Book } from "@types";
 import type { CreateBookFormData } from "@types";
@@ -63,7 +63,7 @@ const CreateBookForm = () => {
         });
 
         setExistingImage(book.image ?? "");
-        setTitlePage(`Edit book: ${book.title}`);
+        setTitlePage(`Edit '${book.title}' book`);
       } catch (e) {
         setError(e instanceof Error ? e.message : "Failed to fetch a book");
         scrollToTop();
@@ -175,7 +175,7 @@ const CreateBookForm = () => {
 
   return (
     <>
-      <SeoNoIndex title={`${titlePage}`} />
+      <Seo title={titlePage} index={false} />
       <h1 className="mt-5 text-center text-3xl font-semibold">
         {isEdit ? "Edit book" : "Create new book"}
       </h1>

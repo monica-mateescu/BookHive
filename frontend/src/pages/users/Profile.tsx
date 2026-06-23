@@ -1,5 +1,5 @@
 import { Container } from "@/components";
-import { SeoNoIndex } from "@/components/seo";
+import { Seo } from "@/components/seo";
 import {
   EmailForm,
   PasswordForm,
@@ -30,9 +30,10 @@ const Profile = () => {
 
   return (
     <Container>
-      <SeoNoIndex
+      <Seo
         title="Profile"
         description="Manage your account details, update your email, and change your password."
+        index={false}
       />
       <h1 className="text-center text-3xl font-semibold">Profile</h1>
       <div className="mt-2 text-center text-(--gray-primary)">
