@@ -1,10 +1,9 @@
 import { Container, ResetPasswordForm } from "@/components";
+import { SeoNoIndex } from "@/components/seo";
 import useAuth from "@/contexts/useAuth";
-import { getPageTitle } from "@/utils";
 import { Navigate, useSearchParams } from "react-router";
 
 const ResetPassword = () => {
-  const pageTitle = getPageTitle("Reset password");
   const { user } = useAuth();
   const [searchParams] = useSearchParams();
   const token = searchParams.get("token") || undefined;
@@ -14,20 +13,25 @@ const ResetPassword = () => {
   return user ? (
     <Navigate to="/profile" replace />
   ) : (
-    <Container>
-      <title>{pageTitle}</title>
-      <h1 className="text-center text-3xl font-semibold">
-        Reset your password
-      </h1>
-      <div className="mt-2 text-center text-(--gray-primary)">
-        Enter your new password below to reset your password.
-      </div>
-      <div className="my-5 w-full">
-        <div className="mx-auto w-full max-w-xl">
-          <ResetPasswordForm token={token} />
+    <>
+      <SeoNoIndex
+        title="Reset password"
+        description="Set a new password for your account."
+      />
+      <Container>
+        <h1 className="text-center text-3xl font-semibold">
+          Reset your password
+        </h1>
+        <div className="mt-2 text-center text-(--gray-primary)">
+          Enter your new password below to reset your password.
         </div>
-      </div>
-    </Container>
+        <div className="my-5 w-full">
+          <div className="mx-auto w-full max-w-xl">
+            <ResetPasswordForm token={token} />
+          </div>
+        </div>
+      </Container>
+    </>
   );
 };
 
