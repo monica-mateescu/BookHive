@@ -1,13 +1,14 @@
-import { SeoNoIndex } from "@/components/seo";
+import { Seo } from "@/components/seo";
 import { Container } from "lucide-react";
 import { Link } from "react-router";
 
 const EmailVerified = () => {
   return (
     <>
-      <SeoNoIndex
+      <Seo
         title="Email verified"
         description="Your email has been successfully verified."
+        index={false}
       />
       <Container className="text-center">
         <h1 className="mb-10 text-center text-3xl font-semibold">

@@ -1,5 +1,5 @@
 import { Container, ForgotPasswordForm } from "@/components";
-import { SeoNoIndex } from "@/components/seo";
+import { Seo } from "@/components/seo";
 import useAuth from "@/contexts/useAuth";
 import { Navigate } from "react-router";
 
@@ -10,9 +10,10 @@ const ForgotPassword = () => {
     <Navigate to="/profile" replace />
   ) : (
     <>
-      <SeoNoIndex
+      <Seo
         title="Forgot password"
         description="Reset your password to regain access to your account."
+        index={false}
       />
       <Container>
         <h1 className="text-center text-3xl font-semibold">

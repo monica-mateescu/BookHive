@@ -1,5 +1,5 @@
 import { BookRow, ConfirmModal, Loading, Pagination } from "@/components";
-import { SeoNoIndex } from "@/components/seo";
+import { Seo } from "@/components/seo";
 import { deleteBookById, getBooks } from "@/data";
 import type { Book, BooksResponse } from "@/types";
 import {
@@ -43,7 +43,7 @@ const Books = () => {
 
   return (
     <>
-      <SeoNoIndex title="Book list" />
+      <Seo title="Book list" index={false} />
       <section className="overflow-x-auto py-5">
         <div className="flex justify-end">
           <Link

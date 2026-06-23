@@ -1,5 +1,5 @@
 import { Container, ResetPasswordForm } from "@/components";
-import { SeoNoIndex } from "@/components/seo";
+import { Seo } from "@/components/seo";
 import useAuth from "@/contexts/useAuth";
 import { Navigate, useSearchParams } from "react-router";
 
@@ -14,9 +14,10 @@ const ResetPassword = () => {
     <Navigate to="/profile" replace />
   ) : (
     <>
-      <SeoNoIndex
+      <Seo
         title="Reset password"
         description="Set a new password for your account."
+        index={false}
       />
       <Container>
         <h1 className="text-center text-3xl font-semibold">

@@ -1,5 +1,5 @@
 import { ClubRow, ConfirmModal, Loading, Pagination } from "@/components";
-import { SeoNoIndex } from "@/components/seo";
+import { Seo } from "@/components/seo";
 import { deleteClubById, getClubs } from "@/data";
 import type { Club, ClubsResponse } from "@/types";
 import {
@@ -43,7 +43,7 @@ const Clubs = () => {
 
   return (
     <>
-      <SeoNoIndex title="Club list" />
+      <Seo title="Club list" index={false} />
       <section className="overflow-x-auto py-5">
         <div className="flex justify-end">
           <Link

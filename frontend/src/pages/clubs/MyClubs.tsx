@@ -4,7 +4,7 @@ import {
   MyClubListSkeleton,
   Pagination,
 } from "@/components";
-import { SeoNoIndex } from "@/components/seo";
+import { Seo } from "@/components/seo";
 import { Container, InfoState } from "@/components/ui";
 import { getMyClubs } from "@/data";
 import type { ClubsResponse } from "@/types";
@@ -26,9 +26,10 @@ const MyClubs = () => {
 
   return (
     <>
-      <SeoNoIndex
+      <Seo
         title="My Clubs"
         description="View the book clubs you have joined or created."
+        index={false}
       />
       <Container>
         <h1 className="text-center text-3xl font-semibold">My Clubs</h1>

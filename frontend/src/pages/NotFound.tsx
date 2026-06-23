@@ -1,4 +1,4 @@
-import { SeoNoIndex } from "@/components/seo";
+import { Seo } from "@/components/seo";
 import { Button, ButtonLink, Container } from "@/components/ui";
 import { useNavigate } from "react-router";
 
@@ -6,10 +6,11 @@ const NotFound = () => {
   const navigate = useNavigate();
   return (
     <>
-      <SeoNoIndex
+      <Seo
         title="Page not found"
         description="The page you’re looking for might have been moved, deleted, or never
           existed."
+        index={false}
       />
 
       <Container className="text-center">

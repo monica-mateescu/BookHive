@@ -5,7 +5,7 @@ import {
   ConfirmModal,
   Loading,
 } from "@/components";
-import { SeoNoIndex } from "@/components/seo";
+import { Seo } from "@/components/seo";
 import { deleteClubById, getClubById } from "@/data";
 import type { Club } from "@/types";
 import { formatDate } from "@/utils";
@@ -38,7 +38,7 @@ const ClubDetail = () => {
 
   return (
     <>
-      <SeoNoIndex title={`${data.name}`} />
+      <Seo title={`${data.name}`} index={false} />
 
       <div className="space-y-6 p-6">
         <h1 className="text-2xl font-semibold">{data.name}</h1>
