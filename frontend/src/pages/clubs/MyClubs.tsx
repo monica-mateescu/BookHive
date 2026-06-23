@@ -4,6 +4,7 @@ import {
   MyClubListSkeleton,
   Pagination,
 } from "@/components";
+import { SeoNoIndex } from "@/components/seo";
 import { Container, InfoState } from "@/components/ui";
 import { getMyClubs } from "@/data";
 import type { ClubsResponse } from "@/types";
@@ -24,40 +25,46 @@ const MyClubs = () => {
   const isEmpty = !isLoading && !isError && clubs.length === 0;
 
   return (
-    <Container>
-      <h1 className="text-center text-3xl font-semibold">My Clubs</h1>
-      <div className="mt-2 text-center text-(--gray-primary)">
-        View the book clubs you have joined or created.
-      </div>
-      <div className="my-5 w-full">
-        <div className="mx-auto w-full max-w-xl space-y-5">
-          {isError && (
-            <ErrorState message="Something went wrong, we couldn’t load the data. Please try again later." />
-          )}
-
-          {isLoading && <MyClubListSkeleton />}
-
-          {isEmpty ? (
-            <InfoState message="You haven't joined or created any clubs yet." />
-          ) : (
-            <>
-              <ul className="list rounded-lg bg-(--bg-main)/80 shadow-lg ring-1 ring-black/5 backdrop-blur-sm">
-                {clubs.map((club) => (
-                  <MyClubCard key={club.id} club={club} />
-                ))}
-              </ul>
-              {totalPages > 1 && (
-                <Pagination
-                  page={page}
-                  totalPages={totalPages}
-                  onPageChange={setPage}
-                />
-              )}
-            </>
-          )}
+    <>
+      <SeoNoIndex
+        title="My Clubs"
+        description="View the book clubs you have joined or created."
+      />
+      <Container>
+        <h1 className="text-center text-3xl font-semibold">My Clubs</h1>
+        <div className="mt-2 text-center text-(--gray-primary)">
+          View the book clubs you have joined or created.
         </div>
-      </div>
-    </Container>
+        <div className="my-5 w-full">
+          <div className="mx-auto w-full max-w-xl space-y-5">
+            {isError && (
+              <ErrorState message="Something went wrong, we couldn’t load the data. Please try again later." />
+            )}
+
+            {isLoading && <MyClubListSkeleton />}
+
+            {isEmpty ? (
+              <InfoState message="You haven't joined or created any clubs yet." />
+            ) : (
+              <>
+                <ul className="list rounded-lg bg-(--bg-main)/80 shadow-lg ring-1 ring-black/5 backdrop-blur-sm">
+                  {clubs.map((club) => (
+                    <MyClubCard key={club.id} club={club} />
+                  ))}
+                </ul>
+                {totalPages > 1 && (
+                  <Pagination
+                    page={page}
+                    totalPages={totalPages}
+                    onPageChange={setPage}
+                  />
+                )}
+              </>
+            )}
+          </div>
+        </div>
+      </Container>
+    </>
   );
 };
 
