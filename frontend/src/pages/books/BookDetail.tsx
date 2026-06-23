@@ -2,7 +2,9 @@ import { BookDetail, Container, ErrorState, Loading } from "@/components";
 import { Seo } from "@/components/seo";
 import { getBookBySlug } from "@/data";
 import { useQuery } from "@tanstack/react-query";
-import { Navigate, useParams } from "react-router";
+import { useParams } from "react-router";
+
+import NotFound from "../NotFound";
 
 function BookDetailPage() {
   const { slug } = useParams();
@@ -19,7 +21,7 @@ function BookDetailPage() {
 
   if (isLoading) return <Loading />;
 
-  if (!book || !book.isActive) return <Navigate to="/" replace />;
+  if (!book || !book.isActive) return <NotFound />;
 
   return (
     <>
