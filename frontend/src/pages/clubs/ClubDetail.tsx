@@ -2,7 +2,7 @@ import { Chat, ClubDetail, Container, ErrorState, Loading } from "@/components";
 import useAuth from "@/contexts/useAuth";
 import { getClubBySlug } from "@/data";
 import { useQuery } from "@tanstack/react-query";
-import { useParams } from "react-router";
+import { Navigate, useParams } from "react-router";
 
 function ClubDetailPage() {
   const { slug } = useParams();
@@ -13,26 +13,25 @@ function ClubDetailPage() {
     isError,
     isLoading,
   } = useQuery({
-    queryKey: ["clubs", slug],
+    queryKey: ["club", slug],
     queryFn: () => getClubBySlug(slug!),
     enabled: !!slug,
   });
 
   if (isLoading) return <Loading />;
 
-  if (isError || !club)
-    return (
-      <Container>
-        <ErrorState message="Something went wrong, we couldn’t load the data. Please try again later." />
-      </Container>
-    );
+  if (!club || club.status != "approved") return <Navigate to="/" replace />;
 
   return (
     <Container>
-      <div className="mx-auto md:w-[80%]">
-        <ClubDetail club={club} />
-        {user && <Chat clubId={club.id} />}
-      </div>
+      {isError ? (
+        <ErrorState message="Something went wrong, we couldn’t load the data. Please try again later." />
+      ) : (
+        <div className="mx-auto md:w-[80%]">
+          <ClubDetail club={club} />
+          {user && <Chat clubId={club.id} />}
+        </div>
+      )}
     </Container>
   );
 }
