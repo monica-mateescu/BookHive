@@ -72,6 +72,7 @@ export const getPopularClubs: RequestHandler<{}, ClubDTO[], {}, {}> = async (_re
         _id: 0,
         id: '$_id',
         name: 1,
+        slug: 1,
         members: 1,
         bookId: 1,
         meetingDate: 1,
@@ -79,6 +80,7 @@ export const getPopularClubs: RequestHandler<{}, ClubDTO[], {}, {}> = async (_re
         image: '$image',
         'book.id': '$book._id',
         'book.title': '$book.title',
+        'book.slug': '$book.slug',
         'book.author': '$book.author',
         'book.image': '$book.image',
         'book.publishedYear': '$book.publishedYear'

@@ -61,12 +61,13 @@ function ClubDetail({ club }: ClubDetailProps) {
       ? club.bookId.image
       : "../assets/images/books/default-cover.png";
 
-  const bookId = isBookRef(club.bookId) ? club.bookId.id : club.bookId;
+  const bookSlug =
+    isBookRef(club.bookId) && club.bookId.slug ? club.bookId.slug : "";
 
   return (
     <div className="grid grid-cols-1 gap-5 md:grid-cols-6">
       <Link
-        to={`/books/${bookId}`}
+        to={`/books/${bookSlug}`}
         className="relative h-64 w-full md:col-span-2 lg:h-auto"
       >
         <img

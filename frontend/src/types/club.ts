@@ -16,6 +16,7 @@ export type MemberRef = {
 export type BookRef = {
   id: string;
   title?: string;
+  slug?: string;
   author?: string;
   publishedYear?: number;
   image?: string;
