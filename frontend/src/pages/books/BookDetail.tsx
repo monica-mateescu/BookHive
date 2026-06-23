@@ -1,7 +1,7 @@
-import { BookDetail, Container, Loading } from "@/components";
+import { BookDetail, Container, ErrorState, Loading } from "@/components";
 import { getBookBySlug } from "@/data";
 import { useQuery } from "@tanstack/react-query";
-import { useParams } from "react-router";
+import { Navigate, useParams } from "react-router";
 
 function BookDetailPage() {
   const { slug } = useParams();
@@ -10,22 +10,25 @@ function BookDetailPage() {
     data: book,
     isError,
     isLoading,
-    error,
   } = useQuery({
-    queryKey: ["books", slug],
+    queryKey: ["book", slug],
     queryFn: () => getBookBySlug(slug!),
     enabled: !!slug,
   });
 
   if (isLoading) return <Loading />;
-  if (isError || !book)
-    return <div className="alert alert-error">{error?.message}</div>;
+
+  if (!book || !book.isActive) return <Navigate to="/" replace />;
 
   return (
     <Container>
-      <div className="mx-auto md:w-[80%]">
-        <BookDetail book={book} />
-      </div>
+      {isError ? (
+        <ErrorState message="Something went wrong, we couldn’t load the data. Please try again later." />
+      ) : (
+        <div className="mx-auto md:w-[80%]">
+          <BookDetail book={book} />
+        </div>
+      )}
     </Container>
   );
 }
