@@ -1,10 +1,12 @@
 import { Chat, ClubDetail, Container, ErrorState, Loading } from "@/components";
+import useAuth from "@/contexts/useAuth";
 import { getClubBySlug } from "@/data";
 import { useQuery } from "@tanstack/react-query";
 import { useParams } from "react-router";
 
 function ClubDetailPage() {
   const { slug } = useParams();
+  const { user } = useAuth();
 
   const {
     data: club,
@@ -29,7 +31,7 @@ function ClubDetailPage() {
     <Container>
       <div className="mx-auto md:w-[80%]">
         <ClubDetail club={club} />
-        <Chat clubId={club.id} />
+        {user && <Chat clubId={club.id} />}
       </div>
     </Container>
   );
