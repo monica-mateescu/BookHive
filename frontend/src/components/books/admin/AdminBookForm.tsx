@@ -158,13 +158,10 @@ const CreateBookForm = () => {
       }
 
       scrollToTop();
+      setForm(initialForm);
+      setExistingImage("");
 
-      if (!isEdit) {
-        setForm(initialForm);
-        setExistingImage("");
-      } else {
-        navigate("/admin/books");
-      }
+      return navigate("/admin/books");
     } catch (e) {
       setError(e instanceof Error ? e.message : "Failed to create a book");
       scrollToTop();
