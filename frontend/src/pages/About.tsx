@@ -4,9 +4,12 @@ import { Link } from "react-router";
 import ButtonLink from "../components/ui/ButtonLink";
 
 function About() {
-  <Seo title="About" description="About" />;
   return (
     <>
+      <Seo
+        title="About us and our vision"
+        description="Discover our vision to blend the offline joy of reading with digital connection."
+      />
       <div className="relative">
         <section
           className="relative overflow-hidden rounded-lg bg-cover bg-center p-10 text-center lg:p-26"
@@ -42,7 +45,6 @@ function About() {
           </div>
         </section>
       </div>
-
       <div className="section container">
         <section>
           <div className="mx-auto max-w-2xl space-y-2 rounded-2xl border-2 border-dashed border-(--brand-primary)/30 p-10 text-center">
