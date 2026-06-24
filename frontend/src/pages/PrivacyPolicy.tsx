@@ -1,12 +1,14 @@
 import { Container } from "@/components";
-import { getPageTitle } from "@/utils";
+import { Seo } from "@/components/seo";
 import { Link } from "react-router";
 
 function PrivacyPolicy() {
-  const pageTitle = getPageTitle("Privacy Policy");
   return (
     <Container>
-      <title>{pageTitle}</title>
+      <Seo
+        title="Privacy Policy"
+        description="This policy explains what information BookHive collects and how it is used."
+      />
       <h1 className="text-3xl font-semibold">Privacy Policy</h1>
       <div className="mt-2 text-(--gray-primary)">
         This policy explains what information BookHive collects and how it is

@@ -1,4 +1,5 @@
 import { ClubRow, ConfirmModal, Loading, Pagination } from "@/components";
+import { Seo } from "@/components/seo";
 import { deleteClubById, getClubs } from "@/data";
 import type { Club, ClubsResponse } from "@/types";
 import {
@@ -41,69 +42,72 @@ const Clubs = () => {
   if (isError) return <div className="alert alert-error">{error.message}</div>;
 
   return (
-    <section className="overflow-x-auto py-5">
-      <div className="flex justify-end">
-        <Link
-          to="create"
-          className="btn btn-primary btn-brand-primary btn-sm mb-2 cursor-pointer"
-        >
-          Add new club
-        </Link>
-      </div>
+    <>
+      <Seo title="Club list" index={false} />
+      <section className="overflow-x-auto py-5">
+        <div className="flex justify-end">
+          <Link
+            to="create"
+            className="btn btn-primary btn-brand-primary btn-sm mb-2 cursor-pointer"
+          >
+            Add new club
+          </Link>
+        </div>
 
-      <h1 className="flex justify-start text-2xl font-semibold">Clubs</h1>
+        <h1 className="flex justify-start text-2xl font-semibold">Clubs</h1>
 
-      <div className="flex justify-end text-xs font-semibold">
-        Total clubs: {data?.pagination.total}
-      </div>
+        <div className="flex justify-end text-xs font-semibold">
+          Total clubs: {data?.pagination.total}
+        </div>
 
-      {errorMessage && (
-        <div className="alert alert-error mb-4">{errorMessage}</div>
-      )}
-      {data?.data?.length === 0 ? (
-        <div className="alert alert-info">No clubs found.</div>
-      ) : (
-        <>
-          <table className="mb-4 table">
-            {/* head */}
-            <thead>
-              <tr>
-                <th></th>
-                <th>Name</th>
-                <th>Status</th>
-                <th>Meating Date</th>
-                <th>Created Date</th>
-                <th></th>
-              </tr>
-            </thead>
-            <tbody>
-              {data?.data.map((club, index) => (
-                <ClubRow
-                  key={club.id}
-                  index={(page - 1) * data.pagination.limit + index + 1}
-                  club={club}
-                  onDelete={() => setSelectedClub(club)}
-                />
-              ))}
-            </tbody>
-          </table>
-          <Pagination
-            page={page}
-            totalPages={data?.pagination.totalPages ?? 1}
-            onPageChange={setPage}
-          />
-          {selectedClub && (
-            <ConfirmModal
-              title={selectedClub.name}
-              message="Are you sure you want to delete this club?"
-              onConfirm={() => handleDelete(selectedClub.id)}
-              onClose={() => setSelectedClub(null)}
-              isLoading={deleteMutation.isPending}
+        {errorMessage && (
+          <div className="alert alert-error mb-4">{errorMessage}</div>
+        )}
+        {data?.data?.length === 0 ? (
+          <div className="alert alert-info">No clubs found.</div>
+        ) : (
+          <>
+            <table className="mb-4 table">
+              {/* head */}
+              <thead>
+                <tr>
+                  <th></th>
+                  <th>Name</th>
+                  <th>Status</th>
+                  <th>Meating Date</th>
+                  <th>Created Date</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody>
+                {data?.data.map((club, index) => (
+                  <ClubRow
+                    key={club.id}
+                    index={(page - 1) * data.pagination.limit + index + 1}
+                    club={club}
+                    onDelete={() => setSelectedClub(club)}
+                  />
+                ))}
+              </tbody>
+            </table>
+            <Pagination
+              page={page}
+              totalPages={data?.pagination.totalPages ?? 1}
+              onPageChange={setPage}
             />
-          )}
-        </>
-      )}
-    </section>
+            {selectedClub && (
+              <ConfirmModal
+                title={selectedClub.name}
+                message="Are you sure you want to delete this club?"
+                onConfirm={() => handleDelete(selectedClub.id)}
+                onClose={() => setSelectedClub(null)}
+                isLoading={deleteMutation.isPending}
+              />
+            )}
+          </>
+        )}
+      </section>
+    </>
   );
 };
 

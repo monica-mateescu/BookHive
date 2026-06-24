@@ -3,7 +3,7 @@ import { Book, Club } from '#models';
 export const populatedFields = [
   { path: 'createdBy', select: 'firstName lastName email' },
   { path: 'members.userId', select: 'firstName lastName email' },
-  { path: 'bookId', select: 'title author description image publishedYear' }
+  { path: 'bookId', select: 'title slug author description image publishedYear' }
 ];
 
 export const bookIsAssigned = async (bookId: string, clubId?: string): Promise<void> => {

@@ -4,6 +4,8 @@ import type { Book, Club, CreateClubFormData } from "@types";
 import { type ChangeEvent, useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router";
 
+import { Seo } from "../seo";
+
 const initialForm: CreateClubFormData = {
   name: "",
   description: "",
@@ -22,6 +24,7 @@ const CreateClubForm = () => {
   }>();
   const isEdit = Boolean(id);
   const { user, isAdmin } = useAuth();
+  const [titlePage, setTitlePage] = useState("Create new club");
 
   const navigate = useNavigate();
 
@@ -99,6 +102,7 @@ const CreateClubForm = () => {
         });
 
         setExistingImage(club.image ?? "");
+        setTitlePage(`Edit '${club.name}' club`);
       } catch (e) {
         setError(e instanceof Error ? e.message : "Failed to fetch a club");
         scrollToTop();
@@ -212,6 +216,10 @@ const CreateClubForm = () => {
 
   return (
     <>
+      <Seo
+        title={titlePage}
+        description="Start your own book club and connect with fellow readers. Share your reading interests, host discussions, and build a community around books you love."
+      />
       {!user ? (
         <>
           <h1 className="text-center text-3xl font-semibold">

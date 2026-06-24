@@ -1,8 +1,7 @@
 import { socket } from "@/components/chat/socket";
-import { authClient } from "@utils";
+import useAuth from "@/contexts/useAuth";
 import { useEffect, useState } from "react";
 
-import { EmptyState } from "..";
 import ChatForm from "./ChatForm";
 import ChatMessages from "./ChatMessages";
 
@@ -11,12 +10,13 @@ interface ChatProps {
 }
 
 export function Chat({ clubId }: ChatProps) {
-  const { data: session } = authClient.useSession();
+  const { user } = useAuth();
+
   const [isChatActive, setIsChatActive] = useState(false);
   const [isConnected, setIsConnected] = useState(socket.connected);
 
   useEffect(() => {
-    if (!session) return;
+    if (!user) return;
 
     function handleConnect() {
       setIsConnected(true);
@@ -33,7 +33,7 @@ export function Chat({ clubId }: ChatProps) {
       socket.off("disconnect", handleDisconnect);
       socket.disconnect();
     };
-  }, [session]);
+  }, [user]);
 
   const toggleChat = () => {
     if (isChatActive) {
@@ -44,15 +44,6 @@ export function Chat({ clubId }: ChatProps) {
       setIsChatActive(true);
     }
   };
-
-  if (!session) {
-    return (
-      <>
-        <br />
-        <EmptyState message="Please sign in to use the chat feature." />
-      </>
-    );
-  }
 
   return (
     <>

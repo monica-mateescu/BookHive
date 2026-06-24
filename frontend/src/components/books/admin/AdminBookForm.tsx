@@ -1,3 +1,4 @@
+import { Seo } from "@/components/seo";
 import { createBook, getBookById, updateBookById } from "@data";
 import type { Book } from "@types";
 import type { CreateBookFormData } from "@types";
@@ -17,6 +18,7 @@ const initialForm: CreateBookFormData = {
 const CreateBookForm = () => {
   const { id } = useParams<{ id: string }>();
   const isEdit = Boolean(id);
+  const [titlePage, setTitlePage] = useState("Create new book");
 
   const navigate = useNavigate();
 
@@ -61,6 +63,7 @@ const CreateBookForm = () => {
         });
 
         setExistingImage(book.image ?? "");
+        setTitlePage(`Edit '${book.title}' book`);
       } catch (e) {
         setError(e instanceof Error ? e.message : "Failed to fetch a book");
         scrollToTop();
@@ -158,13 +161,10 @@ const CreateBookForm = () => {
       }
 
       scrollToTop();
+      setForm(initialForm);
+      setExistingImage("");
 
-      if (!isEdit) {
-        setForm(initialForm);
-        setExistingImage("");
-      } else {
-        navigate("/admin/books");
-      }
+      return navigate("/admin/books");
     } catch (e) {
       setError(e instanceof Error ? e.message : "Failed to create a book");
       scrollToTop();
@@ -175,6 +175,7 @@ const CreateBookForm = () => {
 
   return (
     <>
+      <Seo title={titlePage} index={false} />
       <h1 className="mt-5 text-center text-3xl font-semibold">
         {isEdit ? "Edit book" : "Create new book"}
       </h1>

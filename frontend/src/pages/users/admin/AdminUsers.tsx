@@ -1,4 +1,5 @@
 import { ConfirmModal, Loading, Pagination, UserRow } from "@/components";
+import { Seo } from "@/components/seo";
 import { deleteUser, getUsers, restoreUser } from "@/data/users";
 import {
   keepPreviousData,
@@ -55,81 +56,84 @@ const Users = () => {
   if (isLoading) return <Loading />;
   if (isError) return <div className="alert alert-error">{error.message}</div>;
   return (
-    <section className="overflow-x-auto py-5">
-      <h1 className="flex justify-start text-2xl font-semibold">Users</h1>
+    <>
+      <Seo title="User list" index={false} />
+      <section className="overflow-x-auto py-5">
+        <h1 className="flex justify-start text-2xl font-semibold">Users</h1>
 
-      <div className="flex justify-end text-xs font-semibold">
-        Total users: {data?.pagination?.total}
-      </div>
+        <div className="flex justify-end text-xs font-semibold">
+          Total users: {data?.pagination?.total}
+        </div>
 
-      {errorMessage && (
-        <div className="alert alert-error mb-4">{errorMessage}</div>
-      )}
-      {data?.data?.length === 0 ? (
-        <div className="alert alert-info">No users found.</div>
-      ) : (
-        <>
-          <table className="table">
-            {/* head */}
-            <thead>
-              <tr>
-                <th></th>
-                <th>Name</th>
-                <th>Email</th>
-                <th>Role</th>
-              </tr>
-            </thead>
-            <tbody>
-              {data?.data?.map((user, index) => (
-                <UserRow
-                  key={user.id}
-                  index={(page - 1) * data.pagination.limit + index + 1}
-                  user={user}
-                  onDelete={() => {
-                    setSelectedUser(user);
-                    setIsDeleteOpen(true);
-                  }}
-                  onRestore={() => {
-                    setSelectedUser(user);
-                    setIsRestoreOpen(true);
-                  }}
-                />
-              ))}
-            </tbody>
-          </table>
-          <Pagination
-            page={page}
-            totalPages={data?.pagination.totalPages ?? 1}
-            onPageChange={setPage}
+        {errorMessage && (
+          <div className="alert alert-error mb-4">{errorMessage}</div>
+        )}
+        {data?.data?.length === 0 ? (
+          <div className="alert alert-info">No users found.</div>
+        ) : (
+          <>
+            <table className="table">
+              {/* head */}
+              <thead>
+                <tr>
+                  <th></th>
+                  <th>Name</th>
+                  <th>Email</th>
+                  <th>Role</th>
+                </tr>
+              </thead>
+              <tbody>
+                {data?.data?.map((user, index) => (
+                  <UserRow
+                    key={user.id}
+                    index={(page - 1) * data.pagination.limit + index + 1}
+                    user={user}
+                    onDelete={() => {
+                      setSelectedUser(user);
+                      setIsDeleteOpen(true);
+                    }}
+                    onRestore={() => {
+                      setSelectedUser(user);
+                      setIsRestoreOpen(true);
+                    }}
+                  />
+                ))}
+              </tbody>
+            </table>
+            <Pagination
+              page={page}
+              totalPages={data?.pagination.totalPages ?? 1}
+              onPageChange={setPage}
+            />
+          </>
+        )}
+        {selectedUser && isDeleteOpen && (
+          <ConfirmModal
+            title={
+              selectedUser.name ??
+              `${selectedUser.firstName ?? ""} ${selectedUser.lastName ?? ""}`.trim()
+            }
+            message="Are you sure you want to delete this user?"
+            onConfirm={() => handleDelete(selectedUser.id)}
+            onClose={handleCloseModal}
+            isLoading={deleteMutation.isPending}
           />
-        </>
-      )}
-      {selectedUser && isDeleteOpen && (
-        <ConfirmModal
-          title={
-            selectedUser.name ??
-            `${selectedUser.firstName ?? ""} ${selectedUser.lastName ?? ""}`.trim()
-          }
-          message="Are you sure you want to delete this user?"
-          onConfirm={() => handleDelete(selectedUser.id)}
-          onClose={handleCloseModal}
-          isLoading={deleteMutation.isPending}
-        />
-      )}
+        )}
 
-      {selectedUser && isRestoreOpen && (
-        <ConfirmModal
-          title={
-            selectedUser.name ??
-            `${selectedUser.firstName ?? ""} ${selectedUser.lastName ?? ""}`.trim()
-          }
-          message="Are you sure you want to restore this user?"
-          onConfirm={() => handleRestore(selectedUser.id)}
-          onClose={handleCloseModal}
-          isLoading={restoreMutation.isPending}
-        />
-      )}
-    </section>
+        {selectedUser && isRestoreOpen && (
+          <ConfirmModal
+            title={
+              selectedUser.name ??
+              `${selectedUser.firstName ?? ""} ${selectedUser.lastName ?? ""}`.trim()
+            }
+            message="Are you sure you want to restore this user?"
+            onConfirm={() => handleRestore(selectedUser.id)}
+            onClose={handleCloseModal}
+            isLoading={restoreMutation.isPending}
+          />
+        )}
+      </section>
+    </>
   );
 };
 
