@@ -23,7 +23,7 @@
    Dark theme
 ====================== */
 body {
-  @apply font-roboto text-base;
+  @apply font-roboto text-sm md:text-base;
   color: var(--text-main);
   background-color: var(--bg-main);
 }
@@ -64,7 +64,4 @@ body {
 }
 
 @media only screen and (max-width: 600px) {
-  body {
-    font-size: 14px;
-  }
 }
