@@ -7,8 +7,8 @@ function About() {
   return (
     <>
       <Seo
-        title="About us and our vision"
-        description="Discover our vision to blend the offline joy of reading with digital connection."
+        title="About this project and its mission"
+        description="Discover how to blend the offline joy of reading with digital connection."
       />
       <div className="relative">
         <section
