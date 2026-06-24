@@ -9,23 +9,30 @@ function About() {
       <title>{pageTitle}</title>
       <h1 className="text-3xl font-semibold">About</h1>
       <div className="mt-2 text-(--gray-primary)">
-        Finding ground in a fast-paced world
+        Together is a beautiful place to be.
       </div>
       <p className="mt-2">
-        In today’s hyper-connected, rapidly changing world, our minds rarely
-        find a moment of true stillness. We believe that opening a book is one
-        of the most powerful ways to protect our inner peace, strengthen our
-        resilience, and reconnect with our emotions. When you turn the pages,
-        the chaos of the outside world fades away, and a moment to reconnect
-        with yourself opens up.
+        In today’s rapidly changing world, our minds rarely find a moment of
+        true stillness and grounding, often leaving us feeling disconnected from
+        ourselves and others. We believe that opening a book is a powerful way
+        to protect our inner peace, strengthen our resilience, stay in touch
+        with our emotions. When you turn the pages, the chaos of the outside
+        world fades away, and a moment to reconnect with yourself opens up. But
+        stories are not meant to be read only alone.
       </p>
       <p className="mt-2">
         BookHive was born from a simple yet profound mission: to blend the
-        offline experience of reading with digital connection power, creating a
-        community where stories bring people closer together.
+        offline experience of reading with the power of digital connection. We
+        are building a space where opening a book means opening a door to talk,
+        to share, and to move closer together. Because human connection often
+        starts in the smallest moments—and the best ones begin with a story.
       </p>
       <p className="mt-2">
-        How it works today is just the beginning: you{" "}
+        How it works today is just the beginning: you can{" "}
+        <Link to="/signup" className="underline hover:text-(--brand-primary)">
+          sign up
+        </Link>
+        ,{" "}
         <Link to="/books" className="underline hover:text-(--brand-primary)">
           discover books
         </Link>
@@ -64,8 +71,8 @@ function About() {
         </li>
         <li>
           <b className="font-semibold">For bookstores & libraries:</b> The
-          physical space where all pieces of the puzzle come together. By
-          organizing your own book clubs and hosting hybrid reading events
+          cultural meeting ground where all pieces of the puzzle come together.
+          By organizing your own book clubs and hosting hybrid reading events
           through BookHive, you can attract new visitors and expand your local
           literary hubs.
         </li>
@@ -78,7 +85,7 @@ function About() {
         <Link to="/contact" className="underline hover:text-(--brand-primary)">
           contact form
         </Link>{" "}
-        and let’s create the ultimate digital place for reading and connection
+        and let’s grow a kind-hearted community for reading and connection
         together.
       </p>
     </Container>
