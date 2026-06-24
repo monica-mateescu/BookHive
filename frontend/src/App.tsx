@@ -5,6 +5,7 @@ import {
   ProtectedLayout,
 } from "@/layouts";
 import {
+  About,
   BookCreate,
   BookDetailPage,
   Books,
@@ -37,6 +38,7 @@ function App() {
         <Routes>
           <Route path="/" element={<MainLayout />}>
             <Route index element={<Home />} />
+            <Route path="about" element={<About />} />
             <Route path="signup" element={<SignUp />} />
             <Route path="signin" element={<SignIn />} />
             <Route path="forgot-password" element={<ForgotPassword />} />
