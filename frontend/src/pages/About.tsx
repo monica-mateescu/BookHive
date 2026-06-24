@@ -1,14 +1,12 @@
-import { getPageTitle } from "@/utils";
+import { Seo } from "@/components/seo";
 import { Link } from "react-router";
 
 import ButtonLink from "../components/ui/ButtonLink";
 
 function About() {
-  const pageTitle = getPageTitle("About");
+  <Seo title="About" description="About" />;
   return (
     <>
-      <title>{pageTitle}</title>
-
       <div className="relative">
         <section
           className="relative overflow-hidden rounded-lg bg-cover bg-center p-10 text-center lg:p-26"
