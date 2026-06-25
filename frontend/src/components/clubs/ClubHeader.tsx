@@ -41,7 +41,7 @@ const ClubHeader = ({
           <Button
             onClick={onJoinToggle}
             disabled={isDisabled}
-            variant={isMember ? "neutral" : "primary"}
+            variant={isMember ? "secondary" : "primary"}
           >
             {isMember ? "Leave club" : "Join club"}
           </Button>

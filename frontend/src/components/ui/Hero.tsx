@@ -3,26 +3,35 @@ import { BookOpen } from "lucide-react";
 
 import ButtonLink from "./ButtonLink";
 
-const Hero = () => {
+type HeroProps = {
+  backgroundImage?: string;
+  badgeIcon?: React.ComponentType<{ className?: string }>;
+  badgeText: string;
+  title: React.ReactNode;
+  description: string;
+};
+const Hero = ({
+  backgroundImage,
+  badgeIcon: BadgeIcon = BookOpen,
+  badgeText,
+  title,
+  description,
+}: HeroProps) => {
   return (
-    <section
-      className="relative overflow-hidden rounded-lg bg-cover bg-center p-10 text-center lg:p-26"
-      style={{ backgroundImage: `url(${hero})` }}
+    <div
+      className="relative overflow-hidden bg-cover bg-center p-10 text-center lg:p-26"
+      style={{
+        backgroundImage: backgroundImage
+          ? `url(${backgroundImage})`
+          : `url(${hero})`,
+      }}
     >
-      <div className="mb-4 inline-flex items-center gap-2 rounded-full bg-(--gray-secondary) px-4 py-2 text-sm font-medium text-(--brand-primary)">
-        <BookOpen className="h-4 w-4" /> Online book clubs
+      <div className="mb-4 inline-flex items-center gap-2 rounded-full bg-(--gray-secondary) px-4 py-2 text-sm font-medium">
+        <BadgeIcon className="h-4 w-4" /> {badgeText}
       </div>
-      <h1 className="text-3xl leading-tight font-semibold text-(--text-main)">
-        Discover book clubs,
-        <span className="block text-(--brand-primary)">
-          connect through stories.
-        </span>
-      </h1>
+      <h1 className="text-3xl">{title}</h1>
 
-      <p className="mx-auto mt-4 max-w-2xl text-base leading-7 text-(--gray-primary)">
-        Join online book clubs, share your thoughts with fellow readers, and
-        discover new perspectives through meaningful discussions.
-      </p>
+      <p className="mx-auto mt-4 max-w-2xl leading-7">{description}</p>
 
       <div className="mt-8 flex flex-col items-center justify-center gap-4 sm:flex-row">
         <ButtonLink to="/clubs" className="rounded-xl px-6">
@@ -32,7 +41,7 @@ const Hero = () => {
           Choose a book first
         </ButtonLink>
       </div>
-    </section>
+    </div>
   );
 };
 
