@@ -1,6 +1,6 @@
 type ButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> & {
   children?: React.ReactNode;
-  variant?: "primary" | "neutral";
+  variant?: "primary" | "secondary";
 };
 
 const Button = ({
@@ -11,7 +11,7 @@ const Button = ({
 }: ButtonProps) => {
   const variantClass = {
     primary: "btn-primary btn-brand-primary",
-    neutral: "btn-neutral btn-brand-neutral",
+    secondary: "btn-outline btn-brand-secondary",
   }[variant];
 
   return (
