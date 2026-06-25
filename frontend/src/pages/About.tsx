@@ -51,7 +51,7 @@ function About() {
           description="This is just the beginning of our journey. Discover how you can become part of the hive today."
           steps={[
             {
-              title: "Step 2",
+              title: "Step 1",
               label: "Sign up",
               href: "/signup",
             },
