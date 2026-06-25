@@ -1,7 +1,6 @@
+import { Hero, ProcessSection } from "@/components";
 import { Seo } from "@/components/seo";
 import { Link } from "react-router";
-
-import ButtonLink from "../components/ui/ButtonLink";
 
 function About() {
   return (
@@ -10,41 +9,20 @@ function About() {
         title="About this project and its mission"
         description="Discover how to blend the offline joy of reading with digital connection."
       />
-      <div className="relative">
-        <section
-          className="relative overflow-hidden rounded-lg bg-cover bg-center p-10 text-center lg:p-26"
-          style={{ backgroundImage: 'url("/src/assets/images/hero.png")' }}
-        >
-          <div className="mb-4 inline-flex items-center gap-2 rounded-full bg-(--gray-secondary) px-4 py-2 text-sm font-medium text-(--brand-primary)">
-            About this project
-          </div>
-          <h1 className="text-3xl leading-tight font-semibold text-(--text-main)">
-            Together is
-            <span className="block text-(--brand-primary)">
-              a beautiful place to be.
-            </span>
-          </h1>
 
-          <p className="mx-auto mt-4 max-w-xl text-base leading-7 text-(--gray-primary)">
-            We believe that reading books is a powerful way to protect inner
+      <Hero
+        badgeText="About this project"
+        title={
+          <>
+            Together is
+            <br />a beautiful place to be.
+          </>
+        }
+        description="  We believe that reading books is a powerful way to protect inner
             peace, understand emotions, and bring us closer together. Because
             human connection often starts in the smallest moments—and so many of
-            them begin with a story.
-          </p>
-          <div className="mt-8 flex flex-col items-center justify-center gap-4 sm:flex-row">
-            <ButtonLink to="/clubs" className="rounded-xl px-6">
-              Explore clubs
-            </ButtonLink>
-            <ButtonLink
-              to="/books"
-              variant="secondary"
-              className="rounded-xl px-6"
-            >
-              Choose a book first
-            </ButtonLink>
-          </div>
-        </section>
-      </div>
+            them begin with a story."
+      />
       <div className="section container">
         <section>
           <div className="mx-auto max-w-2xl space-y-2 rounded-2xl border-2 border-dashed border-(--brand-primary)/30 p-10 text-center">
@@ -66,95 +44,33 @@ function About() {
           </div>
         </section>
 
-        <section>
-          <div className="mt-15 grid grid-cols-1 items-center gap-10 rounded-3xl bg-(--gray-secondary)/30 p-10 lg:grid-cols-12 lg:pt-0">
-            <div className="space-y-2 lg:col-span-5">
-              <div className="text-xs font-bold tracking-wider text-(--brand-primary) uppercase">
-                Process
-              </div>
-              <h2 className="text-2xl font-semibold text-(--text-main)">
-                How it works today
-              </h2>
-              <p className="text-sm text-(--gray-primary)">
-                This is just the beginning of our journey. Discover how you can
-                become part of the hive today.
-              </p>
-            </div>
-
-            <div className="lg:col-span-7">
-              {/* DaisyUI Timeline */}
-              <ul className="timeline timeline-vertical lg:timeline-horizontal timeline-compact">
-                <li>
-                  <div className="timeline-middle">
-                    <div className="h-5 w-5 rounded-full bg-(--brand-primary)"></div>
-                  </div>
-                  <div className="timeline-end lg:timeline-start bg-base-100 border-base-200 mb-10 rounded-xl border p-4 shadow-xs lg:mb-0">
-                    <span className="block font-semibold text-(--text-main)">
-                      Step 1
-                    </span>
-                    <Link
-                      to="/signup"
-                      className="text-sm font-medium text-(--brand-primary) underline hover:opacity-80"
-                    >
-                      Sign up
-                    </Link>
-                  </div>
-                  <hr className="bg-(--brand-primary)" />
-                </li>
-                <li>
-                  <hr className="bg-(--brand-primary)" />
-                  <div className="timeline-middle">
-                    <div className="h-5 w-5 rounded-full bg-(--brand-primary)"></div>
-                  </div>
-                  <div className="timeline-end lg:timeline-start bg-base-100 border-base-200 mb-10 rounded-xl border p-4 shadow-xs lg:mb-0">
-                    <span className="block font-semibold text-(--text-main)">
-                      Step 2
-                    </span>
-                    <Link
-                      to="/books"
-                      className="text-sm font-medium text-(--brand-primary) underline hover:opacity-80"
-                    >
-                      Discover books
-                    </Link>
-                  </div>
-                  <hr className="bg-(--brand-primary)" />
-                </li>
-                <li>
-                  <hr className="bg-(--brand-primary)" />
-                  <div className="timeline-middle">
-                    <div className="h-5 w-5 rounded-full bg-(--brand-primary)"></div>
-                  </div>
-                  <div className="timeline-end lg:timeline-start bg-base-100 border-base-200 mb-10 rounded-xl border p-4 shadow-xs lg:mb-0">
-                    <span className="block font-semibold text-(--text-main)">
-                      Step 3
-                    </span>
-                    <Link
-                      to="/clubs"
-                      className="text-sm font-medium text-(--brand-primary) underline hover:opacity-80"
-                    >
-                      Join or create a club
-                    </Link>
-                  </div>
-                  <hr className="bg-(--brand-primary)" />
-                </li>
-                <li>
-                  <hr className="bg-(--brand-primary)" />
-                  <div className="timeline-middle">
-                    <div className="h-5 w-5 rounded-full bg-(--brand-primary)"></div>
-                  </div>
-                  <div className="timeline-end lg:timeline-start bg-base-100 border-base-200 rounded-xl border p-4 shadow-xs">
-                    <span className="block font-semibold text-(--text-main)">
-                      Step 4
-                    </span>
-                    <span className="text-sm text-(--gray-primary)">
-                      Enjoy offline & meet online
-                    </span>
-                  </div>
-                </li>
-              </ul>
-            </div>
-          </div>
-        </section>
+        <ProcessSection
+          variant="about"
+          eyebrow="Process"
+          title="How it works today"
+          description="This is just the beginning of our journey. Discover how you can become part of the hive today."
+          steps={[
+            {
+              title: "Step 2",
+              label: "Sign up",
+              href: "/signup",
+            },
+            {
+              title: "Step 2",
+              label: "Discover books",
+              href: "/books",
+            },
+            {
+              title: "Step 3",
+              label: "Join or create a club",
+              href: "/clubs",
+            },
+            {
+              title: "Step 4",
+              label: "Enjoy offline & meet online",
+            },
+          ]}
+        />
 
         <section>
           <div className="mx-auto mt-15 max-w-xl space-y-2 text-center">
