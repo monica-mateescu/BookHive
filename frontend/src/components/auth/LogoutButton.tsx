@@ -15,10 +15,7 @@ function LogoutButton() {
   };
 
   return (
-    <button
-      className="btn btn-neutral btn-sm cursor-pointer"
-      onClick={handleLogout}
-    >
+    <button className="btn btn-brand-secondary btn-sm" onClick={handleLogout}>
       Logout
     </button>
   );
