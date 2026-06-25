@@ -305,9 +305,8 @@ function About() {
               Do you have some feedback for us?
             </h2>
             <p className="text-(--gray-primary)">
-              We are very excited to hear from you! Send us a message via our
-              contact form and let’s grow a kind-hearted community for reading
-              and connection together.
+              We are very excited to hear from you! Send us a message and let’s
+              grow a kind-hearted community for reading and connection together.
             </p>
             <Link
               to="/contact"
