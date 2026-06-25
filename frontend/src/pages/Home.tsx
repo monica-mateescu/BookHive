@@ -31,6 +31,22 @@ function Home() {
           <SearchClub />
         </div>
       </div>
+      <section>
+        <div className="mx-auto mt-15 max-w-2xl space-y-2 text-center">
+          <h2 className="text-2xl font-semibold text-(--text-main)">
+            Connect through the power of stories
+          </h2>
+          <p>
+            In today’s rapidly changing world, our minds rarely find a moment of
+            true stillness and grounding, often leaving us feeling disconnected
+            from ourselves and others. When you turn the pages of a book, the
+            chaos of the outside world fades away, and a moment to reconnect
+            with yourself opens up. But stories are not meant to be read just
+            alone. So we invite you on an exciting journey to discover new
+            stories and connect together.
+          </p>
+        </div>
+      </section>
       <UpcomingClubs />
       <PopularClubs />
       <Container>

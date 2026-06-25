@@ -18,7 +18,7 @@ function About() {
             <br />a beautiful place to be.
           </>
         }
-        description="  We believe that reading books is a powerful way to protect inner
+        description="We believe that reading books is a powerful way to protect inner
             peace, understand emotions, and bring us closer together. Because
             human connection often starts in the smallest moments—and so many of
             them begin with a story."
@@ -26,14 +26,6 @@ function About() {
       <div className="section container">
         <section>
           <div className="mx-auto max-w-2xl space-y-2 rounded-2xl border-2 border-dashed border-(--brand-primary)/30 p-10 text-center">
-            <p className="text-lg font-medium">
-              In today’s rapidly changing world, our minds rarely find a moment
-              of true stillness and grounding, often leaving us feeling
-              disconnected from ourselves and others. When you turn the pages of
-              a book, the chaos of the outside world fades away, and a moment to
-              reconnect with yourself opens up. But stories are not meant to be
-              read just alone.
-            </p>
             <p className="text-(--gray-primary)">
               BookHive was born from a simple yet profound mission: to blend the
               offline experience of reading with the power of digital
@@ -46,7 +38,6 @@ function About() {
 
         <ProcessSection
           variant="about"
-          eyebrow="Process"
           title="How it works today"
           description="This is just the beginning of our journey. Discover how you can become part of the hive today."
           steps={[
