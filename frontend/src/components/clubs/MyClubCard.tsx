@@ -3,6 +3,7 @@ import type { Club } from "@/types";
 import { isUserRef } from "@/utils";
 import { Link } from "react-router";
 
+import { Button } from "../ui";
 import MembersBadge from "./MembersBadge";
 
 type ClubCardProps = {
@@ -42,13 +43,18 @@ const MyClubCard = ({ club }: ClubCardProps) => {
           max={club.maxMembers ?? 0}
         />
       </p>
-
-      <Link
-        to={`/clubs/${club.slug}`}
-        className="btn btn-sm btn-primary btn-brand-primary"
-      >
-        View club
-      </Link>
+      {club.status === "approved" ? (
+        <Link
+          to={`/clubs/${club.slug}`}
+          className="btn btn-sm btn-primary btn-brand-primary"
+        >
+          View club
+        </Link>
+      ) : (
+        <Button variant="secondary" disabled>
+          View club
+        </Button>
+      )}
     </li>
   );
 };
