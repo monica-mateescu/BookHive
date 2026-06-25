@@ -5,6 +5,7 @@ export {
   ResetPasswordForm,
 } from "./auth";
 export { Hero, Container } from "./ui";
+export { ProcessSection } from "./about";
 export { default as Clubs } from "./clubs/Clubs";
 export { default as UpcomingClubs } from "./clubs/UpcomingClubs";
 export { default as PopularClubs } from "./clubs/PopularClubs";
