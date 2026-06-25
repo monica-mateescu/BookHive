@@ -34,10 +34,8 @@ const Hero = ({
       <p className="mx-auto mt-4 max-w-2xl leading-7">{description}</p>
 
       <div className="mt-8 flex flex-col items-center justify-center gap-4 sm:flex-row">
-        <ButtonLink to="/clubs" className="rounded-xl px-6">
-          Explore clubs
-        </ButtonLink>
-        <ButtonLink to="/books" variant="secondary" className="rounded-xl px-6">
+        <ButtonLink to="/clubs">Explore clubs</ButtonLink>
+        <ButtonLink to="/books" variant="secondary">
           Choose a book first
         </ButtonLink>
       </div>
