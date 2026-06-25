@@ -3,16 +3,21 @@
 @plugin "daisyui";
 
 /* ======================
-   Light theme (default)
+  Light theme 
 ====================== */
 :root {
-  --bg-main: #ffffff;
-  --text-main: #292929;
-  --brand-primary: #006b36;
-  --brand-secondary: #292929;
-  --gray-primary: #808080;
-  --gray-secondary: #eeeeee;
-  --error: #d10000;
+  /* Backgrounds */
+  --bg-main: #faf8f5;
+  --text-main: #111827; /* ink */
+  --brand-primary: #1f2937; /* deep ink navy */
+  --brand-secondary: #111827;
+
+  /* Neutrals */
+  --gray-primary: #6b7280;
+  --gray-secondary: #e5e7eb;
+
+  /* UI states */
+  --error: #b91c1c;
 }
 
 @theme {
@@ -20,14 +25,38 @@
 }
 
 /* ======================
-   Dark theme
+   Base
 ====================== */
 body {
-  @apply font-roboto text-sm md:text-base;
+  @apply font-roboto text-base;
   color: var(--text-main);
   background-color: var(--bg-main);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
 }
 
+/* ======================
+   Typography
+====================== */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  color: var(--text-main);
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+  font-weight: 700;
+}
+
+p {
+  color: var(--gray-primary);
+}
+
+/* ======================
+   Layout
+====================== */
 .container {
   width: 100%;
   max-width: 1200px;
@@ -36,32 +65,59 @@ body {
 }
 
 .section {
-  padding-block: 66px;
+  padding-block: 64px;
 }
 
 .section--muted {
-  background: #f6f3ee;
+  background: #f3efe8;
 }
 
+/* ======================
+   Buttons 
+====================== */
+
+/* Primary: Ink button */
 .btn-brand-primary {
   border-color: var(--brand-primary);
   background-color: var(--brand-primary);
+  color: white;
+
+  font-weight: 600;
+  letter-spacing: 0.2px;
+
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 8px rgba(17, 24, 39, 0.08);
 }
 
 .btn-brand-primary:hover {
-  border-color: var(--brand-secondary);
-  background-color: var(--brand-secondary);
+  transform: translateY(-1px);
+  box-shadow: 0 10px 20px rgba(17, 24, 39, 0.12);
 }
 
+/* Secondary: Outline */
 .btn-brand-secondary {
   color: var(--brand-primary);
-  border-color: var(--brand-primary);
+  border: 1px solid #d6d0c7;
+  background: #fdfbf7;
+
+  font-weight: 500;
+
+  transition: all 0.2s ease;
 }
 
 .btn-brand-secondary:hover {
-  color: var(--brand-secondary);
-  border-color: var(--brand-secondary);
+  color: var(--brand-primary);
+  border-color: var(--brand-primary);
+  background: rgba(31, 41, 55, 0.05);
+
+  transform: translateY(-1px);
 }
 
+/* ======================
+   Responsive
+====================== */
 @media only screen and (max-width: 600px) {
+  body {
+    font-size: 14px;
+  }
 }
