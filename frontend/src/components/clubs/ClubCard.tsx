@@ -1,4 +1,4 @@
-import clubImage from "@/assets/images/clubs/bc-3.png";
+import clubImage from "@/assets/images/clubs/default.png";
 import { useCountdown } from "@/hooks";
 import { formatCountdown, isBookRef } from "@/utils";
 import type { Club } from "@types";
