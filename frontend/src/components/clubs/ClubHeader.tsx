@@ -6,6 +6,7 @@ import MembersBadge from "./MembersBadge";
 
 type ClubHeaderProps = {
   club: Club;
+  membersCount: number;
   errorMessage: string;
   isDisabled: boolean;
   isMember: boolean;
@@ -15,6 +16,7 @@ type ClubHeaderProps = {
 
 const ClubHeader = ({
   club,
+  membersCount,
   errorMessage,
   isDisabled,
   isMember,
@@ -32,18 +34,16 @@ const ClubHeader = ({
       <p className="text-(--gray-primary)">{club.description}</p>
 
       <div className="flex flex-wrap items-center justify-between gap-3 text-sm">
-        <MembersBadge
-          current={club.members.length}
-          max={club.maxMembers ?? 0}
-        />
+        <MembersBadge current={membersCount} max={club.maxMembers ?? 0} />
 
         {!isOwner && (
           <Button
             onClick={onJoinToggle}
             disabled={isDisabled}
             variant={isMember ? "secondary" : "primary"}
+            className="btn-sm"
           >
-            {isMember ? "Leave club" : "Join club"}
+            {isMember ? "Leave" : "Join"} club
           </Button>
         )}
       </div>
