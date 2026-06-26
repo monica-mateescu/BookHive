@@ -18,7 +18,7 @@ const ButtonLink = ({
   }[variant];
 
   return (
-    <Link className={`btn btn-sm ${variantClass} ${className}`} {...props}>
+    <Link className={`btn ${variantClass} ${className}`} {...props}>
       {children}
     </Link>
   );
