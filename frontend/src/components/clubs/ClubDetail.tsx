@@ -20,16 +20,23 @@ function ClubDetail({ club }: ClubDetailProps) {
   const userId = user?.id;
 
   // Check if the user is already a member of the club
-  const isAlreadyMember = club.members.some((m) => {
+  const initialMembership = club.members.some((m) => {
     const memberId = typeof m.userId === "object" ? m.userId.id : m.userId;
     return memberId === userId;
   });
+  const [isMember, setIsMember] = useState(initialMembership);
+  const [membersCount, setMembersCount] = useState(club.members.length);
 
   const { mutate, isPending } = useMutation({
     mutationFn: ({ action }: { action: "join" | "leave" }) =>
       action === "leave" ? leaveClub(club.id) : joinClub(club.id),
 
-    onSuccess: () => {
+    onSuccess: (_, variables) => {
+      const joining = variables.action === "join";
+
+      setIsMember(joining);
+      setMembersCount((prev) => (joining ? prev + 1 : prev - 1));
+
       queryClient.invalidateQueries({ queryKey: ["clubs"] });
       setErrorMessage("");
     },
@@ -45,16 +52,16 @@ function ClubDetail({ club }: ClubDetailProps) {
     }
 
     mutate({
-      action: isAlreadyMember ? "leave" : "join",
+      action: isMember ? "leave" : "join",
     });
   };
 
   const isAlreadyFull =
-    !isAlreadyMember && club.maxMembers
+    !isMember && club.maxMembers
       ? club.members.length >= club.maxMembers
       : false;
 
-  const isJoinDisabled = isPending || (isAlreadyFull && !isAlreadyMember);
+  const isJoinDisabled = isPending || (isAlreadyFull && !isMember);
 
   const bookImage =
     isBookRef(club.bookId) && club.bookId.image
@@ -81,16 +88,17 @@ function ClubDetail({ club }: ClubDetailProps) {
         <div className="grow space-y-5">
           <ClubHeader
             club={club}
+            membersCount={membersCount}
             isDisabled={isJoinDisabled}
             errorMessage={errorMessage}
-            isMember={isAlreadyMember}
+            isMember={isMember}
             authUserId={userId}
             onJoinToggle={handleToggle}
           />
           <MeetingDetailsCard
             meetingDate={club.meetingDate}
             meetingLink={club.meetingLink}
-            isMember={isAlreadyMember}
+            isMember={isMember}
           />
         </div>
       </div>
