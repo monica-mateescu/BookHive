@@ -1,5 +1,6 @@
 import { ClubRow, ConfirmModal, Loading, Pagination } from "@/components";
 import { Seo } from "@/components/seo";
+import { ButtonLink } from "@/components/ui";
 import { deleteClubById, getClubs } from "@/data";
 import type { Club, ClubsResponse } from "@/types";
 import {
@@ -9,7 +10,6 @@ import {
   useQueryClient,
 } from "@tanstack/react-query";
 import { useState } from "react";
-import { Link } from "react-router";
 
 const Clubs = () => {
   const [page, setPage] = useState(1);
@@ -46,12 +46,9 @@ const Clubs = () => {
       <Seo title="Club list" index={false} />
       <section className="overflow-x-auto py-5">
         <div className="flex justify-end">
-          <Link
-            to="create"
-            className="btn btn-primary btn-brand-primary btn-sm mb-2 cursor-pointer"
-          >
+          <ButtonLink to="create" className="btn-sm mb-2">
             Add new club
-          </Link>
+          </ButtonLink>
         </div>
 
         <h1 className="flex justify-start text-2xl font-semibold">Clubs</h1>

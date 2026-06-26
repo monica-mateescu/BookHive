@@ -1,9 +1,8 @@
 import useAuth from "@/contexts/useAuth";
 import type { Club } from "@/types";
 import { isUserRef } from "@/utils";
-import { Link } from "react-router";
 
-import { Button } from "../ui";
+import { Button, ButtonLink } from "../ui";
 import MembersBadge from "./MembersBadge";
 
 type ClubCardProps = {
@@ -44,14 +43,11 @@ const MyClubCard = ({ club }: ClubCardProps) => {
         />
       </p>
       {club.status === "approved" ? (
-        <Link
-          to={`/clubs/${club.slug}`}
-          className="btn btn-sm btn-primary btn-brand-primary"
-        >
+        <ButtonLink to={`/clubs/${club.slug}`} className="btn btn-sm">
           View club
-        </Link>
+        </ButtonLink>
       ) : (
-        <Button variant="secondary" disabled>
+        <Button variant="secondary" disabled className="btn-sm">
           View club
         </Button>
       )}

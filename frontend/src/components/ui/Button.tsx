@@ -15,7 +15,7 @@ const Button = ({
   }[variant];
 
   return (
-    <button className={`btn btn-sm ${variantClass} ${className}`} {...props}>
+    <button className={`btn ${variantClass} ${className}`} {...props}>
       {children}
     </button>
   );

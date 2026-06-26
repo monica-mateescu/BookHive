@@ -67,7 +67,7 @@ function ClubCard({ club, variant = "default" }: ClubCardProps) {
               </div>
 
               <div className="flex justify-end">
-                <Button> More details</Button>
+                <Button className="btn-sm">More details</Button>
               </div>
             </div>
           </div>

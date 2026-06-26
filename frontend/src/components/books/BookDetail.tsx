@@ -1,9 +1,9 @@
 import useAuth from "@/contexts/useAuth";
 import type { Book } from "@/types";
 import { useState } from "react";
-import { Link, useNavigate } from "react-router";
+import { useNavigate } from "react-router";
 
-import { InfoState } from "../ui";
+import { Button, ButtonLink, InfoState } from "../ui";
 
 type BookDetailProps = {
   book: Book;
@@ -72,12 +72,9 @@ function BookDetail({ book }: BookDetailProps) {
                     This book is not currently being read in any club.
                   </div>
                 </div>
-                <button
-                  onClick={handleCreateClick}
-                  className="btn btn-sm btn-primary btn-brand-primary"
-                >
-                  Create club
-                </button>
+                <Button className="btn-sm" onClick={handleCreateClick}>
+                  Create your own club
+                </Button>
               </>
             ) : book.club.status === "approved" ? (
               <>
@@ -87,12 +84,9 @@ function BookDetail({ book }: BookDetailProps) {
                     This book is already being read in the club.
                   </div>
                 </div>
-                <Link
-                  to={`/clubs/${book.club.slug}`}
-                  className="btn btn-sm btn-primary btn-brand-primary"
-                >
+                <ButtonLink to={`/clubs/${book.club.slug}`} className="btn-sm">
                   View club
-                </Link>
+                </ButtonLink>
               </>
             ) : (
               <>

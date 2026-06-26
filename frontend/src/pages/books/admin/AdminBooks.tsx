@@ -1,5 +1,6 @@
 import { BookRow, ConfirmModal, Loading, Pagination } from "@/components";
 import { Seo } from "@/components/seo";
+import { ButtonLink } from "@/components/ui";
 import { deleteBookById, getBooks } from "@/data";
 import type { Book, BooksResponse } from "@/types";
 import {
@@ -9,7 +10,6 @@ import {
   useQueryClient,
 } from "@tanstack/react-query";
 import { useState } from "react";
-import { Link } from "react-router";
 
 const Books = () => {
   const [page, setPage] = useState(1);
@@ -46,12 +46,9 @@ const Books = () => {
       <Seo title="Book list" index={false} />
       <section className="overflow-x-auto py-5">
         <div className="flex justify-end">
-          <Link
-            to="create"
-            className="btn btn-primary btn-brand-primary btn-sm mb-2 cursor-pointer"
-          >
+          <ButtonLink to="create" className="btn-sm mb-2">
             Add new book
-          </Link>
+          </ButtonLink>
         </div>
 
         <h1 className="flex justify-start text-2xl font-semibold">Books</h1>

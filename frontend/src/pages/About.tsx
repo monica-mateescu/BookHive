@@ -1,6 +1,6 @@
 import { Hero, ProcessSection } from "@/components";
 import { Seo } from "@/components/seo";
-import { Link } from "react-router";
+import { ButtonLink } from "@/components/ui";
 
 function About() {
   return (
@@ -215,12 +215,9 @@ function About() {
               We are very excited to hear from you! Send us a message and let’s
               grow a kind-hearted community for reading and connection together.
             </p>
-            <Link
-              to="/contact"
-              className="btn btn-primary btn-brand-primary btn-sm mt-2 cursor-pointer"
-            >
+            <ButtonLink to="/contact" className="btn-sm mt-2">
               Contact us
-            </Link>
+            </ButtonLink>
           </div>
         </section>
       </div>
