@@ -82,6 +82,7 @@ const mockClubData: Club = {
   description: "Club description",
   meetingLink: "https://link.com/m/123",
   meetingDate: "2026-01-01T10:00",
+  durationMinutes: 60,
   maxMembers: 15,
   bookId: "456",
   createdBy: "1234567890",
