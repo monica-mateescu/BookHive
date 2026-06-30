@@ -71,6 +71,8 @@ function ClubDetail({ club }: ClubDetailProps) {
   const bookSlug =
     isBookRef(club.bookId) && club.bookId.slug ? club.bookId.slug : "";
 
+  const isPast = new Date(club.meetingDate) < new Date();
+
   return (
     <div className="grid grid-cols-1 gap-5 md:grid-cols-6">
       <Link
@@ -93,12 +95,14 @@ function ClubDetail({ club }: ClubDetailProps) {
             errorMessage={errorMessage}
             isMember={isMember}
             authUserId={userId}
+            isPast={isPast}
             onJoinToggle={handleToggle}
           />
           <MeetingDetailsCard
             meetingDate={club.meetingDate}
             meetingLink={club.meetingLink}
             isMember={isMember}
+            isPast={isPast}
           />
         </div>
       </div>
