@@ -6,6 +6,7 @@ import { Calendar } from "lucide-react";
 import { Link } from "react-router";
 
 import Button from "../ui/Button";
+import ClubBadge from "./ClubBadge";
 
 type ClubCardProps = {
   club: Club;
@@ -30,12 +31,20 @@ function ClubCard({ club, variant = "default" }: ClubCardProps) {
   return (
     <Link to={`/clubs/${club.slug}`}>
       <div className="flex flex-col rounded-lg bg-(--bg-main)/80 shadow-lg ring-1 ring-black/5 backdrop-blur-sm transition hover:shadow-xl">
-        <div className="h-44 overflow-hidden rounded-tl-lg rounded-tr-lg">
+        <div className="relative overflow-hidden rounded-tl-lg rounded-tr-lg">
           <img
             src={club.image ?? clubImage}
             alt={club.name}
-            className="h-full w-full object-cover"
+            className="w-full"
           />
+          {variant === "default" && (
+            <div className="absolute top-2 right-2">
+              <ClubBadge
+                meetingDate={club.meetingDate}
+                durationMinutes={club.durationMinutes}
+              />
+            </div>
+          )}
         </div>
         <div className="p-5">
           <h2 className="mb-1 text-sm font-semibold">{club.name}</h2>
@@ -59,7 +68,7 @@ function ClubCard({ club, variant = "default" }: ClubCardProps) {
                   )}
 
                   {variant === "upcoming" && (
-                    <span className="inline-flex items-center gap-1 text-(--brand-primary)">
+                    <span className="inline-flex items-center gap-1">
                       <Calendar size={16} /> Starts {formatCountdown(countdown)}
                     </span>
                   )}

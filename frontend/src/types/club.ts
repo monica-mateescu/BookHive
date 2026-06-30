@@ -29,6 +29,7 @@ export type Club = {
   description: string;
   meetingLink: string;
   meetingDate: string;
+  durationMinutes: number;
   maxMembers?: number;
   bookId: string | BookRef;
   book?: BookRef;

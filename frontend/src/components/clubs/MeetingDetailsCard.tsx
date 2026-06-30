@@ -5,11 +5,13 @@ type MeetingDetailsCardProps = {
   meetingDate: string;
   meetingLink: string;
   isMember: boolean;
+  isPast: boolean;
 };
 const MeetingDetailsCard = ({
   meetingDate,
   meetingLink,
   isMember,
+  isPast,
 }: MeetingDetailsCardProps) => {
   return (
     <div className="card rounded-lg bg-(--bg-main)/80 p-2 shadow-sm ring-1 ring-black/5 backdrop-blur-sm">
@@ -23,14 +25,18 @@ const MeetingDetailsCard = ({
           </div>
         </div>
         <div className="space-y-1">
-          <p className="text-sm">
-            <strong>Date & Time:</strong>
-            <span className="ml-1">
-              {formatDate(meetingDate)} at {""}
-              {formatTime(meetingDate)}
-            </span>
-          </p>
-          {isMember && (
+          {isPast ? (
+            <p className="text-sm">This meeting has already taken place.</p>
+          ) : (
+            <p className="text-sm">
+              <strong>Date & Time:</strong>
+              <span className="ml-1">
+                {formatDate(meetingDate)} at {""}
+                {formatTime(meetingDate)}
+              </span>
+            </p>
+          )}
+          {isMember && !isPast && (
             <p className="text-sm break-all">
               <strong>Meeting Link:</strong>
               <a

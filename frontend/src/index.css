@@ -114,6 +114,69 @@ p {
 }
 
 /* ======================
+   Club Status Badges
+====================== */
+
+.badge-club {
+  display: inline-block;
+  padding: 4px 12px;
+  border-radius: 9999px;
+
+  font-size: 12px;
+  font-weight: 600;
+
+  border: 1px solid transparent;
+  backdrop-filter: blur(6px);
+
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
+  letter-spacing: 0.2px;
+}
+
+.badge-club-live {
+  background: #87f479;
+  color: #0f2f10;
+  border-color: rgba(0, 0, 0, 0.08);
+}
+
+.badge-club-upcoming {
+  background: #f8b858;
+  color: #3a2a10;
+  border-color: rgba(0, 0, 0, 0.08);
+}
+
+/* ======================
+   Member Count Badge
+====================== */
+
+.badge-members {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+
+  padding: 6px 12px;
+  border-radius: 9999px;
+
+  background: #fdfbf7;
+  border: 1px solid #d6d0c7;
+
+  color: var(--brand-primary);
+
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.2px;
+
+  box-shadow: 0 1px 4px rgba(17, 24, 39, 0.06);
+  backdrop-filter: blur(6px);
+
+  transition: all 0.2s ease;
+}
+
+.badge-members__icon {
+  color: var(--brand-primary);
+  opacity: 0.9;
+}
+
+/* ======================
    Responsive
 ====================== */
 @media only screen and (max-width: 600px) {
