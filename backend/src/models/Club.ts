@@ -8,6 +8,7 @@ const clubSchema = new Schema(
     description: { type: String, required: [true, 'Description is required'] },
     meetingLink: { type: String, required: [true, 'Meeting link is required'] },
     meetingDate: { type: Date, required: [true, 'Meeting date is required'] },
+    durationMinutes: { type: Number, default: 60, min: [1, 'Duration must be at least 1 minute'] },
     createdBy: { type: Types.ObjectId, ref: 'User', required: [true, 'Creator ID is required'] },
     members: [
       {
