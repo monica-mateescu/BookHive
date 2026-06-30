@@ -30,7 +30,7 @@ function PrivacyPolicy() {
         Depending on how you use BookHive, we may collect and store data within
         the following database collections:
       </p>
-      <ul className="mt-5 list-disc space-y-2 pl-5">
+      <ul className="mt-5 list-disc space-y-2 pl-5 text-(--gray-primary)">
         <li>
           <b className="font-semibold">User data:</b> Authentication details
           stored in user/account collections.
@@ -60,7 +60,7 @@ function PrivacyPolicy() {
         As core services are exclusively accessible to registered users, your
         data is used:
       </p>
-      <ul className="mt-5 list-disc space-y-2 pl-5">
+      <ul className="mt-5 list-disc space-y-2 pl-5 text-(--gray-primary)">
         <li>
           To provide core features: authentication, managing book clubs and
           real-time messaging.
@@ -87,7 +87,7 @@ function PrivacyPolicy() {
       <p className="mt-2">
         We utilize trusted third-party providers to deliver its services:
       </p>
-      <ul className="mt-5 list-disc space-y-2 pl-5">
+      <ul className="mt-5 list-disc space-y-2 pl-5 text-(--gray-primary)">
         <li>Authentication: Better Auth.</li>
         <li>Email delivery service: Resend.</li>
         <li>Database hosting provider: MongoDB.</li>
@@ -98,7 +98,17 @@ function PrivacyPolicy() {
         </li>
       </ul>
       <h2 className="mt-5 text-xl font-semibold text-(--text-main)">
-        5. Cookies
+        5. AI-generated content
+      </h2>
+      <p className="mt-2">
+        For testing and demonstration purposes during this project, some
+        platform content has been generated using AI tools.
+        <br />
+        This data does not represent real-world entities or official
+        publications: book metadata, book covers, club details and club images.
+      </p>
+      <h2 className="mt-5 text-xl font-semibold text-(--text-main)">
+        6. Cookies
       </h2>
       <p className="mt-2">
         We only use strictly necessary cookies and session tokens to keep you
@@ -109,7 +119,7 @@ function PrivacyPolicy() {
         track your behavior or profile your activity across the web.
       </p>
       <h2 className="mt-5 text-xl font-semibold text-(--text-main)">
-        6. Contact
+        7. Contact
       </h2>
       <p className="mt-2">
         If you have questions about this project or data handling, you can use
