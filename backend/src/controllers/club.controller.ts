@@ -3,6 +3,7 @@ import { Club } from '#models';
 import type { ClubDTO, ClubInputDTO, ClubsPagination, ClubsQuery } from '#types';
 import { bookService, clubService } from '#services';
 import { isAdmin, deleteFromCloudinary } from '#utils';
+import { Types } from 'mongoose';
 
 const POPULAR_CLUB_WINDOW_DAYS = 60;
 const MIN_MEMBERS_FOR_POPULAR = 2;
@@ -113,9 +114,8 @@ export const getMyClubs: RequestHandler<{}, ClubsPagination, {}, ClubsQuery> = a
   const { page = 1, limit = 10 } = req.query;
 
   const filter: Record<string, unknown> = {
-    $or: [{ createdBy: user?.id }, { 'members.userId': user?.id }]
+    $or: [{ createdBy: new Types.ObjectId(user?.id) }, { 'members.userId': new Types.ObjectId(user?.id) }]
   };
-
   const clubs = await clubService.getPaginatedClubs({ filter, page, limit });
 
   res.json(clubs);
