@@ -17,7 +17,7 @@ const MyClubCard = ({ club }: ClubCardProps) => {
   const isOwner = user?.id === ownerId;
   return (
     <li className="list-row flex items-center justify-between gap-0 md:gap-3">
-      <div>
+      <div className="min-w-0 flex-1">
         <h2 className="font-semibold">{club.name}</h2>
         <div className="text-xs uppercase">
           <span>{isOwner ? "Owner" : "Member"}</span>
@@ -36,18 +36,18 @@ const MyClubCard = ({ club }: ClubCardProps) => {
           )}
         </div>
       </div>
-      <p className="list-col-wrap text-xs">
+      <p className="list-col-wrap shrink-0 text-xs">
         <MembersBadge
           current={club.members.length}
           max={club.maxMembers ?? 0}
         />
       </p>
       {club.status === "approved" ? (
-        <ButtonLink to={`/clubs/${club.slug}`} className="btn btn-sm">
+        <ButtonLink to={`/clubs/${club.slug}`} className="btn btn-sm shrink-0">
           View club
         </ButtonLink>
       ) : (
-        <Button variant="secondary" disabled className="btn-sm">
+        <Button variant="secondary" disabled className="btn-sm shrink-0">
           View club
         </Button>
       )}
