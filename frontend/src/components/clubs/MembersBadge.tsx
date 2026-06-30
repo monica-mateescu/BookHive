@@ -7,8 +7,8 @@ type MembersBadgeProps = {
 
 const MembersBadge = ({ current, max }: MembersBadgeProps) => {
   return (
-    <span className="badge badge-outline rounded-2xl bg-(--gray-secondary)">
-      <Users className="text-(--brand-primary)" size={18} />
+    <span className="badge-members">
+      <Users className="badge-members__icon" size={16} />
       {current} / {max}
     </span>
   );
