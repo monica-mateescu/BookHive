@@ -4,6 +4,10 @@ import type { ClubDTO, ClubInputDTO, ClubsPagination, ClubsQuery } from '#types'
 import { bookService, clubService } from '#services';
 import { isAdmin, deleteFromCloudinary } from '#utils';
 
+const POPULAR_CLUB_WINDOW_DAYS = 60;
+const MIN_MEMBERS_FOR_POPULAR = 2;
+const POPULAR_CLUBS_LIMIT = 8;
+
 /**
  * Get a paginated list of clubs with optional search and filters.
  * Query parameters:
@@ -34,17 +38,15 @@ export const getClubs: RequestHandler<{}, ClubsPagination, {}, ClubsQuery> = asy
  * sorted by member count and meeting date.
  */
 export const getPopularClubs: RequestHandler<{}, ClubDTO[], {}, {}> = async (_req, res) => {
-  const sixtyDaysAgo = new Date();
-  sixtyDaysAgo.setDate(sixtyDaysAgo.getDate() - 60);
+  const start = new Date();
+  start.setDate(start.getDate() - POPULAR_CLUB_WINDOW_DAYS);
 
   const clubs = await Club.aggregate<ClubDTO>([
     {
       $match: {
         status: 'approved',
-        meetingDate: { $gte: sixtyDaysAgo },
-        $expr: {
-          $gt: [{ $size: '$members' }, 2]
-        }
+        meetingDate: { $gte: start },
+        [`members.${MIN_MEMBERS_FOR_POPULAR}`]: { $exists: true }
       }
     },
     {
@@ -53,18 +55,19 @@ export const getPopularClubs: RequestHandler<{}, ClubDTO[], {}, {}> = async (_re
       }
     },
     { $sort: { memberCount: -1, meetingDate: -1 } },
-    { $limit: 8 },
+    { $limit: POPULAR_CLUBS_LIMIT },
     {
       $lookup: {
         from: 'books',
         localField: 'bookId',
         foreignField: '_id',
-        as: 'book'
+        as: 'bookId'
       }
     },
     {
       $unwind: {
-        path: '$book'
+        path: '$bookId',
+        preserveNullAndEmptyArrays: true
       }
     },
     {
@@ -77,13 +80,20 @@ export const getPopularClubs: RequestHandler<{}, ClubDTO[], {}, {}> = async (_re
         bookId: 1,
         meetingDate: 1,
         maxMembers: 1,
-        image: '$image',
-        'book.id': '$book._id',
-        'book.title': '$book.title',
-        'book.slug': '$book.slug',
-        'book.author': '$book.author',
-        'book.image': '$book.image',
-        'book.publishedYear': '$book.publishedYear'
+        image: 1,
+        book: {
+          $cond: [
+            { $ifNull: ['$book', false] },
+            {
+              id: '$book._id',
+              title: '$book.title',
+              slug: '$book.slug',
+              author: '$book.author',
+              image: '$book.image'
+            },
+            null
+          ]
+        }
       }
     }
   ]);

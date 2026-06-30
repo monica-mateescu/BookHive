@@ -25,6 +25,7 @@ export const clubSchema = z.strictObject({
   ...clubInputSchema.shape,
   slug: z.string(),
   createdBy: z.instanceof(Types.ObjectId),
+  durationMinutes: z.number().int(),
   members: z.array(
     z.object({
       userId: z.instanceof(Types.ObjectId),
