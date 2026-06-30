@@ -29,7 +29,7 @@ function BookCard({ book }: BookCardProps) {
             {book.author}
             <span className="block font-semibold">{book.title}</span>
           </h2>
-          <Button className="btn-sm mt-auto">Create a club</Button>
+          <Button className="btn-sm mt-auto">More details</Button>
         </div>
       </div>
     </Link>
