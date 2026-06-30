@@ -7,7 +7,7 @@ type MembersBadgeProps = {
 
 const MembersBadge = ({ current, max }: MembersBadgeProps) => {
   return (
-    <span className="badge-members">
+    <span className="badge-members flex min-w-22 items-center justify-start">
       <Users className="badge-members__icon" size={16} />
       {current} / {max}
     </span>
