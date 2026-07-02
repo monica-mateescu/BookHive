@@ -91,11 +91,8 @@ export const createAuth = <P extends BetterAuthPlugin[] = []>({
     },
     advanced: {
       defaultCookieAttributes: {
-        sameSite: isProduction ? 'none' : 'lax',
+        sameSite: 'lax',
         secure: isProduction
-      },
-      ipAddress: {
-        ipAddressHeaders: ['x-forwarded-for']
       }
     },
     hooks: {
