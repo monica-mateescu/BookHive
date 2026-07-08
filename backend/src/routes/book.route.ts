@@ -6,21 +6,22 @@ import {
   cloudinaryUpload,
   isAdmin,
   validateObjectId,
-  validateZod,
+  validateQuery,
+  validateBody,
   sanitizeSlug
 } from '#middlewares';
 import { paginationQuerySchema, bookInputSchema } from '#schemas';
 
 const bookRouter = Router();
 
-bookRouter.get('/', validateZod(paginationQuerySchema), getBooks);
+bookRouter.get('/', validateQuery(paginationQuerySchema), getBooks);
 bookRouter.post(
   '/',
   authMiddleware,
   isAdmin,
   fileHandler,
   cloudinaryUpload('covers'),
-  validateZod(bookInputSchema),
+  validateBody(bookInputSchema),
   createBook
 );
 bookRouter.get('/:id', validateObjectId('id'), getBookById);
@@ -32,7 +33,7 @@ bookRouter.put(
   validateObjectId('id'),
   fileHandler,
   cloudinaryUpload('covers'),
-  validateZod(bookInputSchema),
+  validateBody(bookInputSchema),
   updateBook
 );
 bookRouter.delete('/:id', authMiddleware, isAdmin, validateObjectId('id'), deleteBook);

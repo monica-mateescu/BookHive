@@ -1,7 +1,7 @@
 export { notFoundHandler } from './notFoundHandler.ts';
 export { errorHandler } from './errorHandler.ts';
 export { authMiddleware } from './auth.ts';
-export { validateZod } from './validateZod.ts';
+export { validateBody, validateQuery } from './validateZod.ts';
 export { validateObjectId } from './validateObjectId.ts';
 export { sanitizeSlug } from './sanitizeSlug.ts';
 export { isAdmin } from './isAdmin.ts';

@@ -1,26 +1,43 @@
 import { clubService, messageService } from '#services';
 import { Server, Socket } from 'socket.io';
-import { messageInputSchema } from '#schemas';
-import { z } from 'zod';
+import { messageInputSchema, joinClubSchema } from '#schemas';
+
+const MIN_MS_BETWEEN_MESSAGES = 1000;
+const lastMessageAt = new Map<string, number>();
+
+const genericError = (context: string, err: unknown) => {
+  console.error(context, err);
+  return 'Something went wrong. Please try again.';
+};
 
 export const handleSocketConnection = (io: Server) => {
   io.on('connection', (socket: Socket) => {
     console.log(`User connected: ${socket.id}`);
 
-    socket.on('join', async ({ clubId }, callback) => {
-      const userId = socket.data.user.id;
+    socket.on('join', async (payload, callback) => {
+      try {
+        const { data, error, success } = joinClubSchema.safeParse(payload);
 
-      const isMember = await clubService.isMember(clubId, userId);
+        if (!success) {
+          return callback?.({ success: false, error: error.issues[0]?.message ?? 'Invalid request' });
+        }
 
-      if (!isMember) {
-        return callback?.({
-          success: false,
-          error: 'You are not a member of this club'
-        });
+        const { clubId } = data;
+        const userId = socket.data.user.id;
+
+        const isMember = await clubService.isMember(clubId.toString(), userId);
+
+        if (!isMember) {
+          return callback?.({ success: false, error: 'You are not a member of this club' });
+        }
+
+        socket.join(clubId.toString());
+        console.log(`${userId} joined club chat: ${clubId}`);
+
+        callback?.({ success: true });
+      } catch (err) {
+        callback?.({ success: false, error: genericError('Error handling join event:', err) });
       }
-
-      socket.join(clubId);
-      console.log(`${userId} joined club chat: ${clubId}`);
     });
 
     socket.on('message', async (payload, callback) => {
@@ -28,33 +45,38 @@ export const handleSocketConnection = (io: Server) => {
         const { data, error, success } = messageInputSchema.safeParse(payload);
 
         if (!success) {
-          return callback?.({
-            success: false,
-            error: z.prettifyError(error)
-          });
+          return callback?.({ success: false, error: error.issues[0]?.message ?? 'Invalid message' });
         }
 
         const { text, clubId } = data;
-
+        const clubRoom = clubId.toString();
         const senderId = socket.data.user.id;
 
-        const message = await messageService.createMessage(clubId.toString(), senderId, text);
+        if (!socket.rooms.has(clubRoom)) {
+          return callback?.({ success: false, error: 'You must join this club chat before sending messages' });
+        }
 
-        callback?.({
-          success: true
-        });
+        const now = Date.now();
+        const last = lastMessageAt.get(socket.id) ?? 0;
 
-        io.to(clubId.toString()).emit('message', message);
-      } catch (err: any) {
-        console.error('Error handling message event:', err);
-        callback?.({
-          success: false,
-          error: err.message || 'An error occurred while sending the message'
-        });
+        if (now - last < MIN_MS_BETWEEN_MESSAGES) {
+          return callback?.({ success: false, error: 'You are sending messages too quickly' });
+        }
+
+        lastMessageAt.set(socket.id, now);
+
+        const message = await messageService.createMessage(clubId, senderId, text);
+
+        callback?.({ success: true });
+
+        io.to(clubRoom).emit('message', message);
+      } catch (err) {
+        callback?.({ success: false, error: genericError('Error handling message event:', err) });
       }
     });
 
-    socket.on('disconnect', async () => {
+    socket.on('disconnect', () => {
+      lastMessageAt.delete(socket.id);
       console.log(`User disconnected: ${socket.id}`);
     });
   });
