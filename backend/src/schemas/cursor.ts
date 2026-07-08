@@ -1,8 +1,12 @@
+import { Types } from 'mongoose';
 import { z } from 'zod';
 
 export const cursorSchema = z.strictObject({
-  limit: z.coerce.number().int().positive().optional(),
-  cursor: z.string().optional()
+  limit: z.coerce.number().int().min(1).max(50).default(20).optional(),
+  cursor: z
+    .string()
+    .refine(id => Types.ObjectId.isValid(id), 'Invalid cursor')
+    .optional()
 });
 
 export const cursorPaginationSchema = <T extends z.ZodTypeAny>(schema: T) =>
