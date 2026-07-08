@@ -1,4 +1,4 @@
-import { authClient } from "@utils";
+import { authClient, consumeRedirectTo } from "@utils";
 import { useMemo, useState } from "react";
 import { useNavigate } from "react-router";
 import { Link } from "react-router";
@@ -35,19 +35,20 @@ function RegisterForm() {
     setSubmitting(true);
 
     try {
+      const redirectTo = consumeRedirectTo();
       const { error } = lastName
         ? await authClient.signUp.email({
             email: email.trim(),
             password,
             name: firstName,
             lastName: lastName,
-            callbackURL: "/",
+            callbackURL: redirectTo,
           })
         : await authClient.signUp.email({
             email: email.trim(),
             password,
             name: firstName,
-            callbackURL: "/",
+            callbackURL: redirectTo,
           });
 
       if (error) {
@@ -56,7 +57,7 @@ function RegisterForm() {
       }
 
       setSuccess("Registration successful.");
-      setTimeout(() => navigate("/"), 1000);
+      setTimeout(() => navigate(redirectTo), 1000);
     } catch (e) {
       setError(e instanceof Error ? e.message : "Registration failed");
     } finally {
