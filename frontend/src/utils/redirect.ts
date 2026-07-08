@@ -12,9 +12,7 @@ export const setRedirectTo = (path: string) => {
 };
 
 export const consumeRedirectTo = (): string => {
-  let raw: string | null = null;
-
-  raw = sessionStorage.getItem(REDIRECT_KEY);
+  const raw = sessionStorage.getItem(REDIRECT_KEY) ?? null;
   sessionStorage.removeItem(REDIRECT_KEY);
 
   return isSafeRedirect(raw) ? raw : "/";

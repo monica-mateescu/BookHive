@@ -6,12 +6,13 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 import SignUpForm from "./SignUpForm";
 
 /* Mock the module that provides authClient. */
-vi.mock("@/utils", () => ({
+vi.mock("@utils", () => ({
   authClient: {
     signUp: {
       email: vi.fn(),
     },
   },
+  consumeRedirectTo: vi.fn(() => "/"),
 }));
 
 const mockedNavigate = vi.fn();
