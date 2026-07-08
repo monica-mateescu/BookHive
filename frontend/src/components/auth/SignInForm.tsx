@@ -1,4 +1,4 @@
-import { authClient } from "@utils";
+import { authClient, consumeRedirectTo } from "@utils";
 import { useMemo, useState } from "react";
 import { useNavigate } from "react-router";
 import { Link } from "react-router";
@@ -29,10 +29,11 @@ function SignInForm() {
     setSubmitting(true);
 
     try {
+      const redirectTo = consumeRedirectTo();
       const { error } = await authClient.signIn.email({
         email: email.trim(),
         password: password,
-        callbackURL: "/",
+        callbackURL: redirectTo,
       });
 
       if (error) {
@@ -41,7 +42,7 @@ function SignInForm() {
       }
 
       setSuccess("Login successful.");
-      setTimeout(() => navigate("/"), 1000);
+      setTimeout(() => navigate(redirectTo), 1000);
     } catch (e) {
       setError(e instanceof Error ? e.message : "Login failed");
     } finally {

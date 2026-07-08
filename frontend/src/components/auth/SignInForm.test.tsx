@@ -1,17 +1,18 @@
 import { fireEvent, render, screen, waitFor } from "@testing-library/react";
+import { authClient } from "@utils";
 import { BrowserRouter } from "react-router";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
-import { authClient } from "../../utils";
 import SignInForm from "./SignInForm";
 
 /* Mock the module that provides authClient. */
-vi.mock("@/utils", () => ({
+vi.mock("@utils", () => ({
   authClient: {
     signIn: {
       email: vi.fn(),
     },
   },
+  consumeRedirectTo: vi.fn(() => "/"),
 }));
 
 const mockedNavigate = vi.fn();

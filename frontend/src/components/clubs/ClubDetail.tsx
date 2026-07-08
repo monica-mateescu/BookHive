@@ -1,10 +1,10 @@
-import { isBookRef } from "@/utils";
+import { isBookRef, setRedirectTo } from "@/utils";
 import useAuth from "@contexts/useAuth";
 import { joinClub, leaveClub } from "@data";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import type { Club } from "@types";
 import { useState } from "react";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
 
 import ClubHeader from "./ClubHeader";
 import MeetingDetailsCard from "./MeetingDetailsCard";
@@ -15,6 +15,7 @@ type ClubDetailProps = {
 
 function ClubDetail({ club }: ClubDetailProps) {
   const { user } = useAuth();
+  const navigate = useNavigate();
   const queryClient = useQueryClient();
   const [errorMessage, setErrorMessage] = useState("");
   const userId = user?.id;
@@ -47,9 +48,12 @@ function ClubDetail({ club }: ClubDetailProps) {
 
   const handleToggle = () => {
     if (!user) {
-      setErrorMessage("You have to be logged in to join a club.");
+      setRedirectTo(`/clubs/${club.slug}`);
+      navigate("/signin");
       return;
     }
+
+    setErrorMessage("");
 
     mutate({
       action: isMember ? "leave" : "join",
