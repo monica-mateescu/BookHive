@@ -1,4 +1,4 @@
-import { Book, Club } from '#models';
+import { Club } from '#models';
 
 export const populatedFields = [
   { path: 'createdBy', select: 'firstName lastName email' },
@@ -32,7 +32,53 @@ export const isMember = async (clubId: string, userId: string): Promise<boolean>
   return !!exists;
 };
 
+const buildPagination = (total: number, page: number, limit: number) => {
+  const totalPages = Math.max(1, Math.ceil(total / limit));
+
+  return {
+    total,
+    page,
+    limit,
+    totalPages,
+    hasNextPage: page < totalPages,
+    hasPrevPage: page > 1
+  };
+};
+
 export const getPaginatedClubs = async ({
+  filter,
+  search,
+  sort,
+  page,
+  limit
+}: {
+  filter: Record<string, unknown>;
+  search?: string;
+  sort?: Record<string, 1 | -1>;
+  page: number;
+  limit: number;
+}) => {
+  const skip = (page - 1) * limit;
+
+  const query: Record<string, any> = { ...filter };
+
+  if (search) {
+    query.$text = { $search: search };
+  }
+
+  let cursor = Club.find(query, search ? { score: { $meta: 'textScore' } } : undefined);
+
+  cursor = cursor.sort(sort || (search ? { score: { $meta: 'textScore' } } : { createdAt: -1 }));
+
+  const [total, data] = await Promise.all([
+    Club.countDocuments(query),
+    cursor.skip(skip).limit(limit).populate(populatedFields)
+  ]);
+
+  return { data, pagination: buildPagination(total, page, limit) };
+};
+
+export const getAggregatedPaginatedClubs = async ({
   filter,
   search,
   page,
@@ -49,12 +95,12 @@ export const getPaginatedClubs = async ({
   const query: Record<string, any> = { ...filter };
 
   if (search) {
-    const regex = new RegExp(search, 'i');
-    query.$or = [{ name: regex }, { description: regex }];
+    query.$text = { $search: search };
   }
 
   const pipeline: any[] = [
     { $match: query },
+    ...(search ? [{ $addFields: { _textScore: { $meta: 'textScore' } } }] : []),
     {
       $addFields: {
         meetingEndDate: {
@@ -90,7 +136,7 @@ export const getPaginatedClubs = async ({
         }
       }
     },
-    { $sort: { _eventBucket: 1, _sortKey: 1 } }
+    { $sort: search ? { _eventBucket: 1, _textScore: -1, _sortKey: 1 } : { _eventBucket: 1, _sortKey: 1 } }
   ];
 
   const [countResult, data] = await Promise.all([
@@ -123,19 +169,76 @@ export const getPaginatedClubs = async ({
   ]);
 
   const total = countResult[0]?.total ?? 0;
-  const totalPages = Math.max(1, Math.ceil(total / limit));
 
   const populated = await Club.populate(data, populatedFields);
 
-  return {
-    data: populated,
-    pagination: {
-      total,
-      page,
-      limit,
-      totalPages,
-      hasNextPage: page < totalPages,
-      hasPrevPage: page > 1
+  return { data: populated, pagination: buildPagination(total, page, limit) };
+};
+
+const MIN_MEMBERS_FOR_POPULAR = 2;
+const POPULAR_CLUBS_LIMIT = 8;
+
+export const getPopularsClubs = async (start: Date) => {
+  const pipeline: any[] = [
+    {
+      $match: {
+        status: 'approved',
+        meetingDate: { $gte: start },
+        $expr: { $gt: [{ $size: '$members' }, MIN_MEMBERS_FOR_POPULAR] }
+      }
+    },
+    {
+      $addFields: {
+        memberCount: { $size: '$members' }
+      }
+    },
+    { $sort: { memberCount: -1, meetingDate: -1 } },
+    { $limit: POPULAR_CLUBS_LIMIT },
+    {
+      $lookup: {
+        from: 'books',
+        localField: 'bookId',
+        foreignField: '_id',
+        as: 'book'
+      }
+    },
+    {
+      $unwind: {
+        path: '$book',
+        preserveNullAndEmptyArrays: true
+      }
     }
-  };
+  ];
+
+  const clubs = await Club.aggregate([
+    ...pipeline,
+    {
+      $project: {
+        _id: 0,
+        id: '$_id',
+        name: 1,
+        slug: 1,
+        members: 1,
+        bookId: 1,
+        meetingDate: 1,
+        maxMembers: 1,
+        image: 1,
+        book: {
+          $cond: [
+            { $ifNull: ['$book', false] },
+            {
+              id: '$book._id',
+              title: '$book.title',
+              slug: '$book.slug',
+              author: '$book.author',
+              image: '$book.image'
+            },
+            null
+          ]
+        }
+      }
+    }
+  ]);
+
+  return clubs;
 };
