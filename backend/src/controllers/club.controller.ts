@@ -5,14 +5,10 @@ import { bookService, clubService } from '#services';
 import { isAdmin, deleteFromCloudinary } from '#utils';
 import { Types } from 'mongoose';
 
-const POPULAR_CLUB_WINDOW_DAYS = 60;
-const MIN_MEMBERS_FOR_POPULAR = 2;
-const POPULAR_CLUBS_LIMIT = 8;
-
 /**
  * Get a paginated list of clubs with optional search and filters.
  * Query parameters:
- * - q: search query to match club names(optional)
+ * - q: search query to match club names/descriptions (optional)
  * - page: page number for pagination (default: 1)
  * - limit: number of items per page (default: 10)
  * - status: filter by club status (pending, approved, rejected) (optional)
@@ -27,9 +23,13 @@ export const getClubs: RequestHandler<{}, ClubsPagination, {}, ClubsQuery> = asy
 
   if (upcoming) {
     filter.meetingDate = { $gte: new Date() };
+
+    const clubs = await clubService.getPaginatedClubs({ filter, search: q, sort: { meetingDate: 1 }, page, limit });
+
+    return res.json(clubs);
   }
 
-  const clubs = await clubService.getPaginatedClubs({ filter, search: q, page, limit });
+  const clubs = await clubService.getAggregatedPaginatedClubs({ filter, search: q, page, limit });
 
   res.json(clubs);
 };
@@ -38,66 +38,12 @@ export const getClubs: RequestHandler<{}, ClubsPagination, {}, ClubsQuery> = asy
  * Get a list of popular clubs with more than 2 members and a meeting date within the last 60 days,
  * sorted by member count and meeting date.
  */
+const POPULAR_CLUB_WINDOW_DAYS = 60;
 export const getPopularClubs: RequestHandler<{}, ClubDTO[], {}, {}> = async (_req, res) => {
   const start = new Date();
   start.setDate(start.getDate() - POPULAR_CLUB_WINDOW_DAYS);
 
-  const clubs = await Club.aggregate<ClubDTO>([
-    {
-      $match: {
-        status: 'approved',
-        meetingDate: { $gte: start },
-        [`members.${MIN_MEMBERS_FOR_POPULAR}`]: { $exists: true }
-      }
-    },
-    {
-      $addFields: {
-        memberCount: { $size: '$members' }
-      }
-    },
-    { $sort: { memberCount: -1, meetingDate: -1 } },
-    { $limit: POPULAR_CLUBS_LIMIT },
-    {
-      $lookup: {
-        from: 'books',
-        localField: 'bookId',
-        foreignField: '_id',
-        as: 'bookId'
-      }
-    },
-    {
-      $unwind: {
-        path: '$bookId',
-        preserveNullAndEmptyArrays: true
-      }
-    },
-    {
-      $project: {
-        _id: 0,
-        id: '$_id',
-        name: 1,
-        slug: 1,
-        members: 1,
-        bookId: 1,
-        meetingDate: 1,
-        maxMembers: 1,
-        image: 1,
-        book: {
-          $cond: [
-            { $ifNull: ['$book', false] },
-            {
-              id: '$book._id',
-              title: '$book.title',
-              slug: '$book.slug',
-              author: '$book.author',
-              image: '$book.image'
-            },
-            null
-          ]
-        }
-      }
-    }
-  ]);
+  const clubs = await clubService.getPopularsClubs(start);
 
   res.json(clubs);
 };
@@ -135,7 +81,7 @@ export const createClub: RequestHandler<{}, ClubDTO, ClubInputDTO> = async (req,
 
   await bookService.bookExists(bookId.toString());
 
-  // Check if the user already has an active club with a future meeting date
+  // Check if the user already has an active club with a future meeting date.
   if (!isAdmin(user?.role)) {
     const existing = await Club.findOne({
       createdBy: user?.id,
@@ -273,30 +219,33 @@ export const joinClub: RequestHandler<{ id: string }, ClubDTO> = async (req, res
   } = req;
   const userId = user?.id;
 
-  const club = await Club.findById(id);
+  const club = await Club.findOneAndUpdate(
+    {
+      _id: id,
+      'members.userId': { $ne: userId },
+      $expr: { $lt: [{ $size: '$members' }, { $ifNull: ['$maxMembers', Number.MAX_SAFE_INTEGER] }] }
+    },
+    {
+      $push: { members: { userId, role: 'member', joinedAt: new Date() } }
+    },
+    { new: true }
+  );
+
   if (!club) {
-    throw new Error('Club not found', { cause: { status: 404 } });
-  }
+    const existing = await Club.findById(id);
 
-  // Check if the user is already a member of the club
-  const isAlreadyMember = club.members.some(m => m.userId.equals(userId));
+    if (!existing) {
+      throw new Error('Club not found', { cause: { status: 404 } });
+    }
 
-  if (isAlreadyMember) {
-    throw new Error('You are already a member of this club', { cause: { status: 400 } });
-  }
+    const isAlreadyMember = existing.members.some(m => m.userId.toString() === userId);
+    if (isAlreadyMember) {
+      throw new Error('You are already a member of this club', { cause: { status: 400 } });
+    }
 
-  // Check if the club is already full (maxMembers)
-  if (club.maxMembers && club.members.length >= club.maxMembers) {
     throw new Error('This club is already full', { cause: { status: 400 } });
   }
 
-  club.members.push({
-    userId: userId,
-    role: 'member',
-    joinedAt: new Date()
-  });
-
-  await club.save();
   const populatedClub = await club.populate(clubService.populatedFields);
   res.json(populatedClub as ClubDTO);
 };
@@ -316,15 +265,12 @@ export const leaveClub: RequestHandler<{ id: string }, ClubDTO> = async (req, re
     throw new Error('Club not found', { cause: { status: 404 } });
   }
 
-  // Prevent the club owner from leaving the club unless they are an admin
+  // Prevent the club owner from leaving the club unless they are an admin.
   if (club.createdBy.toString() === userId && !isAdmin(user?.role)) {
     throw new Error('Owner cannot leave the club', { cause: { status: 400 } });
   }
 
-  club.members = club.members.filter(m => {
-    const memberId = m.userId._id?.toString();
-    return memberId !== userId;
-  }) as typeof club.members;
+  club.members = club.members.filter(m => m.userId.toString() !== userId) as typeof club.members;
 
   await club.save();
   const populatedClub = await club.populate(clubService.populatedFields);
