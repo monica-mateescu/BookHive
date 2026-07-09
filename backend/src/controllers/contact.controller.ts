@@ -76,7 +76,7 @@ export const sendContactMessage: RequestHandler<{}, { success: boolean } | { mes
     try {
       await sendEmail({
         to: EMAIL_TO,
-        subject: `BookHive - ${subject}`,
+        subject: `BookSpine - ${subject}`,
         html: messageHtml
       });
     } catch (error) {

@@ -11,7 +11,7 @@ type SendEmail = {
 
 export const sendEmail = async ({ to, subject, html }: SendEmail) => {
   await resend.emails.send({
-    from: `BookHive <${EMAIL_FROM}>`,
+    from: `BookSpine <${EMAIL_FROM}>`,
     to,
     subject,
     html

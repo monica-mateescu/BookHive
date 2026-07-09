@@ -27,8 +27,8 @@ function About() {
         <section>
           <div className="mx-auto max-w-2xl space-y-2 rounded-2xl border-2 border-dashed border-(--brand-primary)/30 p-10 text-center">
             <p className="text-(--gray-primary)">
-              BookHive was born from a simple yet profound mission: to blend the
-              offline experience of reading with the power of digital
+              BookSpine was born from a simple yet profound mission: to blend
+              the offline experience of reading with the power of digital
               connection. We are building a space where opening a book means
               opening a door to talk, to share, and to find a place where we
               belong.
@@ -66,7 +66,7 @@ function About() {
         <section>
           <div className="mx-auto mt-15 max-w-xl space-y-2 text-center">
             <h2 className="text-2xl font-semibold text-(--text-main)">
-              What is BookHive about?
+              What is BookSpine about?
             </h2>
             <p className="text-(--gray-primary)">
               Whether you are reading the book, writing it, or bringing it to
@@ -101,8 +101,8 @@ function About() {
                 </div>
                 <p className="text-(--gray-primary)">
                   Discover your next book and connect with like-minded people.
-                  BookHive helps you turn solitary reading into a shared journey
-                  of personal growth and friendship.
+                  BookSpine helps you turn solitary reading into a shared
+                  journey of personal growth and friendship.
                 </p>
               </div>
             </div>
@@ -132,7 +132,7 @@ function About() {
                   </h3>
                 </div>
                 <p className="text-(--gray-primary)">
-                  BookHive is your platform to present your work directly to
+                  BookSpine is your platform to present your work directly to
                   passionate readers and engaged community around your stories.
                 </p>
               </div>
@@ -198,7 +198,7 @@ function About() {
                 </div>
                 <p className="text-(--gray-primary)">
                   By organizing your own book clubs and hosting hybrid reading
-                  events through BookHive, you can attract new visitors and
+                  events through BookSpine, you can attract new visitors and
                   expand your local literary hubs.
                 </p>
               </div>

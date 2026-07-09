@@ -1,1 +1,1 @@
-# BookHive - Frontend
+# BookSpine - Frontend

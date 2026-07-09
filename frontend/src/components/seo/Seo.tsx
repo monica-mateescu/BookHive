@@ -7,7 +7,7 @@ type SeoProps = {
 const Seo = ({ title, description, index = true }: SeoProps) => {
   return (
     <>
-      <title>{`BookHive - ${title}`}</title>
+      <title>{`BookSpine - ${title}`}</title>
       <meta
         name="description"
         content={
