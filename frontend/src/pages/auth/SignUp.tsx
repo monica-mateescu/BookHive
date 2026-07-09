@@ -6,7 +6,7 @@ function SignUp() {
     <>
       <Seo
         title="Create account"
-        description="Join BookHive and start discovering reading clubs and discussions."
+        description="Join BookSpine and start discovering reading clubs and discussions."
       />
       <Container>
         <h1 className="text-center text-3xl font-semibold">Sign up</h1>

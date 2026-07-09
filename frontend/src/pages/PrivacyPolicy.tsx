@@ -7,18 +7,18 @@ function PrivacyPolicy() {
     <Container>
       <Seo
         title="Privacy Policy"
-        description="This policy explains what information BookHive collects and how it is used."
+        description="This policy explains what information BookSpine collects and how it is used."
       />
       <h1 className="text-3xl font-semibold">Privacy Policy</h1>
       <div className="mt-2 text-(--gray-primary)">
-        This policy explains what information BookHive collects and how it is
+        This policy explains what information BookSpine collects and how it is
         used.
       </div>
       <h2 className="mt-5 text-xl font-semibold text-(--text-main)">
         Important notice
       </h2>
       <p className="mt-2">
-        BookHive is a student project created for educational purposes.
+        BookSpine is a student project created for educational purposes.
         <br />
         We do not represent a registered company and do not provide commercial
         services.
@@ -27,7 +27,7 @@ function PrivacyPolicy() {
         1. What we collect
       </h2>
       <p className="mt-2">
-        Depending on how you use BookHive, we may collect and store data within
+        Depending on how you use BookSpine, we may collect and store data within
         the following database collections:
       </p>
       <ul className="mt-5 list-disc space-y-2 pl-5 text-(--gray-primary)">
@@ -127,7 +127,7 @@ function PrivacyPolicy() {
         <Link to="/contact" className="underline hover:text-(--brand-primary)">
           contact form
         </Link>{" "}
-        to reach out to the BookHive project team.
+        to reach out to the BookSpine project team.
       </p>
     </Container>
   );

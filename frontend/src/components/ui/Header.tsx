@@ -33,7 +33,7 @@ function Header() {
           to="/"
           className="text-xl font-semibold text-shadow-2xs hover:text-(--brand-primary)"
         >
-          BookHive
+          BookSpine
         </NavLink>
 
         {!isPending && (
