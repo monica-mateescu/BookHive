@@ -43,6 +43,10 @@ const clubSchema = new Schema(
 clubSchema.index({ createdBy: 1, meetingDate: 1 });
 clubSchema.index({ 'members.userId': 1, meetingDate: 1 });
 clubSchema.index({ status: 1, meetingDate: 1 });
+clubSchema.index(
+  { name: 'text', description: 'text' },
+  { weights: { name: 3, description: 1 }, name: 'club_text_search' }
+);
 
 clubSchema.pre('save', async function () {
   if (this.isModified('name')) {
