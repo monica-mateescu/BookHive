@@ -2,7 +2,7 @@ import useAuth from "@/contexts/useAuth";
 import type { Club } from "@/types";
 import { isUserRef } from "@/utils";
 
-import { Button, ButtonLink } from "../ui";
+import { ButtonLink } from "../ui";
 import MembersBadge from "./MembersBadge";
 
 type ClubCardProps = {
@@ -42,15 +42,9 @@ const MyClubCard = ({ club }: ClubCardProps) => {
           max={club.maxMembers ?? 0}
         />
       </p>
-      {club.status === "approved" ? (
-        <ButtonLink to={`/clubs/${club.slug}`} className="btn btn-sm shrink-0">
-          View club
-        </ButtonLink>
-      ) : (
-        <Button variant="secondary" disabled className="btn-sm shrink-0">
-          View club
-        </Button>
-      )}
+      <ButtonLink to={`/clubs/${club.slug}`} className="btn btn-sm shrink-0">
+        View club
+      </ButtonLink>
     </li>
   );
 };
