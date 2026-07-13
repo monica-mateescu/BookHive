@@ -23,7 +23,7 @@ function ClubDetailPage() {
 
   if (isLoading) return <Loading />;
 
-  if (!club || club.status !== "approved") return <NotFound />;
+  if (!club) return <NotFound />;
 
   return (
     <>
