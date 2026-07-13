@@ -9,12 +9,12 @@ const AuthContextProvider = ({ children }: { children: ReactNode }) => {
   const user = data?.user
     ? {
         ...data.user,
-        role: data.user.role ?? ["user"],
+        role: data.user.role ?? "user",
         deletedAt: data.user.deletedAt ?? null,
       }
     : undefined;
 
-  const isAdmin = user?.role?.includes("admin") ?? false;
+  const isAdmin = user?.role === "admin";
 
   return (
     <AuthContext value={{ user, isAdmin, isPending }}>{children}</AuthContext>

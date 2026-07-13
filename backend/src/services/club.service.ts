@@ -33,10 +33,7 @@ export const isMember = async (clubId: string, userId: string): Promise<boolean>
   return !!exists;
 };
 
-export const canViewClub = (
-  club: { status: string; createdBy: any },
-  user?: { id: string; role: string[] }
-): boolean => {
+export const canViewClub = (club: { status: string; createdBy: any }, user?: { id: string; role: string }): boolean => {
   if (club.status === 'approved') return true;
 
   if (!user) return false;

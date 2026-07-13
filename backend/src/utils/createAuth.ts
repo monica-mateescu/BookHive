@@ -64,9 +64,9 @@ export const createAuth = <P extends BetterAuthPlugin[] = []>({
           defaultValue: ''
         },
         role: {
-          type: 'string[]',
+          type: 'string',
           input: false,
-          defaultValue: ['user']
+          defaultValue: 'user'
         },
         deletedAt: {
           type: 'date',

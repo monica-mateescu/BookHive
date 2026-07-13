@@ -1,4 +1,4 @@
-export const isAdmin = (role?: string[]): boolean => {
+export const isAdmin = (role?: string): boolean => {
   if (!role) return false;
-  return role.includes('admin');
+  return role === 'admin';
 };
