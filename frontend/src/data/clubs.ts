@@ -25,7 +25,6 @@ export const getClubs = async (
   page = 1,
   limit = 10,
   filters?: {
-    status?: string;
     upcoming?: string;
     q?: string;
   },
@@ -42,6 +41,38 @@ export const getClubs = async (
     });
   }
   const res = await fetch(`${API_URL}/api/clubs?${params.toString()}`);
+
+  if (!res.ok) throw new Error("Failed to fetch clubs");
+
+  const data = await res.json();
+  return data;
+};
+
+export const getAllClubs = async (
+  page = 1,
+  limit = 10,
+  filters?: {
+    status?: string;
+    q?: string;
+  },
+): Promise<ClubsResponse> => {
+  const params = new URLSearchParams({
+    page: page.toString(),
+    limit: limit.toString(),
+  });
+
+  if (filters) {
+    Object.entries(filters).forEach(([key, value]) => {
+      if (value !== undefined) {
+        params.append(key, value);
+      }
+    });
+  }
+
+  const res = await fetch(`${API_URL}/api/clubs/admin?${params.toString()}`, {
+    method: "GET",
+    credentials: "include",
+  });
 
   if (!res.ok) throw new Error("Failed to fetch clubs");
 
@@ -79,7 +110,10 @@ export const getMyClubs = async (
 };
 
 export const getClubById = async (id: string): Promise<Club> => {
-  const res = await fetch(`${API_URL}/api/clubs/${id}`);
+  const res = await fetch(`${API_URL}/api/clubs/${id}`, {
+    method: "GET",
+    credentials: "include",
+  });
 
   if (!res.ok) {
     const error = await res.json().catch(() => null);
@@ -91,7 +125,10 @@ export const getClubById = async (id: string): Promise<Club> => {
 };
 
 export const getClubBySlug = async (slug: string): Promise<Club> => {
-  const res = await fetch(`${API_URL}/api/clubs/slug/${slug}`);
+  const res = await fetch(`${API_URL}/api/clubs/slug/${slug}`, {
+    method: "GET",
+    credentials: "include",
+  });
 
   if (!res.ok) {
     const error = await res.json().catch(() => null);
