@@ -1,15 +1,25 @@
-import { auth } from '#utils';
-import { fromNodeHeaders } from 'better-auth/node';
+import { userService } from '#services';
+
 import type { Request, Response, NextFunction } from 'express';
 
-export async function authMiddleware(req: Request, res: Response, next: NextFunction) {
-  const session = await auth.api.getSession({ headers: fromNodeHeaders(req.headers) });
+export async function authMiddleware(req: Request, _res: Response, next: NextFunction) {
+  const user = await userService.getSessionUser(req);
 
-  if (!session) {
+  if (!user) {
     return next(new Error('Unauthorized', { cause: { status: 401 } }));
   }
 
-  req.user = session.user;
+  req.user = user;
+
+  next();
+}
+
+export async function optionalAuthMiddleware(req: Request, _res: Response, next: NextFunction) {
+  const user = await userService.getSessionUser(req);
+
+  if (user) {
+    req.user = user;
+  }
 
   next();
 }
