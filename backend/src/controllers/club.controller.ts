@@ -11,15 +11,12 @@ import { Types } from 'mongoose';
  * - q: search query to match club names/descriptions (optional)
  * - page: page number for pagination (default: 1)
  * - limit: number of items per page (default: 10)
- * - status: filter by club status (pending, approved, rejected) (optional)
  * - upcoming: if true, only return clubs with a future meeting date (optional)
  */
 export const getClubs: RequestHandler<{}, ClubsPagination, {}, ClubsQuery> = async (req, res) => {
-  const { q, page = 1, limit = 10, status, upcoming } = req.query;
+  const { q, page = 1, limit = 10, upcoming } = req.query;
 
-  const filter: Record<string, unknown> = {};
-
-  if (typeof status !== 'undefined') filter.status = status;
+  const filter: Record<string, unknown> = { status: 'approved' };
 
   if (upcoming) {
     filter.meetingDate = { $gte: new Date() };
@@ -30,6 +27,26 @@ export const getClubs: RequestHandler<{}, ClubsPagination, {}, ClubsQuery> = asy
   }
 
   const clubs = await clubService.getAggregatedPaginatedClubs({ filter, search: q, page, limit });
+
+  res.json(clubs);
+};
+
+/**
+ * Admin-only endpoint to get all clubs, including pending and rejected ones, with pagination.
+ * Query parameters:
+ * - q: search query to match club names/descriptions (optional)
+ * - page: page number for pagination (default: 1)
+ * - limit: number of items per page (default: 10)
+ * - status: filter by club status ('pending', 'approved', 'rejected') (optional)
+ */
+export const getAllClubs: RequestHandler<{}, ClubsPagination, {}, ClubsQuery> = async (req, res) => {
+  const { q, page = 1, limit = 10, status } = req.query;
+
+  const filter: Record<string, unknown> = {};
+
+  if (typeof status !== 'undefined') filter.status = status;
+
+  const clubs = await clubService.getPaginatedClubs({ filter, search: q, page, limit });
 
   res.json(clubs);
 };
@@ -116,7 +133,12 @@ export const createClub: RequestHandler<{}, ClubDTO, ClubInputDTO> = async (req,
 export const getClubById: RequestHandler<{ id: string }, ClubDTO> = async (req, res) => {
   const { id } = req.params;
   const club = await Club.findById(id).populate(clubService.populatedFields);
+
   if (!club) {
+    throw new Error('Club not found', { cause: { status: 404 } });
+  }
+
+  if (!clubService.canViewClub(club, req.user)) {
     throw new Error('Club not found', { cause: { status: 404 } });
   }
 
@@ -131,6 +153,10 @@ export const getClubBySlug: RequestHandler<{ slug: string }, ClubDTO> = async (r
 
   const club = await Club.findOne({ slug }).populate(clubService.populatedFields);
   if (!club) {
+    throw new Error('Club not found', { cause: { status: 404 } });
+  }
+
+  if (!clubService.canViewClub(club, req.user)) {
     throw new Error('Club not found', { cause: { status: 404 } });
   }
 
