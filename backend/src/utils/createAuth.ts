@@ -37,11 +37,17 @@ export const createAuth = <P extends BetterAuthPlugin[] = []>({
         void mailer.sendEmail({
           to: user.email,
           subject: 'Reset your password',
-          html: `Click the link to reset your password: ${url}`
+          html: `
+          <h1 style="font-size: 14px;">Hi ${user.name},</h1>
+          <p style="font-size: 14px;">You requested to reset your password. Please reset your password by clicking the link below:</p>
+          <a href=${url} target='_blank' style="font-size: 14px;">Reset password</a>
+          <p style="font-size: 14px;">If you did not request a password reset, please ignore this email.</p>       
+          <p style="font-size: 14px;">Thank you,</p>
+          <p style="font-size: 14px;">The BookSpine team</p>
+          `
         });
       }
     },
-
     session: {
       cookieCache: {
         enabled: true,
@@ -71,21 +77,34 @@ export const createAuth = <P extends BetterAuthPlugin[] = []>({
       changeEmail: {
         enabled: true,
         sendChangeEmailConfirmation: async ({ user, newEmail, url }) => {
-          console.log(`Verification URL for ${user.email}: ${url}`);
           mailer.sendEmail({
             to: user.email,
-            subject: 'Approve email change',
-            html: `Click to approve the change to ${newEmail}:  <a href=${url} target='_blank'>Approve</a>`
+            subject: 'Change your email address',
+            html: `
+            <h1 style="font-size: 14px;">Hi ${user.name},</h1>
+            <p style="font-size: 14px;">You requested to change your email address to ${newEmail}. Please change your email address by clicking the link below:</p>
+            <a href=${url} target='_blank' style="font-size: 14px;">Change email address</a>
+            <p style="font-size: 14px;">Thank you,</p>
+            <p style="font-size: 14px;">Your BookSpine team</p>
+            `
           });
         }
       }
     },
     emailVerification: {
+      sendOnSignUp: true,
+      autoSigninAfterVerification: true,
       sendVerificationEmail: async ({ user, url }) => {
         mailer.sendEmail({
           to: user.email,
-          subject: 'Verify your email address',
-          html: `Click to verify your email: <a href=${url} target='_blank'>Verify</a>`
+          subject: 'Confirm your email address',
+          html: `
+            <h1 style="font-size: 14px;">Hi ${user.name},</h1>
+            <p style="font-size: 14px;">Thank you for signing up! Please confirm your email address by clicking the link below:</p>
+            <a href=${url} target='_blank' style="font-size: 14px;">Confirm email address</a>
+            <p style="font-size: 14px;">Thank you,</p>
+            <p style="font-size: 14px;">Your BookSpine team</p>
+            `
         });
       }
     },
