@@ -1,4 +1,5 @@
 import { Club } from '#models';
+import { isAdmin } from '#utils';
 
 export const populatedFields = [
   { path: 'createdBy', select: 'firstName lastName email' },
@@ -30,6 +31,19 @@ export const isMember = async (clubId: string, userId: string): Promise<boolean>
   const exists = await Club.exists({ _id: clubId, 'members.userId': userId });
 
   return !!exists;
+};
+
+export const canViewClub = (
+  club: { status: string; createdBy: any },
+  user?: { id: string; role: string[] }
+): boolean => {
+  if (club.status === 'approved') return true;
+
+  if (!user) return false;
+
+  if (isAdmin(user.role) || club.createdBy.toString() === user.id) return true;
+
+  return false;
 };
 
 const buildPagination = (total: number, page: number, limit: number) => {
