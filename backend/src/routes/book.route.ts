@@ -4,7 +4,7 @@ import {
   authMiddleware,
   fileHandler,
   cloudinaryUpload,
-  isAdmin,
+  requireAdmin,
   validateObjectId,
   validateQuery,
   validateBody,
@@ -18,7 +18,7 @@ bookRouter.get('/', validateQuery(paginationQuerySchema), getBooks);
 bookRouter.post(
   '/',
   authMiddleware,
-  isAdmin,
+  requireAdmin,
   fileHandler,
   cloudinaryUpload('covers'),
   validateBody(bookInputSchema),
@@ -29,13 +29,13 @@ bookRouter.get('/slug/:slug', sanitizeSlug('slug'), getBookBySlug);
 bookRouter.put(
   '/:id',
   authMiddleware,
-  isAdmin,
+  requireAdmin,
   validateObjectId('id'),
   fileHandler,
   cloudinaryUpload('covers'),
   validateBody(bookInputSchema),
   updateBook
 );
-bookRouter.delete('/:id', authMiddleware, isAdmin, validateObjectId('id'), deleteBook);
+bookRouter.delete('/:id', authMiddleware, requireAdmin, validateObjectId('id'), deleteBook);
 
 export default bookRouter;
