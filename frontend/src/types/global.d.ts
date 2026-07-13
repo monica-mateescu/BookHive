@@ -13,7 +13,7 @@ declare global {
     image?: string | null | undefined;
     email: string;
     emailVerified: boolean;
-    role: string[];
+    role: string;
     deletedAt: Date | null;
     createdAt: Date;
     updatedAt: Date;
