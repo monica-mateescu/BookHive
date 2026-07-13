@@ -4,13 +4,12 @@ import type { ClubsResponse } from "@types";
 
 import { ClubCard, ClubListSkeleton } from "..";
 
-const status = "approved";
 const upcoming = "true";
 
 const UpcomingClubs = () => {
   const { isLoading, data } = useQuery<ClubsResponse, Error>({
-    queryKey: ["clubs", status, upcoming],
-    queryFn: () => getClubs(1, 4, { status, upcoming }),
+    queryKey: ["clubs", upcoming],
+    queryFn: () => getClubs(1, 4, { upcoming }),
     staleTime: 1000 * 60 * 5,
   });
 

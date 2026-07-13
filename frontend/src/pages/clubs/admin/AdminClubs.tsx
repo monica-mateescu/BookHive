@@ -1,7 +1,7 @@
 import { ClubRow, ConfirmModal, Loading, Pagination } from "@/components";
 import { Seo } from "@/components/seo";
 import { ButtonLink } from "@/components/ui";
-import { deleteClubById, getClubs } from "@/data";
+import { deleteClubById, getAllClubs } from "@/data";
 import type { Club, ClubsResponse } from "@/types";
 import {
   keepPreviousData,
@@ -17,7 +17,7 @@ const Clubs = () => {
   const queryClient = useQueryClient();
   const { isLoading, isError, data, error } = useQuery<ClubsResponse, Error>({
     queryKey: ["clubs", { page }],
-    queryFn: () => getClubs(page),
+    queryFn: () => getAllClubs(page),
     placeholderData: keepPreviousData,
   });
 

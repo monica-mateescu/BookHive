@@ -12,8 +12,6 @@ import {
   Pagination,
 } from "..";
 
-const status = "approved";
-
 const Clubs = () => {
   const [page, setPage] = useState(1);
   const [searchParams] = useSearchParams();
@@ -22,10 +20,9 @@ const Clubs = () => {
   const search = q || "";
 
   const { isLoading, isError, data } = useQuery<ClubsResponse, Error>({
-    queryKey: ["clubs", page, 8, status, search],
+    queryKey: ["clubs", page, 8, search],
     queryFn: () =>
       getClubs(page, 8, {
-        status,
         q: q || undefined,
       }),
     placeholderData: keepPreviousData,
@@ -33,7 +30,7 @@ const Clubs = () => {
 
   const { data: fallbackData } = useQuery<ClubsResponse, Error>({
     queryKey: ["fallback-clubs"],
-    queryFn: () => getClubs(page, 8, { status: "approved" }),
+    queryFn: () => getClubs(page, 8),
     enabled: !!q && data?.data?.length === 0,
   });
 
