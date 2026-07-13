@@ -4,7 +4,7 @@ export { authMiddleware, optionalAuthMiddleware } from './auth.ts';
 export { validateBody, validateQuery } from './validateZod.ts';
 export { validateObjectId } from './validateObjectId.ts';
 export { sanitizeSlug } from './sanitizeSlug.ts';
-export { isAdmin } from './isAdmin.ts';
+export { requireAdmin } from './requireAdmin.ts';
 export { isClubMember } from './isClubMember.ts';
 
 export { fileHandler } from './fileHandler.ts';
