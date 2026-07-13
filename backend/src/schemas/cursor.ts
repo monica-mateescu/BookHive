@@ -2,7 +2,7 @@ import { Types } from 'mongoose';
 import { z } from 'zod';
 
 export const cursorSchema = z.strictObject({
-  limit: z.coerce.number().int().min(1).max(50).default(20).optional(),
+  limit: z.coerce.number().int().min(1).max(50).optional(),
   cursor: z
     .string()
     .refine(id => Types.ObjectId.isValid(id), 'Invalid cursor')
