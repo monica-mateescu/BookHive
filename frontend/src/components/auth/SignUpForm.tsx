@@ -1,3 +1,4 @@
+import { BASE_APP_URL } from "@/config";
 import { authClient, consumeRedirectTo } from "@utils";
 import { useMemo, useState } from "react";
 import { useNavigate } from "react-router";
@@ -36,19 +37,20 @@ function RegisterForm() {
 
     try {
       const redirectTo = consumeRedirectTo();
+      const callbackURL = `${BASE_APP_URL}/email-verified`;
       const { error } = lastName
         ? await authClient.signUp.email({
             email: email.trim(),
             password,
             name: firstName,
             lastName: lastName,
-            callbackURL: redirectTo,
+            callbackURL,
           })
         : await authClient.signUp.email({
             email: email.trim(),
             password,
             name: firstName,
-            callbackURL: redirectTo,
+            callbackURL,
           });
 
       if (error) {
