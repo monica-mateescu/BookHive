@@ -52,7 +52,7 @@ function Home() {
       <Container>
         <ProcessSection
           title="Get started"
-          description="Join in minutes, discover books that match your interests, and connect with readers who share your passion"
+          description="Join in minutes, discover books that match your interests, and connect with readers who share your passion."
           steps={[
             {
               title: "Create account",
