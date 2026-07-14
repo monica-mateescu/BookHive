@@ -49,8 +49,8 @@ function App() {
             <Route path="books/:slug" element={<BookDetailPage />} />
             <Route path="clubs" element={<ClubsPage />} />
             <Route path="clubs/:slug" element={<ClubDetailPage />} />
+            <Route path="email-verified" element={<EmailVerified />} />
             <Route element={<ProtectedLayout />}>
-              <Route path="email-verified" element={<EmailVerified />} />
               <Route path="profile" element={<Profile />} />
               <Route path="my-clubs" element={<MyClubs />} />
               <Route path="clubs/create/:bookId/" element={<ClubCreate />} />
