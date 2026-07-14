@@ -15,7 +15,7 @@ const ClubsPage = () => {
             Discover book clubs
           </h1>
           <div className="mt-2 text-center text-(--gray-primary)">
-            Join discussions, explore books, connect with readers
+            Join discussions, explore books, connect with readers.
           </div>
         </section>
         <Clubs />

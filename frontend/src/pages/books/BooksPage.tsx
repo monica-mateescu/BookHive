@@ -14,7 +14,7 @@ const BooksPage = () => {
             Explore our book collection
           </h1>
           <div className="mt-2 text-center text-(--gray-primary)">
-            Join discussions, explore books, connect with readers
+            Join discussions, explore books, connect with readers.
           </div>
         </section>
         <section aria-labelledby="books-title">
