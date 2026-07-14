@@ -22,11 +22,11 @@ const NotFound = () => {
         </p>
 
         <div className="flex flex-wrap justify-center gap-3">
-          <ButtonLink to="/" className="btn btn-primary">
-            Go to Home
-          </ButtonLink>
+          <ButtonLink to="/">Go to homepage</ButtonLink>
 
-          <Button onClick={() => navigate(-1)}>Go Back</Button>
+          <Button onClick={() => navigate(-1)} variant="secondary">
+            Go back
+          </Button>
         </div>
       </Container>
     </>
