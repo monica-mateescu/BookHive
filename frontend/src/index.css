@@ -1,16 +1,25 @@
 @import "./assets/styles/font.css";
 @import "tailwindcss";
-@plugin "daisyui";
+@plugin "daisyui" {
+  themes:
+    light --default,
+    dark --prefersdark;
+}
 
 /* ======================
-  Light theme 
+  Light theme
 ====================== */
 :root {
+  color-scheme: light;
+
   /* Backgrounds */
   --bg-main: #faf8f5;
+  --bg-muted: #f3efe8;
   --text-main: #111827; /* ink */
   --brand-primary: #1f2937; /* deep ink navy */
   --brand-secondary: #111827;
+  --bg-card: #ffffff;
+  --border: #d6d0c7;
 
   /* Neutrals */
   --gray-primary: #6b7280;
@@ -18,6 +27,31 @@
 
   /* UI states */
   --error: #b91c1c;
+}
+
+/* ======================
+  Dark theme (only when system dark mode is on)
+====================== */
+@media (prefers-color-scheme: dark) {
+  :root {
+    color-scheme: dark;
+
+    /* Backgrounds */
+    --bg-main: #11151c;
+    --bg-muted: #1a2029;
+    --text-main: #e5e7eb;
+    --brand-primary: #dca54d;
+    --brand-secondary: #d1d5db;
+    --bg-card: #1e2632;
+    --border: #2f3742;
+
+    /* Neutrals */
+    --gray-primary: #9ca3af;
+    --gray-secondary: #2a323d;
+
+    /* UI states */
+    --error: #f87171;
+  }
 }
 
 @theme {
@@ -68,10 +102,24 @@ p {
   padding-block: 64px;
 }
 
-.section--muted {
-  background: #f3efe8;
+.section-muted {
+  background-color: var(--bg-muted);
 }
 
+/* ======================
+   Hero
+====================== */
+.section-hero {
+  background-size: cover;
+  background-position: center;
+  padding-block: 80px;
+  text-align: center;
+}
+
+.section-hero h1,
+.section-hero p {
+  color: #111827;
+}
 /* ======================
    Buttons 
 ====================== */
@@ -169,11 +217,6 @@ p {
   backdrop-filter: blur(6px);
 
   transition: all 0.2s ease;
-}
-
-.badge-members__icon {
-  color: var(--brand-primary);
-  opacity: 0.9;
 }
 
 /* ======================

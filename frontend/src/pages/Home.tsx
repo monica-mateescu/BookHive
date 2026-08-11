@@ -32,7 +32,7 @@ function Home() {
         </div>
       </div>
       <section>
-        <div className="mx-auto mt-15 max-w-2xl space-y-2 text-center">
+        <div className="m-15 mx-auto max-w-2xl space-y-2 text-center">
           <h2 className="text-2xl font-semibold text-(--text-main)">
             Connect through the power of stories
           </h2>

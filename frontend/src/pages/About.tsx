@@ -76,7 +76,7 @@ function About() {
 
           <div className="mt-10 grid grid-cols-1 gap-5 md:grid-cols-2">
             {/* Card 1: For Readers */}
-            <div className="card rounded-lg bg-(--bg-main)/80 shadow-lg ring-1 ring-black/5 backdrop-blur-sm transition hover:shadow-xl">
+            <div className="card rounded-lg bg-(--bg-card) shadow-lg ring-1 ring-(--border) backdrop-blur-sm transition hover:shadow-xl">
               <div className="card-body">
                 <div className="mb-2 flex items-center gap-2">
                   <div className="rounded-lg bg-(--gray-secondary) p-2 text-(--brand-primary)">
@@ -108,7 +108,7 @@ function About() {
             </div>
 
             {/* Card 2: For Authors */}
-            <div className="card rounded-lg bg-(--bg-main)/80 shadow-lg ring-1 ring-black/5 backdrop-blur-sm transition hover:shadow-xl">
+            <div className="card rounded-lg bg-(--bg-card) shadow-lg ring-1 ring-(--border) backdrop-blur-sm transition hover:shadow-xl">
               <div className="card-body">
                 <div className="mb-2 flex items-center gap-2">
                   <div className="rounded-lg bg-(--gray-secondary) p-2 text-(--brand-primary)">
@@ -139,7 +139,7 @@ function About() {
             </div>
 
             {/* Card 3: For Printers & Publishers */}
-            <div className="card rounded-lg bg-(--bg-main)/80 shadow-lg ring-1 ring-black/5 backdrop-blur-sm transition hover:shadow-xl">
+            <div className="card rounded-lg bg-(--bg-card) shadow-lg ring-1 ring-(--border) backdrop-blur-sm transition hover:shadow-xl">
               <div className="card-body">
                 <div className="mb-2 flex items-center gap-2">
                   <div className="rounded-lg bg-(--gray-secondary) p-2 text-(--brand-primary)">
@@ -173,7 +173,7 @@ function About() {
             </div>
 
             {/* Card 4: For Bookstores & Libraries */}
-            <div className="card rounded-lg bg-(--bg-main)/80 shadow-lg ring-1 ring-black/5 backdrop-blur-sm transition hover:shadow-xl">
+            <div className="card rounded-lg bg-(--bg-card) shadow-lg ring-1 ring-(--border) backdrop-blur-sm transition hover:shadow-xl">
               <div className="card-body">
                 <div className="mb-2 flex items-center gap-2">
                   <div className="rounded-lg bg-(--gray-secondary) p-2 text-(--brand-primary)">
