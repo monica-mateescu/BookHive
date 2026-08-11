@@ -42,7 +42,7 @@ const ClubDetail = () => {
 
       <div className="space-y-6 p-6">
         <h1 className="text-2xl font-semibold">{data.name}</h1>
-        <p className="text-gray-500">{data.description}</p>
+        <p className="text-(--gray-primary)">{data.description}</p>
 
         <div className="mt-3 flex flex-wrap items-center gap-3 text-sm">
           <span className="badge badge-outline">

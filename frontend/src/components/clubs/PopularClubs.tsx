@@ -18,7 +18,7 @@ const PopularClubs = () => {
     return (
       <section
         aria-labelledby="popular-clubs-title"
-        className="section section--muted"
+        className="section section-muted"
       >
         <div className="container">
           <div className="mb-6 flex items-center justify-between">
