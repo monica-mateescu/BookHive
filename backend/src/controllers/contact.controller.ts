@@ -1,6 +1,6 @@
 import { contactInputSchema } from '#schemas';
 import { type RequestHandler } from 'express';
-import { sendEmail } from '#utils';
+import { sendEmail, getEmailHtmlTemplate } from '#utils';
 import { z } from 'zod/v4';
 
 import { EMAIL_TO, TURNSTILE_SECRET_KEY } from '#config';
@@ -59,25 +59,29 @@ export const sendContactMessage: RequestHandler<{}, { success: boolean } | { mes
       return;
     }
 
-    const messageHtml = `
-      <div>
-        Contact Form Submission
-        <br />
-        Name: ${name}
-        <br />
-        Email: ${email}
-        <br />
-        Subject: ${subject}
-        <br />
-        Message: ${message}
-      </div>
-    `;
+    const emailHtml = getEmailHtmlTemplate({
+      contentHtml: `
+        <h1 style="font-family: Arial, sans-serif; font-size: 18px; margin-bottom: 10px;">
+          Contact
+        </h1>
+        <p style="font-family: Arial, sans-serif; font-size: 14px; margin-bottom: 10px;">
+          Name: ${name}
+          <br />
+          Email: ${email}
+          <br />
+          Subject: ${subject}
+          <br />
+          Message: ${message}
+        </p>
+      `,
+      showButton: false
+    });
 
     try {
       await sendEmail({
         to: EMAIL_TO,
         subject: `BookSpine - ${subject}`,
-        html: messageHtml
+        html: emailHtml
       });
     } catch (error) {
       console.error('Failed to send email', error);
