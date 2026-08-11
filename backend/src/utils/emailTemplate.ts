@@ -57,7 +57,7 @@ export const getEmailHtmlTemplate = ({
                       "
                     >
                       <a
-                        href="mailto:${buttonUrl}"
+                        href="${buttonUrl}"
                         target="_blank"
                         style="
                           margin: 0;
