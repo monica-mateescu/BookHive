@@ -19,7 +19,7 @@ const Hero = ({
 }: HeroProps) => {
   return (
     <div
-      className="relative overflow-hidden bg-cover bg-center p-10 text-center lg:p-26"
+      className="section-hero relative overflow-hidden"
       style={{
         backgroundImage: backgroundImage
           ? `url(${backgroundImage})`
