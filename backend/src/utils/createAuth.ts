@@ -5,6 +5,7 @@ import type { BetterAuthPlugin } from 'better-auth';
 import { createAuthMiddleware } from 'better-auth/api';
 import { APIError } from 'better-auth/api';
 import type { Mailer } from '#types';
+import { getEmailHtmlTemplate } from '#utils';
 
 type CreateAuthOptions = {
   db: Db;
@@ -34,17 +35,21 @@ export const createAuth = <P extends BetterAuthPlugin[] = []>({
     emailAndPassword: {
       enabled: true,
       sendResetPassword: async ({ user, url }) => {
+        const emailHtml = getEmailHtmlTemplate({
+          contentHtml: `
+            <h1 style="font-family: Arial, sans-serif; font-size: 18px; margin-bottom: 10px;">Hi ${user.name},</h1>
+            <p style="font-family: Arial, sans-serif; font-size: 14px; margin-bottom: 10px;">You requested to reset your password. Please reset your password by clicking the button below. If you did not request a password reset, please ignore this email.</p>`,
+          signatureHtml: `
+            <p style="font-family: Arial, sans-serif; font-size: 14px; margin-top: 10px; margin-bottom: 10px;">Thank you,<br />Your BookSpine team</p>
+          `,
+          showButton: true,
+          buttonUrl: url,
+          buttonText: 'Reset password'
+        });
         void mailer.sendEmail({
           to: user.email,
           subject: 'Reset your password',
-          html: `
-          <h1 style="font-size: 14px;">Hi ${user.name},</h1>
-          <p style="font-size: 14px;">You requested to reset your password. Please reset your password by clicking the link below:</p>
-          <a href=${url} target='_blank' style="font-size: 14px;">Reset password</a>
-          <p style="font-size: 14px;">If you did not request a password reset, please ignore this email.</p>       
-          <p style="font-size: 14px;">Thank you,</p>
-          <p style="font-size: 14px;">The BookSpine team</p>
-          `
+          html: emailHtml
         });
       }
     },
