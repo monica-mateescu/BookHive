@@ -189,7 +189,9 @@ describe("CreateClubForm", () => {
       expect(fd.get("name")).toBe("Club name");
       expect(fd.get("description")).toBe("Club description");
       expect(fd.get("meetingLink")).toBe("https://link.com/m/123");
-      expect(fd.get("meetingDate")).toBe("2026-01-01T10:00");
+      expect(fd.get("meetingDate")).toBe(
+        new Date("2026-01-01T10:00").toISOString(),
+      );
       expect(fd.get("bookId")).toBe("456");
 
       const imageFile = fd.get("image") as File;
