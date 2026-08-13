@@ -4,7 +4,6 @@ import { fromNodeHeaders } from 'better-auth/node';
 
 import type { UsersPagination, UsersQuery } from '#types';
 import { User } from '#models';
-import type { ZodNull } from 'zod';
 
 export const getUsers: RequestHandler<{}, UsersPagination, {}, UsersQuery> = async (req, res) => {
   const { page = 1, limit = 10 } = req.query;

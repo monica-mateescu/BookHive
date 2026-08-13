@@ -5,7 +5,10 @@ export const clubInputSchema = z.strictObject({
   name: z.string().min(1, 'Name is required'),
   description: z.string().min(1, 'Description is required'),
   meetingLink: z.url('Meeting link must be a valid URL'),
-  meetingDate: z.coerce.date().refine(date => date > new Date(), 'Meeting date must be in the future'),
+  meetingDate: z.iso
+    .datetime({ offset: true })
+    .transform(date => new Date(date))
+    .refine(date => date > new Date(), 'Meeting date must be in the future'),
   maxMembers: z.coerce.number().int().optional(),
   bookId: z
     .string()
