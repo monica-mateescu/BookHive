@@ -82,16 +82,21 @@ export const createAuth = <P extends BetterAuthPlugin[] = []>({
       changeEmail: {
         enabled: true,
         sendChangeEmailConfirmation: async ({ user, newEmail, url }) => {
+          const emailHtml = getEmailHtmlTemplate({
+            contentHtml: `
+            <h1 style="font-family: Arial, sans-serif; font-size: 18px; margin-bottom: 10px;">Hi ${user.name},</h1>
+            <p style="font-family: Arial, sans-serif; font-size: 14px; margin-bottom: 10px;">You requested to change your email address to ${newEmail}. Please change your email address by clicking the link below.</p>`,
+            signatureHtml: `
+            <p style="font-family: Arial, sans-serif; font-size: 14px; margin-top: 10px; margin-bottom: 10px;">Thank you,<br />Your BookSpine team</p>
+          `,
+            showButton: true,
+            buttonUrl: url,
+            buttonText: 'Change email address'
+          });
           mailer.sendEmail({
             to: user.email,
             subject: 'Change your email address',
-            html: `
-            <h1 style="font-size: 14px;">Hi ${user.name},</h1>
-            <p style="font-size: 14px;">You requested to change your email address to ${newEmail}. Please change your email address by clicking the link below:</p>
-            <a href=${url} target='_blank' style="font-size: 14px;">Change email address</a>
-            <p style="font-size: 14px;">Thank you,</p>
-            <p style="font-size: 14px;">Your BookSpine team</p>
-            `
+            html: emailHtml
           });
         }
       }
@@ -100,16 +105,21 @@ export const createAuth = <P extends BetterAuthPlugin[] = []>({
       sendOnSignUp: true,
       autoSigninAfterVerification: true,
       sendVerificationEmail: async ({ user, url }) => {
+        const emailHtml = getEmailHtmlTemplate({
+          contentHtml: `
+            <h1 style="font-family: Arial, sans-serif; font-size: 18px; margin-bottom: 10px;">Hi ${user.name},</h1>
+            <p style="font-family: Arial, sans-serif; font-size: 14px; margin-bottom: 10px;">Thank you for signing up! Please confirm your email address by clicking the link below.</p>`,
+          signatureHtml: `
+            <p style="font-family: Arial, sans-serif; font-size: 14px; margin-top: 10px; margin-bottom: 10px;">Thank you,<br />Your BookSpine team</p>
+          `,
+          showButton: true,
+          buttonUrl: url,
+          buttonText: 'Confirm email address'
+        });
         mailer.sendEmail({
           to: user.email,
           subject: 'Confirm your email address',
-          html: `
-            <h1 style="font-size: 14px;">Hi ${user.name},</h1>
-            <p style="font-size: 14px;">Thank you for signing up! Please confirm your email address by clicking the link below:</p>
-            <a href=${url} target='_blank' style="font-size: 14px;">Confirm email address</a>
-            <p style="font-size: 14px;">Thank you,</p>
-            <p style="font-size: 14px;">Your BookSpine team</p>
-            `
+          html: emailHtml
         });
       }
     },

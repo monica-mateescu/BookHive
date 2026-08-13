@@ -47,18 +47,20 @@ export const getEmailHtmlTemplate = ({
                 <tbody>
                   <tr>
                     <td
+                      class="email-button-bg"
                       style="
                         font-family: Arial, sans-serif;
                         font-size: 16px;
                         border-radius: 4px;
                         text-align: center;
                         vertical-align: top;
-                        background-color: #111827;
+                        background-color: #1f2937;
                       "
                     >
                       <a
                         href="${buttonUrl}"
                         target="_blank"
+                        class="email-button-text"
                         style="
                           margin: 0;
                           cursor: pointer;
@@ -70,8 +72,8 @@ export const getEmailHtmlTemplate = ({
                           display: inline-block;
                           text-decoration: none;
                           box-sizing: border-box;
-                          border: solid 1px #111827;
-                          background-color: #111827;
+                          border: solid 1px #1f2937;
+                          background-color: #1f2937;
                         "
                       >
                         ${buttonText}
@@ -103,6 +105,8 @@ export const getEmailHtmlTemplate = ({
           name="format-detection"
           content="telephone=no,date=no,address=no,email=no,url=no"
         />
+        <meta name="color-scheme" content="light dark" />
+        <meta name="supported-color-schemes" content="light dark" />
         <style>
           html,
           body {
@@ -142,9 +146,90 @@ export const getEmailHtmlTemplate = ({
             line-height: inherit;
             text-decoration: none;
           }
+          @media (prefers-color-scheme: dark) {
+            .email-body-bg {
+              background-color: #11151c !important;
+            }
+            .email-wrapper {
+              background-color: #11151c !important;
+            }
+            .email-header-link {
+              color: #e5e7eb !important;
+            }
+            .email-header-text {
+              color: #e5e7eb !important;
+            }
+            .email-content {
+              color: #e5e7eb !important;
+              background-color: #1e2632 !important;
+            }
+            .email-content * {
+              color: #e5e7eb !important;
+            }
+            .email-footer-link {
+              color: #e5e7eb !important;
+            }
+            .email-footer-text {
+              color: #e5e7eb !important;
+            }
+            .email-button-bg {
+              border-color: #dca54d !important;
+              background-color: #dca54d !important;
+            }
+            .email-button-text {
+              color: #11151c !important;
+              border-color: #dca54d !important;
+              background-color: #dca54d !important;
+            }
+          }
+          [data-ogsc] .email-body-bg,
+          [data-ogsb] .email-body-bg {
+            background-color: #11151c !important;
+          }
+          [data-ogsc] .email-wrapper,
+          [data-ogsb] .email-wrapper {
+            background-color: #11151c !important;
+          }
+          [data-ogsc] .email-header-link,
+          [data-ogsb] .email-header-link {
+            color: #e5e7eb !important;
+          }
+          [data-ogsc] .email-header-text,
+          [data-ogsb] .email-header-text {
+            color: #e5e7eb !important;
+          }
+          [data-ogsc] .email-content,
+          [data-ogsb] .email-content {
+            color: #e5e7eb !important;
+            background-color: #1e2632 !important;
+          }
+          [data-ogsc] .email-content *,
+          [data-ogsb] .email-content * {
+            color: #e5e7eb !important;
+          }
+          [data-ogsc] .email-footer-link,
+          [data-ogsb] .email-footer-link {
+            color: #e5e7eb !important;
+          }
+          [data-ogsc] .email-footer-text,
+          [data-ogsb] .email-footer-text {
+            color: #e5e7eb !important;
+          }
+          [data-ogsc] .email-button-bg,
+          [data-ogsb] .email-button-bg {
+            border-color: #dca54d !important;
+            background-color: #dca54d !important;
+          }
+          [data-ogsc] .email-button-text,
+          [data-ogsb] .email-button-text {
+            color: #11151c !important;
+            border-color: #dca54d !important;
+            background-color: #dca54d !important;
+          }
         </style>
       </head>
       <body
+        class="email-body-bg"
         style="
           margin: 0;
           padding: 0;
@@ -172,6 +257,7 @@ export const getEmailHtmlTemplate = ({
             <tbody>
               <tr>
                 <td
+                  class="email-wrapper"
                   style="
                     padding: 10px;
                     line-height: 20px;
@@ -194,6 +280,7 @@ export const getEmailHtmlTemplate = ({
                       <tbody>
                         <tr>
                           <td
+                            class="email-header-text"
                             style="
                               font-family: Arial, sans-serif;
                               font-size: 16px;
@@ -208,6 +295,7 @@ export const getEmailHtmlTemplate = ({
                           >
                             <a
                               href="https://bookspine.net"
+                              class="email-header-link"
                               style="
                                 cursor: pointer;
                                 font-size: 16px;
@@ -249,6 +337,7 @@ export const getEmailHtmlTemplate = ({
                       <tbody>
                         <tr>
                           <td
+                            class="email-content"
                             style="
                               font-family: Arial, sans-serif;
                               padding: 20px;
@@ -302,6 +391,7 @@ export const getEmailHtmlTemplate = ({
                           >
                             <a
                               href="https://bookspine.net/about"
+                              class="email-footer-link"
                               style="
                                 cursor: pointer;
                                 font-size: 16px;
@@ -313,6 +403,7 @@ export const getEmailHtmlTemplate = ({
                             -
                             <a
                               href="https://bookspine.net/privacy-policy"
+                              class="email-footer-link"
                               style="
                                 cursor: pointer;
                                 font-size: 16px;
@@ -324,6 +415,7 @@ export const getEmailHtmlTemplate = ({
                             -
                             <a
                               href="https://bookspine.net/contact"
+                              class="email-footer-link"
                               style="
                                 cursor: pointer;
                                 font-size: 16px;
@@ -336,6 +428,7 @@ export const getEmailHtmlTemplate = ({
                         </tr>
                         <tr>
                           <td
+                            class="email-footer-text"
                             style="
                               font-family: Arial, sans-serif;
                               font-size: 16px;
