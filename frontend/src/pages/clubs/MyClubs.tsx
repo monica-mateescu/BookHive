@@ -48,7 +48,7 @@ const MyClubs = () => {
               <InfoState message="You haven't joined or created any clubs yet." />
             ) : (
               <>
-                <ul className="list rounded-lg bg-(--bg-card) shadow-lg ring-1 ring-(--border) backdrop-blur-sm">
+                <ul className="list rounded-lg bg-(--bg-card) shadow-lg backdrop-blur-sm">
                   {clubs.map((club) => (
                     <MyClubCard key={club.id} club={club} />
                   ))}
