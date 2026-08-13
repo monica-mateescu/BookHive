@@ -14,7 +14,7 @@ const MeetingDetailsCard = ({
   isPast,
 }: MeetingDetailsCardProps) => {
   return (
-    <div className="card rounded-lg bg-(--bg-card) p-2 shadow-sm ring-1 ring-(--border) backdrop-blur-sm">
+    <div className="card rounded-lg bg-(--bg-card) p-2 shadow-sm backdrop-blur-sm">
       <div className="card-body">
         <div className="flex items-center justify-between">
           <h2 className="card-title text-md">Meeting Details</h2>

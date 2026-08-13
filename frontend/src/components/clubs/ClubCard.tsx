@@ -30,7 +30,7 @@ function ClubCard({ club, variant = "default" }: ClubCardProps) {
 
   return (
     <Link to={`/clubs/${club.slug}`}>
-      <div className="flex flex-col rounded-lg bg-(--bg-card) shadow-lg ring-1 ring-(--border) backdrop-blur-sm transition hover:shadow-xl">
+      <div className="flex flex-col rounded-lg bg-(--bg-card) shadow-lg backdrop-blur-sm transition hover:shadow-xl">
         <div className="relative overflow-hidden rounded-tl-lg rounded-tr-lg">
           <img
             src={club.image ?? clubImage}
