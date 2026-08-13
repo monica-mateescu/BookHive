@@ -1,3 +1,4 @@
+import { localInputToUTC, utcToLocalInput } from "@/utils";
 import useAuth from "@contexts/useAuth";
 import { createClub, getBooks, getClubById, updateClubById } from "@data";
 import type { Book, Club, CreateClubFormData } from "@types";
@@ -89,12 +90,7 @@ const CreateClubForm = () => {
           name: club.name || "",
           description: club.description || "",
           meetingLink: club.meetingLink || "",
-          meetingDate: club.meetingDate
-            ? new Date(club.meetingDate)
-                .toLocaleString("sv-SE")
-                .replace(" ", "T")
-                .substring(0, 16)
-            : "",
+          meetingDate: utcToLocalInput(club.meetingDate) ?? "",
           maxMembers: club.maxMembers || 10,
           status: club.status ?? "pending",
           imageFile: null,
@@ -184,7 +180,7 @@ const CreateClubForm = () => {
       fd.append("name", form.name);
       fd.append("description", form.description);
       fd.append("meetingLink", form.meetingLink);
-      fd.append("meetingDate", form.meetingDate);
+      fd.append("meetingDate", localInputToUTC(form.meetingDate) ?? "");
       fd.append("bookId", form.bookId);
 
       if (isAdmin) {
